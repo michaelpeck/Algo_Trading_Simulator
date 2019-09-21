@@ -18,13 +18,13 @@ class Submission(object):
             return False
         return True
 
-    @staticmethod
-    def verify_ticker(ticker):
-        ticker = ticker.upper()
-        url = 'http://finance.yahoo.com/d/quotes.csv?s=%s&f=%s' % (ticker, 'n')
-        with urlopen(Request(url)) as response:
-            content = response.read().decode().strip().strip('"')
-        return content != 'N/A'
+##    @staticmethod
+##    def verify_ticker(ticker):
+##        ticker = ticker.upper()
+##        url = 'http://finance.yahoo.com/d/quotes.csv?s=%s&f=%s' % (ticker, 'n')
+##        with urlopen(Request(url)) as response:
+##            content = response.read().decode().strip().strip('"')
+##        return content != 'N/A'
 
     @staticmethod
     def verify_money(money):
@@ -32,7 +32,6 @@ class Submission(object):
             val = int(money)
             if val < 0:
                 return False
-            break
         except ValueError:
             return False
         return True

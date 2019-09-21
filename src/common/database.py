@@ -1,12 +1,13 @@
 import pymongo
 
+
+
 class Database(object):
-    URI = 'mongodb://127.0.0.1:27017'
     DATABASE = None
 
     @staticmethod
     def initialize():
-        client = pymongo.MongoClient(Database.URI)
+        client = pymongo.MongoClient("mongodb+srv://algo_trader:atapass123@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority")
         Database.DATABASE = client['AlgoTrading']
 
     @staticmethod

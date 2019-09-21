@@ -1,5 +1,6 @@
 from src.common.database import Database
 from src.models.calculation import Calculation
+from src.models.processing import Submission
 
 
 from flask import Flask, render_template, request, session
@@ -31,22 +32,22 @@ def calc_data():
     money = request.form['money']
     buy = request.form['buy']
     sell = request.form['sell']
-    return_message = []
 
-    valid = [Submission.verify_ticker(ticker),
-            Submission.verify_money(money)]
-    if valid == [True, True]:
-        final_money = Calculation.algo(ticker, period, interval, money, buy, sell)
-    else:
-        for entry in valid:
-            error_message = ["The ticker you entered was not valid",
-                              "The money you entered was not valid"]
-            if valid[entry] == False:
-                return_message += error_message[entry]
-            elif valid[entry] == True:
-                return_message += Null
-    transaction_id = Calculation.algo(ticker, period, interval, money, buy, sell)
-    url = "/results/" + str(transaction_id)
+ ##   valid = [Submission.verify_ticker(ticker),
+ ##           Submission.verify_money(money)]
+ ##   if valid == [True, True]:
+ ##       final_money = Calculation.algo(ticker, period, interval, money, buy, sell)
+ ##   else:
+ ##       for entry in valid:
+ ##           error_message = ["The ticker you entered was not valid",
+ ##                             "The money you entered was not valid"]
+ ##           if valid[entry] == False:
+ ##               return_message += error_message[entry]
+ ##           elif valid[entry] == True:
+ ##               return_message += Null
+    transaction = Calculation.algo(ticker, period, interval, money, buy, sell)
+
+    url = "/results/" + str(transaction[1])
     return render_template(url)
 
 @app.route('/results/<string:transaction_id>')

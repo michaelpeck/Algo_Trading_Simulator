@@ -3,3 +3,5 @@ Flask==1.1.1
 pymongo==3.9.0
 
 yfinance==0.1.45
+
+dnspython==1.16.0

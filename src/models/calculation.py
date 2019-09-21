@@ -15,20 +15,21 @@ class Calculation(object):
         self._id = uuid.uuid4().hex if _id is None else _id
         self.final_money = 0
 
-    def algo(self):
-        stock = yf.Ticker(self.ticker)
-        df = stock.history(period="1mo", interval="2m")
+    @staticmethod
+    def algo(ticker, period, interval, money, buy, sell, _id):
+        stock = yf.Ticker(ticker)
+        df = stock.history(period=period, interval=interval)
         owned = 0
         count = 0
-        trade_money = self.money
-        buy = self.buy
-        sell = self.sell
+        trade_money = float(money)
+        buy = float(buy)
+        sell = float(sell)
         for index, row in df.iterrows():
             count += 1
             if trade_money > 0 and row['Low'] <= buy:
                 value = ((row['Low']*row['Volume'])/5)
                 if value>trade_money>0:
-                    owned += (money/row['Low'])
+                    owned += (trade_money/row['Low'])
                     trade_money = 0
                 elif trade_money>value>0:
                     owned += (value/row['Low'])
@@ -44,12 +45,12 @@ class Calculation(object):
 
         if owned > 0:
             trade_money += df.Low.ix[count-1]*owned
-            owned = 0
+        return [ticker, period, interval, money, buy, sell,trade_money _id]
 
-        self.final_money = trade_money
-        self.save_to_mongo()
-        return self._id
-
+    @classmethod
+    def log_final_money(cls, trade_money, id):
+        transaction = cls.get_by_id(id)
+        transaction.final_money = trade_money
 
     def save_to_mongo(self):
         Database.insert(collection='entries', data=self.json())
@@ -65,3 +66,15 @@ class Calculation(object):
             'buy': self.buy,
             'sell': self.sell
         }
+
+    @classmethod
+    def from_mongo(cls, id):
+        entry_data = Database.find(collection='entries',
+                                   query={'entry_id': id})
+        return cls(**entry_data)
+
+    @classmethod
+    def get_by_id(cls, _id):
+        data = Database.find_one("entries", {"_id": _id})
+        if data is not None:
+            return cls(**data)
