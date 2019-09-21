@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container page-form">
+  <form id="stock-data-form" action="/calc/stock_data" method="post">
+    <div class="form-group">
+      <label for="ticker">Ticker</label>
+      <input type="text" id="ticker" class="form-control" name="ticker">
+      <label for="start">Start date (MM/DD/YYYY)</label>
+      <input type="text" id="start" class="form-control" name="start">
+      <label for="end">End date (MM/DD/YYYY)</label>
+      <input type="text" id="end" class="form-control" name="end">
+      <label for="money">Money to be invested</label>
+      <input type="number" id="money" class="form-control" name="money">
+      <label for="trade_point">Breaking point for buy/sell</label>
+      <input type="number" id="trade_point" class="form-control" name="trade_point">
+    </div>
+    <div class="page-button">
+      <button type="submit" class="btn btn-secondary">Submit</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
