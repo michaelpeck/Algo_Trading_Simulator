@@ -1,42 +1,67 @@
+import uuid
 import datetime as dt
 import yfinance as yf
 import pandas as pd
+from src.common.database import Database
 
 class Calculation(object):
-    def __init__(self, ticker, start, end, money, trade_point):
+    def __init__(self, ticker, period, interval, money, buy, sell, _id=None):
         self.ticker = upper(ticker)
-        self.start = start
-        self.end = end
+        self.period = period
+        self.interval = interval
         self.money = money
-        self.tp = trade_point
+        self.buy = buy
+        self.sell = sell
+        self._id = uuid.uuid4().hex if _id is None else _id
+        self.final_money = 0
 
-    @staticmethod
     def algo(self):
         stock = yf.Ticker(self.ticker)
         df = stock.history(period="1mo", interval="2m")
         owned = 0
         count = 0
+        trade_money = self.money
+        buy = self.buy
+        sell = self.sell
         for index, row in df.iterrows():
             count += 1
-            if money > 0 and row['Low'] < self.tp:
+            if trade_money > 0 and row['Low'] <= buy:
                 value = ((row['Low']*row['Volume'])/5)
-                if value>money>0:
+                if value>trade_money>0:
                     owned += (money/row['Low'])
-                    money = 0
-                elif money>value>0:
+                    trade_money = 0
+                elif trade_money>value>0:
                     owned += (value/row['Low'])
-                    money -= value
-            if owned > 0 and row['High'] > self.tp:
+                    trade_money -= value
+            if owned > 0 and row['High'] >= sell:
                 halfvol = row['Volume']/2
                 if halfvol > owned:
-                    money += (owned*row['High'])
+                    trade_money += (owned*row['High'])
                     owned = 0
                 elif owned > halfvol:
-                    money += (halfvol*row['High'])
+                    trade_money += (halfvol*row['High'])
                     owned -= halfvol
 
         if owned > 0:
-            money += df.Low.ix[count-1]*owned
+            trade_money += df.Low.ix[count-1]*owned
             owned = 0
 
-        return money
+        self.final_money = trade_money
+        self.save_to_mongo()
+        return self._id
+
+
+    def save_to_mongo(self):
+        Database.insert(collection='entries', data=self.json())
+
+    def json(self):
+        return{
+            '_id': self._id,
+            'ticker': self.ticker,
+            'starting_balance': self.money,
+            'ending_balance': self.final_money,
+            'period': self.period,
+            'interval': self.interval,
+            'buy': self.buy,
+            'sell': self.sell
+        }

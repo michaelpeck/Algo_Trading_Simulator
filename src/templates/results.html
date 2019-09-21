@@ -2,7 +2,14 @@
 {% block content %}
 <div class="container page-form">
     <h1>Results</h1>
-    <h3>Your investment criteria:</h3>
+    <h3>Your investment criteria</h3>
+    <h3>Ticker: {{ results.ticker }}</h3>
+    <h3>Period: {{ results.period }}</h3>
+    <h3>Interval: {{ results.interval }}</h3>
+    <h3>Starting balance: {{ results.money }}</h3>
+    <h3>Buy point: {{ results.buy }}</h3>
+    <h3>Sell point: {{ results.sell }}</h3>
+    <h3>Ending balance: {{ results.final_money }}</h3>
 
 </div>
 {% endblock %}
