@@ -1,23 +1,23 @@
 import pymongo
 
 
-
 class Database(object):
-    DATABASE = None
+    URI = "mongodb+srv://algo_trader:testpass@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true"
+    db = None
 
     @staticmethod
     def initialize():
-        client = pymongo.MongoClient("mongodb+srv://algo_trader:atapass123@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority")
-        Database.DATABASE = client['AlgoTrading']
+        client = pymongo.MongoClient("mongodb+srv://algo_trader:testpass@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true")
+        Database.db = client.get_database('AlgoTrading')
 
     @staticmethod
     def insert(collection, data):
-        Database.DATABASE[collection].insert(data)
+        Database.db[collection].insert(data)
 
     @staticmethod
     def find(collection, query):
-        return Database.DATABASE[collection].find(query)
+        return Database.db[collection].find(query)
 
     @staticmethod
     def find_one(collection, query):
-        return Database.DATABASE[collection].find_one(query)
+        return Database.db[collection].find_one(query)

@@ -3,7 +3,7 @@ from src.models.calculation import Calculation
 from src.models.processing import Submission
 
 
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, redirect, session
 
 app = Flask(__name__) # '__main__'
 app.secret_key = "Michael"
@@ -46,13 +46,13 @@ def calc_data():
  ##           elif valid[entry] == True:
  ##               return_message += Null
     transaction = Calculation.algo(ticker, period, interval, money, buy, sell)
+    url = "/results/" + transaction
 
-    url = "/results/" + str(transaction[1])
-    return render_template(url)
+    return redirect(url)
 
 @app.route('/results/<string:transaction_id>')
 def get_results(transaction_id):
-    results=Calculation.from_mongo(transaction_id)
+    results = Calculation.from_mongo(transaction_id)
 
     return render_template('results.html', results=results)
 

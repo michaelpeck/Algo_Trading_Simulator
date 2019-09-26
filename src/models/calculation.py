@@ -5,18 +5,19 @@ import pandas as pd
 from src.common.database import Database
 
 class Calculation(object):
-    def __init__(self, ticker, period, interval, money, buy, sell, _id=None):
-        self.ticker = upper(ticker)
+    def __init__(self, ticker, period, interval, money, buy, sell, final_money = None,_id=None):
+        self.ticker = ticker.upper()
         self.period = period
         self.interval = interval
         self.money = money
         self.buy = buy
         self.sell = sell
         self._id = uuid.uuid4().hex if _id is None else _id
-        self.final_money = 0
+        self.final_money = 0 if final_money is None else final_money
 
-    @staticmethod
-    def algo(ticker, period, interval, money, buy, sell, _id):
+    @classmethod
+    def algo(cls, ticker, period, interval, money, buy, sell):
+        new_entry = cls(ticker, period, interval, money, buy, sell)
         stock = yf.Ticker(ticker)
         df = stock.history(period=period, interval=interval)
         owned = 0
@@ -45,12 +46,10 @@ class Calculation(object):
 
         if owned > 0:
             trade_money += df.Low.ix[count-1]*owned
-        return [ticker, period, interval, money, buy, sell,trade_money _id]
+        new_entry.final_money = trade_money
+        new_entry.save_to_mongo()
+        return new_entry._id
 
-    @classmethod
-    def log_final_money(cls, trade_money, id):
-        transaction = cls.get_by_id(id)
-        transaction.final_money = trade_money
 
     def save_to_mongo(self):
         Database.insert(collection='entries', data=self.json())
@@ -59,8 +58,8 @@ class Calculation(object):
         return{
             '_id': self._id,
             'ticker': self.ticker,
-            'starting_balance': self.money,
-            'ending_balance': self.final_money,
+            'money': self.money,
+            'final_money': self.final_money,
             'period': self.period,
             'interval': self.interval,
             'buy': self.buy,
@@ -69,8 +68,8 @@ class Calculation(object):
 
     @classmethod
     def from_mongo(cls, id):
-        entry_data = Database.find(collection='entries',
-                                   query={'entry_id': id})
+        entry_data = Database.find_one(collection='entries',
+                                   query={'_id': id})
         return cls(**entry_data)
 
     @classmethod
