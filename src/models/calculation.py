@@ -5,19 +5,21 @@ import pandas as pd
 from src.common.database import Database
 
 class Calculation(object):
-    def __init__(self, ticker, period, interval, money, buy, sell, final_money = None,_id=None):
+    def __init__(self, ticker, period, interval, money, buy, sell, user_id=None, final_money=None, _id=None):
         self.ticker = ticker.upper()
         self.period = period
         self.interval = interval
         self.money = money
         self.buy = buy
         self.sell = sell
-        self._id = uuid.uuid4().hex if _id is None else _id
+        self.user_id = "guest" if user_id is None else user_id
         self.final_money = 0 if final_money is None else final_money
+        self._id = uuid.uuid4().hex if _id is None else _id
+
 
     @classmethod
-    def algo(cls, ticker, period, interval, money, buy, sell):
-        new_entry = cls(ticker, period, interval, money, buy, sell)
+    def algo(cls, ticker, period, interval, money, buy, sell, user_id):
+        new_entry = cls(ticker, period, interval, money, buy, sell, user_id)
         stock = yf.Ticker(ticker)
         df = stock.history(period=period, interval=interval)
         owned = 0
@@ -77,3 +79,9 @@ class Calculation(object):
         data = Database.find_one("entries", {"_id": _id})
         if data is not None:
             return cls(**data)
+
+    @classmethod
+    def find_by_user_id(cls, user_id):
+        entries = Database.find(collection='entries',
+                                query={'user_id': user_id})
+        return [cls(**entry) for entry in entries]

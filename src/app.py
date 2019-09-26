@@ -1,5 +1,6 @@
 from src.common.database import Database
 from src.models.calculation import Calculation
+from src.models.user import User
 from src.models.processing import Submission
 
 
@@ -16,9 +17,45 @@ def home_template():
 def login_template():
     return render_template('login.html')
 
+@app.route('/register')
+def register_template():
+    return render_template('register.html')
+
+@app.route('/logout')
+def log_out():
+    User.logout()
+    return render_template("home.html")
+
 @app.before_first_request
 def initialize_database():
     Database.initialize()
+    session['email'] = None
+
+@app.route('/auth/login', methods=['POST'])
+def login_user():
+    email = request.form['email']
+    password = request.form['password']
+
+    if User.login_valid(email, password):
+        User.login(email)
+        return render_template("profile.html", email=session['email'])
+    else:
+        session['email'] = None
+        return render_template("login.html")
+
+
+@app.route('/auth/register', methods=['POST'])
+def register_user():
+    email = request.form['email']
+    password = request.form['password']
+    User.register(email, password)
+
+    return render_template("profile.html", email=session['email'])
+
+@app.route('/profile')
+def profile_template():
+    return render_template("profile.html", email=session['email'])
+
 
 @app.route('/stock_data')
 def data_entry_template():
@@ -32,20 +69,12 @@ def calc_data():
     money = request.form['money']
     buy = request.form['buy']
     sell = request.form['sell']
+    if session['email'] != None:
+        user_id = User.get_id_by_email(session['email'])
+    else:
+        user_id = "guest"
 
- ##   valid = [Submission.verify_ticker(ticker),
- ##           Submission.verify_money(money)]
- ##   if valid == [True, True]:
- ##       final_money = Calculation.algo(ticker, period, interval, money, buy, sell)
- ##   else:
- ##       for entry in valid:
- ##           error_message = ["The ticker you entered was not valid",
- ##                             "The money you entered was not valid"]
- ##           if valid[entry] == False:
- ##               return_message += error_message[entry]
- ##           elif valid[entry] == True:
- ##               return_message += Null
-    transaction = Calculation.algo(ticker, period, interval, money, buy, sell)
+    transaction = Calculation.algo(ticker, period, interval, money, buy, sell, user_id)
     url = "/results/" + transaction
 
     return redirect(url)

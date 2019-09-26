@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container text-center">
-    <h1>Login</h1>
+    <h1>Register</h1>
 </div>
 <div class="container page-form">
-    <form id="login-form" action="/auth/login" method="post">
+    <form id="login-form" action="/auth/register" method="post">
         <div class="form-group">
             <label for="email">Email</label>
             <input type="text" id="email" class="form-control" name="email" required>
@@ -14,12 +14,12 @@
             <input tyle="password" id="password" class="form-control" name="password" required>
         </div>
         <div class="page-button">
-            <button type="submit" class="btn btn-secondary">Log in</button>
+            <button type="submit" class="btn btn-secondary">Register</button>
         </div>
     </form>
 </div>
 <div class="container text-center">
-    <h4>Don't have an account yet?</h4>
-    <a href="/register" class="btn btn-info" role="button">Register</a>
+    <h4>Already have an account?</h4>
+    <a href="/login" class="btn btn-info" role="button">Login</a>
 </div>
 {% endblock %}

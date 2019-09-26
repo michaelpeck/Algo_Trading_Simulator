@@ -5,8 +5,29 @@
   <title>Trading Algo Simulator</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <script type="text/javascript" src="./static/js/functions.js"></script>
 </head>
 <body>
+  <ul class="nav justify-content-center nav-pills bg-secondary text-light">
+    <li class="nav-item">
+      <a class="nav-link text-light nav-text" href="/">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-light nav-text" href="/stock_data">Bot</a>
+    </li>
+    {% if session['email'] != None %}
+    <li class="nav-item">
+      <a class="nav-link text-light nav-text" href="/profile">Profile</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-light nav-text" href="/logout">Log out</a>
+    </li>
+    {% elif session['email'] == None %}
+    <li class="nav-item">
+      <a class="nav-link text-light nav-text" href="/login">Login</a>
+    </li>
+    {% endif %}
+  </ul>
   {% block content %}
 
   {% endblock %}
