@@ -47,6 +47,10 @@ Python packages:
 Pandas - used for data processing
 yfinance - used for data retrieval
 
+Storage:
+
+MongoDB Atlas - remote server database
+
 *** LIMITATIONS ***
 
 This is not an exact indicator of the preformance of a given stock, it is an estimate.
