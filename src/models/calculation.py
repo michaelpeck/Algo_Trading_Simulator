@@ -5,7 +5,7 @@ import pandas as pd
 from src.common.database import Database
 
 class Calculation(object):
-    def __init__(self, ticker, period, interval, money, buy, sell, trade_cost, user_id=None, final_money=None, final_volume=None, final_liquid=None, _id=None):
+    def __init__(self, ticker, period, interval, money, buy, sell, trade_cost, user_id=None, final_money=None, final_owned=None, final_liquid=None, trades=None, buys=None, sells=None, _id=None):
         self.ticker = ticker.upper()
         self.period = period
         self.interval = interval
@@ -15,8 +15,11 @@ class Calculation(object):
         self.trade_cost = trade_cost
         self.user_id = "guest" if user_id is None else user_id
         self.final_money = 0 if final_money is None else final_money
-        self.final_volume = 0 if final_volume is None else final_volume
+        self.final_owned = 0 if final_owned is None else final_owned
         self.final_liquid = 0 if final_liquid is None else final_liquid
+        self.trades = 0 if trades is None else trades
+        self.buys = 0 if buys is None else buys
+        self.sells = 0 if sells is None else sells
         self._id = uuid.uuid4().hex if _id is None else _id
 
 
@@ -27,38 +30,59 @@ class Calculation(object):
         df = stock.history(period=period, interval=interval)
         owned = 0
         count = 0
+        trades = 0
+        buys = 0
+        sells = 0
         trade_money = float(money)
+        trade_cost = float(trade_cost)
         buy = float(buy)
         sell = float(sell)
         trade_cost = float(trade_cost)
         for index, row in df.iterrows():
             count += 1
-            available_money = money - trade_cost
+            available_money = trade_money - trade_cost
             available_volume = row['Volume']/40
-            if available_money > 0 and row['Low'] <= buy:
-                value = (row['Low']*available_volume)
-                if value>available_money>0:
-                    owned += (available_money/row['Low'])
+            low = round(row['Low'], 4)
+            high = round(row['High'], 4)
+            lvalue = (low * available_volume)
+            hvalue = (high * available_volume)
+            if available_money > 0 and low <= buy and lvalue > trade_cost:
+                if lvalue>available_money>0:
+                    owned += (available_money/low)
                     trade_money = 0
-                elif available_money>value>0:
-                    owned += (value/row['Low'])
+                    trades += 1
+                    buys += 1
+                elif available_money>lvalue>0:
+                    owned += (lvalue/low)
                     trade_money -= trade_cost
-                    trade_money -= value
-            if owned > 0 and row['High'] >= sell:
+                    trade_money -= lvalue
+                    trades += 1
+                    buys += 1
+            if owned > 0 and high >= sell and hvalue > trade_cost:
                 if available_volume > owned:
-                    trade_money += (owned*row['High'])
+                    trade_money += (owned*high)
                     trade_money -= trade_cost
                     owned = 0
+                    trades += 1
+                    sells += 1
                 elif owned > available_volume:
-                    trade_money += (available_volume*row['High'])
+                    trade_money += (available_volume*high)
                     trade_money -= trade_cost
                     owned -= available_volume
+                    trades += 1
+                    sells += 1
 
         if owned > 0:
-            liquid_money = trade_money + df.Low.ix[count-1]*owned
-        new_entry.final_money = trade_money
-        new_entry.final_owned = owned
-        new_entry.final_liquid = liquid_money
+            liquid_money = (trade_money - trade_cost) + df.Low.ix[count-1]*owned
+        else:
+            liquid_money = trade_money
+
+        new_entry.final_money = round(trade_money, 2)
+        new_entry.final_owned = round(owned)
+        new_entry.final_liquid = round(liquid_money, 2)
+        new_entry.trades = trades
+        new_entry.buys = buys
+        new_entry.sells = sells
         new_entry.save_to_mongo()
         return new_entry._id
 
@@ -73,10 +97,16 @@ class Calculation(object):
             'ticker': self.ticker,
             'money': self.money,
             'final_money': self.final_money,
+            'final_owned': self.final_owned,
+            'final_liquid': self.final_liquid,
+            'trades': self.trades,
+            'buys': self.buys,
+            'sells': self.sells,
             'period': self.period,
             'interval': self.interval,
             'buy': self.buy,
-            'sell': self.sell
+            'sell': self.sell,
+            'trade_cost': self.trade_cost
         }
 
     @classmethod
