@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
+<div class="container algo-intro">
     <h1>Trading algorithm parameters</h1>
     <h3>Fill out the form below with the stock information that you would like to run through the algorithm.</h3>
 </div>
@@ -28,12 +28,14 @@
         <option>60m</option>
         <option>90m</option>
       </select>
-      <label for="money">Money to be invested</label>
+      <label for="money">Account balance</label>
       <input type="number" step="0.01" id="money" class="form-control" name="money" required>
       <label for="buy">Buy point</label>
       <input type="number" step="0.0001" id="buy" class="form-control" name="buy" required>
       <label for="sell">Sell point</label>
       <input type="number" step="0.0001" id="sell" class="form-control" name="sell" required>
+      <label for="trade_cost">Cost per trade</label>
+      <input type="number" step="0.01" id="trade_cost" class="form-control" name="trade_cost" required>
     </div>
     <div class="page-button">
       <button type="submit" class="btn btn-secondary">Submit</button>

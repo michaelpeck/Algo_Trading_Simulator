@@ -38,7 +38,9 @@ def login_user():
 
     if User.login_valid(email, password):
         User.login(email)
-        return render_template("profile.html", email=session['email'])
+        user = User.get_by_email(session['email'])
+        entries = user.get_entries()
+        return render_template("profile.html", user=user, entries=entries, email=session['email'])
     else:
         session['email'] = None
         return render_template("login.html")
@@ -46,15 +48,20 @@ def login_user():
 
 @app.route('/auth/register', methods=['POST'])
 def register_user():
+    first_name = request.form['first']
+    last_name = request.form['last']
     email = request.form['email']
     password = request.form['password']
-    User.register(email, password)
+    User.register(first_name, last_name, email, password)
 
     return render_template("profile.html", email=session['email'])
 
 @app.route('/profile')
 def profile_template():
-    return render_template("profile.html", email=session['email'])
+    user = User.get_by_email(session['email'])
+    entries = user.get_entries()
+
+    return render_template("profile.html", user=user, entries=entries, email=session['email'])
 
 
 @app.route('/stock_data')
@@ -69,12 +76,14 @@ def calc_data():
     money = request.form['money']
     buy = request.form['buy']
     sell = request.form['sell']
+    trade_cost = request.form['trade_cost']
     if session['email'] != None:
-        user_id = User.get_id_by_email(session['email'])
+        user = User.get_id_by_email(session['email'])
+        user_id = user.user_id
     else:
         user_id = "guest"
 
-    transaction = Calculation.algo(ticker, period, interval, money, buy, sell, user_id)
+    transaction = Calculation.algo(ticker, period, interval, money, buy, sell, trade_cost, user_id)
     url = "/results/" + transaction
 
     return redirect(url)

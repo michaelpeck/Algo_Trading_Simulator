@@ -7,3 +7,71 @@
 .nav-text{
     font-size: 24px;
 }
+
+/* Home page */
+.concept-flex {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.concept-pic{
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 350px;
+    height: 600px;
+    width: 50%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.concept-text{
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 350px;
+    width:50%;
+    text-align: center;
+}
+.concept-container{
+    padding: 3%;
+}
+.concept-background{
+    height: 400px;
+    background-color: #B8B8B8;
+    background-image: url("../assets/The_Concept.png");
+    background-position: top left;
+}
+.volume-background{
+    height: 400px;
+    background-color: #D0D0D0;
+    background-image: url("../assets/Volume.png");
+    background-position: top right;
+}
+.volatility-background{
+    height: 400px;
+    background-color: #E8E8E8;
+    background-image: url("../assets/Volatility.png");
+    background-position: top left;
+}
+.concept-conclusion {
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #263238;
+}
+
+/* Algo page */
+.algo-intro{
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+/* Profile page */
+.profile-header {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.profile-text {
+    padding-bottom:50px;
+}
+
