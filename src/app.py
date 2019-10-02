@@ -13,6 +13,10 @@ app.secret_key = "Michael"
 def home_template():
     return render_template('home.html')
 
+@app.route('/about')
+def about_template():
+    return render_template('about.html')
+
 @app.route('/login')
 def login_template():
     return render_template('login.html')
@@ -63,12 +67,23 @@ def profile_template():
 
     return render_template("profile.html", user=user, entries=entries, email=session['email'])
 
+@app.route('/strategies')
+def strategies_template():
+    return render_template('strategies.html')
 
-@app.route('/stock_data')
-def data_entry_template():
-    return render_template('stock_data.html')
+@app.route('/static_range')
+def static_range_template():
+    return render_template('static_range.html')
 
-@app.route('/calc/stock_data', methods=['POST'])
+@app.route('/moving_average')
+def moving_average_template():
+    return render_template('moving_average.html')
+
+@app.route('/weighted_moving_average')
+def weighted_moving_average_template():
+    return render_template('weighted_moving_average.html')
+
+@app.route('/calc/static_range', methods=['POST'])
 def calc_data():
     ticker = request.form['ticker']
     period = request.form['period']
@@ -83,7 +98,7 @@ def calc_data():
     else:
         user_id = "guest"
 
-    transaction = Calculation.algo(ticker, period, interval, money, buy, sell, trade_cost, user_id)
+    transaction = Calculation.static_range("SR", ticker, period, interval, money, buy, sell, trade_cost, user_id)
     url = "/results/" + transaction
 
     return redirect(url)

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container algo-intro">
+    <h1>Static Range algorithm</h1>
+    <p>Fill out the form below with the stock information that you would like to run through the algorithm.</p>
+</div>
+
+<div class="container page-form">
+  <form id="stock-data-form" class="stock-data-form" action="/calc/static_range" method="post">
+    <h3 class="text-center" style="padding-bottom: 20px;">Parameters</h3>
+    <div class="form-group">
+      <div class="form-group row">
+          <label for="ticker" class="col-lg-6 col-form-label">Ticker</label>
+          <div class="col-lg-6">
+                <input type="text" id="ticker" class="form-control" name="ticker" required>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="period" class="col-lg-6 col-form-label">Period</label>
+          <div class="col-lg-6">
+                <select id="period" class="form-control" name="period">
+                    <option>1d</option>
+                    <option>5d</option>
+                    <option>1mo</option>
+                    <option>3mo</option>
+                    <option>6mo</option>
+                </select>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="interval" class="col-lg-6 col-form-label">Interval</label>
+          <div class="col-lg-6">
+                <select id="interval" class="form-control" name="interval">
+                    <option>1m</option>
+                    <option>2m</option>
+                    <option>5m</option>
+                    <option>15m</option>
+                    <option>30m</option>
+                    <option>60m</option>
+                    <option>90m</option>
+                </select>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="money" class="col-lg-6 col-form-label">Account balance</label>
+          <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend">$</span>
+                </div>
+                <input type="number" step="0.01" id="money" class="form-control" name="money" aria-describedby="inputGroupPrepend" required>
+              </div>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="buy" class="col-lg-6 col-form-label">Buy point</label>
+          <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2">$</span>
+                </div>
+                <input type="number" step="0.0001" id="buy" class="form-control" name="buy" aria-describedby="inputGroupPrepend2" required>
+              </div>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="sell" class="col-lg-6 col-form-label">Sell point</label>
+          <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend3">$</span>
+                </div>
+                <input type="number" step="0.0001" id="sell" class="form-control" name="sell" aria-describedby="inputGroupPrepend3" required>
+              </div>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="trade_cost" class="col-lg-6 col-form-label">Cost per trade</label>
+          <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend4">$</span>
+                </div>
+                <input type="number" step="0.01" id="trade_cost" class="form-control" name="trade_cost" aria-describedby="inputGroupPrepend4" required>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="page-button text-center">
+      <button type="submit" class="btn btn-secondary">Submit</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="info-intro">
+        <h1>Strategies</h1>
+        <p>These are several different strategies that you can use.</p>
+    </div>
+    <div class="checker-flex">
+        <div class="checker-item">
+            <div class="checker-content"></div>
+        </div>
+        <div class="checker-item">
+            <div class="checker-content">
+                <h3>Static Range</h3>
+                <p>Define static buy and sell prices for fulfilment with availibility.</p>
+                <div class="page-button text-center">
+                    <a class="btn btn-secondary" href="/static_range">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="checker-flex">
+        <div class="checker-item">
+            <div class="checker-content">
+                <h3>Moving Average</h3>
+                <p>Define average duration and trading criteria in relation to the moving average.</p>
+                <div class="page-button text-center">
+                    <a class="btn btn-secondary" href="/moving_average">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="checker-item">
+            <div class="checker-content"></div>
+        </div>
+    </div>
+    <div class="checker-flex">
+        <div class="checker-item">
+            <div class="checker-content"></div>
+        </div>
+        <div class="checker-item">
+            <div class="checker-content">
+                <h3>Weighted Moving Average</h3>
+                <p>Define average duration and trading criteria in relation to the weighted moving average.</p>
+                <div class="page-button text-center">
+                    <a class="btn btn-secondary" href="/weighted_moving_average">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

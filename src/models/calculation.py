@@ -5,7 +5,8 @@ import pandas as pd
 from src.common.database import Database
 
 class Calculation(object):
-    def __init__(self, ticker, period, interval, money, buy, sell, trade_cost, user_id=None, final_money=None, final_owned=None, final_liquid=None, trades=None, buys=None, sells=None, _id=None):
+    def __init__(self, type, ticker, period, interval, money, buy, sell, trade_cost, user_id=None, final_money=None, final_owned=None, final_liquid=None, trades=None, buys=None, sells=None, _id=None):
+        self.type = type
         self.ticker = ticker.upper()
         self.period = period
         self.interval = interval
@@ -24,8 +25,8 @@ class Calculation(object):
 
 
     @classmethod
-    def algo(cls, ticker, period, interval, money, buy, sell, trade_cost, user_id):
-        new_entry = cls(ticker, period, interval, money, buy, sell, trade_cost, user_id)
+    def static_range(cls, type, ticker, period, interval, money, buy, sell, trade_cost, user_id):
+        new_entry = cls(type, ticker, period, interval, money, buy, sell, trade_cost, user_id)
         stock = yf.Ticker(ticker)
         df = stock.history(period=period, interval=interval)
         owned = 0

@@ -3,32 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Trading Algo Simulator</title>
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   <script type="text/javascript" src="./static/js/functions.js"></script>
 </head>
 <body>
 <nav class="navbar" style="background-color: #263238">
-  <a class="navbar-brand" href="#">
-    <img src="./static/assets/PennStockBot_Logo.png" width="80px;" alt="">
+  <a class="navbar-brand" style="padding-left: 10px;" href="#">
+    <img src="./static/assets/SenseBot_Logo_Green.png" width="80px;" alt="">
   </a>
   <ul class="nav justify-content-end nav-pills text-light">
     <li class="nav-item">
       <a class="nav-link text-light nav-text" href="/">Home</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link text-light nav-text" href="/stock_data">Bot</a>
+      <a class="nav-link text-light nav-text" href="/about">About</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-light nav-text" href="/strategies">Bot</a>
     </li>
     {% if session['email'] != None %}
     <li class="nav-item">
       <a class="nav-link text-light nav-text" href="/profile">Profile</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link text-light nav-text" href="/logout">Log out</a>
+    <li class="nav-item log">
+      <a class="nav-link nav-text log-text" href="/logout">Log out</a>
     </li>
     {% elif session['email'] == None %}
-    <li class="nav-item">
-      <a class="nav-link text-light nav-text" href="/login">Login</a>
+    <li class="nav-item log">
+      <a class="nav-link nav-text log-text" href="/login">Login</a>
     </li>
     {% endif %}
   </ul>

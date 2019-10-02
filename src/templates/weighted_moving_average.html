@@ -1,21 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container algo-intro">
-    <h1>Trading algorithm parameters</h1>
-    <h3>Fill out the form below with the stock information that you would like to run through the algorithm.</h3>
+    <h1>Weighted moving average algorithm</h1>
+    <p>Fill out the form below with the stock information that you would like to run through the algorithm.</p>
 </div>
 
 <div class="container page-form">
-  <form id="stock-data-form" action="/calc/stock_data" method="post">
+  <form id="stock-data-form" class="stock-data-form" action="/calc/stock_data" method="post">
+    <h3 class="text-center" style="padding-bottom: 20px;">Parameters</h3>
     <div class="form-group">
       <div class="form-group row">
-          <label for="ticker" class="col-lg-6 col-form-label text-center">Ticker</label>
+          <label for="ticker" class="col-lg-6 col-form-label">Ticker</label>
           <div class="col-lg-6">
                 <input type="text" id="ticker" class="form-control" name="ticker" required>
           </div>
       </div>
       <div class="form-group row">
-          <label for="period" class="col-lg-6 col-form-label text-center">Period</label>
+          <label for="period" class="col-lg-6 col-form-label">Period</label>
           <div class="col-lg-6">
                 <select id="period" class="form-control" name="period">
                     <option>1d</option>
@@ -27,7 +28,7 @@
           </div>
       </div>
       <div class="form-group row">
-          <label for="interval" class="col-lg-6 col-form-label text-center">Interval</label>
+          <label for="interval" class="col-lg-6 col-form-label">Interval</label>
           <div class="col-lg-6">
                 <select id="interval" class="form-control" name="interval">
                     <option>1m</option>
@@ -41,7 +42,7 @@
           </div>
       </div>
       <div class="form-group row">
-          <label for="money" class="col-lg-6 col-form-label text-center">Account balance</label>
+          <label for="money" class="col-lg-6 col-form-label">Account balance</label>
           <div class="col-lg-6">
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -52,7 +53,7 @@
           </div>
       </div>
       <div class="form-group row">
-          <label for="buy" class="col-lg-6 col-form-label text-center">Buy point</label>
+          <label for="buy" class="col-lg-6 col-form-label">Buy point</label>
           <div class="col-lg-6">
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -63,7 +64,7 @@
           </div>
       </div>
       <div class="form-group row">
-          <label for="sell" class="col-lg-6 col-form-label text-center">Sell point</label>
+          <label for="sell" class="col-lg-6 col-form-label">Sell point</label>
           <div class="col-lg-6">
               <div class="input-group">
                 <div class="input-group-prepend">
@@ -74,7 +75,7 @@
           </div>
       </div>
       <div class="form-group row">
-          <label for="trade_cost" class="col-lg-6 col-form-label text-center">Cost per trade</label>
+          <label for="trade_cost" class="col-lg-6 col-form-label">Cost per trade</label>
           <div class="col-lg-6">
               <div class="input-group">
                 <div class="input-group-prepend">

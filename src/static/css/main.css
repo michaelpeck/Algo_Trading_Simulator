@@ -1,3 +1,6 @@
+body {
+    font-family: 'Raleway', sans-serif;
+}
 .page-form{
     max-width: 500px;
 }
@@ -7,8 +10,82 @@
 .nav-text{
     font-size: 24px;
 }
+.navbar{
+    padding: 0px;
+    margin: 0px;
+}
+.log{
+    background-color: white;
+}
+.log-text{
+    color: #263238;
+}
 
 /* Home page */
+.jumbotron {
+    padding-bottom: 0px;
+}
+.home-hero{
+    background: linear-gradient(150deg, #4095BF 20%, #2D6886 20%);
+}
+.hero-image{
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/Green_Hero_Logo.png');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: 95% 170%;
+}
+.lead {
+    padding-top: 40px;
+}
+.btn-start{
+    background-color: #263238;
+    border: 0px;
+    color: white;
+}
+.btn-start:hover{
+    background-color: #90EE90;
+    color: white;
+}
+.home-col-flex{
+    width: 100%;
+    padding: 0px 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.flex-col{
+    color: #263238;
+    padding: 0px 30px;
+    width: 400px;
+}
+/* Strategies Page */
+.info-intro{
+    padding-top: 50px;
+}
+.checker-flex{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.checker-item{
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 350px;
+    width: 50%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+}
+.checker-content {
+
+}
+
+/* About Page */
+
 .concept-flex {
     width: 100%;
     display: flex;
@@ -59,10 +136,14 @@
     background-color: #263238;
 }
 
-/* Algo page */
+/* Algo pages */
 .algo-intro{
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding: 50px 100px;
+
+}
+.stock-data-form{
+    padding: 50px;
+    background-color: #E8E8E8;
 }
 
 /* Results page */
