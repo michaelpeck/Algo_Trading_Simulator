@@ -15,26 +15,45 @@
             Test out different methods and strategies to see what works for your stocks.</h4>
     </div>
     <div class="home-col-flex">
-        <div class="flex-col">
+        <div class="flex-col-three">
             <h2>Make smart decisions</h2>
             <p>Automated trading can be risky. Make sure your strategies are tried and true before putting them into action.</p>
         </div>
-        <div class="flex-col">
+        <div class="flex-col-three">
             <h2>Get creative</h2>
             <p>Take advantage of SenseBot's customization to easily try out new ideas.</p>
         </div>
-        <div class="flex-col">
+        <div class="flex-col-three">
             <h2>Save your work</h2>
             <p>Keep all of your work in one place by saving strategies and test instances.</p>
         </div>
     </div>
 
-    <div id="warning" class="text-light text-center" style="background-color: rgba(220,53,69,0.5); margin:5%; padding:3%; border-radius:10px">
-        <h4>NOTE: CALCULATIONS ARE AN ESTIMATE, NOT AN EXACT RESULT OF THEORETICAL PERFORMANCE</h4>
-        <a href="/about" class="btn btn-lg btn-danger" role="button">READ MORE</a>
+    <div class="text-light text-center home-about">
+        <h4>SenseBot uses publicly accessible stock market data and best practices to calculate performance for a variety
+        of applications. While it does not guarantee future results, it's customizable algorithm parameters allow you to
+        test detailed strategies so that you can make better decisions in the market.</h4>
+        <a href="/about" class="btn btn-lg btn-about" role="button">Read more</a>
     </div>
-    <div id="startbutton" class="text-center" style="padding:2%">
-        <a href="/strategies" class="btn btn-lg btn-success" role="button" style="background-color: #90EE90; border:0px;">START</a>
+    <div class="home-col-flex" style="height: 300px;">
+        <div class="flex-col-two">
+            <div class="home-strategies-text">
+                <h3>Learn more about each of the </h3>
+            </div>
+            <div class="home-strategies-buttons">
+                <a href="/strategies" class="btn btn-lg btn-strategies" style="background-color: #90EE90; border:0px;">Strategies</a>
+            </div>
+        </div>
+        <div class="flex-col-two">
+            <div class="home-strategies-text">
+                <h3>or go ahead and jump right in!</h3>
+            </div>
+            <div class="home-strategies-buttons">
+                <a href="/strategies" class="btn btn-lg btn-strategies text-light" style="background-color: #4095BF; border:0px;">Static range</a>
+                <a href="/strategies" class="btn btn-lg btn-strategies text-light" style="background-color: #2D6886; border:0px;">Moving average</a>
+                <a href="/strategies" class="btn btn-lg btn-strategies text-light" style="background-color: #263238; border:0px;">Weighted moving average</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

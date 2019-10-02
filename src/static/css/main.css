@@ -55,16 +55,65 @@ body {
     flex-wrap: wrap;
     justify-content: center;
 }
-.flex-col{
+.flex-col-three{
     color: #263238;
     padding: 0px 30px;
     width: 400px;
+}
+.home-about{
+     background-color: #4095BF;
+     padding:50px 8%;
+     margin-top: 30px;
+}
+.btn-about{
+    border: 0px;
+    background-color: white;
+    color: #263238;
+    margin-top: 20px;
+}
+.btn-about:hover {
+    background-color: #90EE90;
+}
+.flex-col-two{
+    color: #263238;
+    padding: 30px 30px;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.home-strategies-text{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    width: 180px;
+}
+.home-strategies-buttons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+.btn-strategies{
+    width: 280px;
+    margin: 5px auto;
+    padding: auto;
 }
 /* Strategies Page */
 .info-intro{
     padding-top: 50px;
 }
 .checker-flex{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    align-items: center;
+    justify-content: center;
+}
+.checker-flex-two{
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -76,12 +125,13 @@ body {
     flex-basis: 0;
     min-width: 350px;
     width: 50%;
-    height: 500px;
+    height: 450px;
     display: flex;
     align-items: center;
 }
 .checker-content {
-
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 /* About Page */

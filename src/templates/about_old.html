@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <div class="concept-flex text-dark">
+        <div class="concept-pic concept-background"></div>
+        <div class="concept-text">
+            <div class="concept-container">
+                <p>Have you ever watched The Wolf of Wall Street and wondered how Jordan Belfort made so much money selling
+                    stocks that cost a fraction of a dollar?</p>
+                <p>Well, there were the lies to investors and the fraudulent pump and dump tactics which account for the rise
+                    of his empire, but before he started Stratton Oakmont he was still making big money without breaking the law.
+                    How?</p>
+            </div>
+        </div>
+    </div>
+    <div class="concept-flex text-dark">
+        <div class="concept-text">
+            <div class="concept-container">
+                <p>The rest of Wall Street had written off penny stocks because they didn't represent the REAL players in the
+                economy and left them to small one-off brokers like 'Investors' Center' who might sell just as many stocks
+                by volume, but touch a fraction of the money.</p>
+                <p>What Jordan Belfort realized, was that <b>100,000 pennies is worth just as much as
+                a single 100 dollar bill</b>. He could charge the same percentage for a sale as any of the big Wall Street
+                brokers, so all he had to do to make the same paycheck was to sell more shares, and when a stock costs a penny,
+                selling 100,000 of them was merely a matter of convincing that investor to break their $100 up.</p>
+            </div>
+        </div>
+        <div class="concept-pic volume-background">
+        </div>
+    </div>
+    <div class="concept-flex text-dark">
+        <div class="concept-pic volatility-background">
+        </div>
+        <div class="concept-text">
+            <div class="concept-container">
+                <p>But why would they do that? After all, buying one share of an established company is much safer than buying
+                    100,000 shares of a puny company that could go under on any given day.</p>
+                <p>The greater the risk, the greater the reward, and in this case that concept is taken to new heights. If one
+                    day that stock starts trading for 2 cents, all of a sudden that $100 is now $200 in a matter of hours!
+                    That $100 stock could never. It might be work $120 after a good year an the investors would be thrilled.
+                    Granted, that 1 cent stock could just as easily go to 0 cents, but people are optimistic, and greedy.</p>
+            </div>
+        </div>
+    </div>
+    <div id="ConceptConclusion" class="container concept-conclusion text-light">
+        <h3>So what does all of this have to do with The PennyStockBot?</h3>
+        <h4>We're taking that understanding of <span style="color:#90EE90">volume</span> and
+        <span style="color:rgba(220,53,69,0.5)">volatility</span> and programming them into an automated trading
+        algorithm to take advantage of those rewards while minimizing the risks.</h4>
+        <p>Unlike Jordan Belfort who was profiting off of the sales, we're trying to capitalize on those massive
+        fluctuations in the stock values. That means that we're incurring the risk as well, but instead of falling
+        victim to the pitch of an effective broker, we're using data, emotionless computer logic, and safeguards.</p>
+    </div>
+</div>
+    <div class="container">
+        <p>Yfinance, the Python package used by this algorithm provides open/close and high/low prices for each specified
+          interval over the course of the period, it does not indicate actual transaction instances with price, volume, and
+          bid/ask information. As a result, I attempted to create a conservative estimate of transaction volumes and was
+          unable to account for larger bids/asks that would take precedent over certain attempted transactions.</p>
+    </div>
+
+{% endblock %}
