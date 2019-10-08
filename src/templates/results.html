@@ -67,8 +67,8 @@
         </div>
     </div>
 
-
-    <a href="/stock_data" class="btn btn-info" role="button">Try again</a>
+    {% set url  = '/static_range/' + results.model_id %}
+    <a href="{{ url }}" class="btn btn-info" role="button">Try again</a>
 
 </div>
 {% endblock %}

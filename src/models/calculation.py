@@ -3,9 +3,10 @@ import datetime as dt
 import yfinance as yf
 import pandas as pd
 from src.common.database import Database
+from src.models.strategy_model import Model
 
 class Calculation(object):
-    def __init__(self, type, ticker, period, interval, money, buy, sell, trade_cost, user_id=None, final_money=None, final_owned=None, final_liquid=None, trades=None, buys=None, sells=None, _id=None):
+    def __init__(self, type, ticker, period, interval, money, buy, sell, trade_cost, user_id, model_id=None, final_money=None, final_owned=None, final_liquid=None, trades=None, buys=None, sells=None, _id=None):
         self.type = type
         self.ticker = ticker.upper()
         self.period = period
@@ -22,11 +23,12 @@ class Calculation(object):
         self.buys = 0 if buys is None else buys
         self.sells = 0 if sells is None else sells
         self._id = uuid.uuid4().hex if _id is None else _id
+        self.model_id = model_id
 
 
     @classmethod
-    def static_range(cls, type, ticker, period, interval, money, buy, sell, trade_cost, user_id):
-        new_entry = cls(type, ticker, period, interval, money, buy, sell, trade_cost, user_id)
+    def static_range(cls, type, ticker, period, interval, money, buy, sell, trade_cost, user_id, model_name):
+        new_entry = cls(type, ticker, period, interval, money, buy, sell, trade_cost, user_id, model_name)
         stock = yf.Ticker(ticker)
         df = stock.history(period=period, interval=interval)
         owned = 0
@@ -95,6 +97,8 @@ class Calculation(object):
         return{
             '_id': self._id,
             'user_id': self.user_id,
+            'model_id': self.model_id,
+            'type': self.type,
             'ticker': self.ticker,
             'money': self.money,
             'final_money': self.final_money,

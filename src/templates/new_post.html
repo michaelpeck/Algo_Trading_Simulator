@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container algo-intro">
+    <h1>New post</h1>
+    <p>Create a new post below.</p>
+</div>
+
+<div class="container page-form">
+    <form id="new-post-form" action="/post/new" method="post">
+        <h3 class="text-center" style="padding-bottom: 20px;">Input</h3>
+        <div class="form-group">
+            <div class="form-group row">
+                <label for="title" class="col-lg-6 col-form-label">Title</label>
+                <div class="col-lg-6">
+                    <input type="text" id="title" class="form-control" name="title" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="content" class="col-lg-6 col-form-label">Content</label>
+                <div class="col-lg-6">
+                    <input type="text" id="content" class="form-control" name="content" required>
+                </div>
+            </div>
+        </div>
+        <div class="page-button text-center">
+          <button type="submit" class="btn btn-secondary">Submit</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

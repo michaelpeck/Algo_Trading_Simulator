@@ -1,6 +1,7 @@
 import uuid
 from src.common.database import Database
 from src.models.calculation import Calculation
+from src.models.strategy_model import Model
 from flask import Flask, session
 
 __author__ = 'michaelpeck'
@@ -61,6 +62,9 @@ class User(object):
     def get_entries(self):
         return Calculation.find_by_user_id(self.user_id)
 
+    def get_models(self):
+        return Model.find_by_user_id(self.user_id)
+
     def json(self):
         return {
             "first_name": self.first_name,
@@ -71,3 +75,7 @@ class User(object):
         }
     def save_to_mongo(self):
         Database.insert("users", self.json())
+
+
+    def get_id(self):
+        return self.user_id

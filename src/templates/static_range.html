@@ -1,9 +1,90 @@
 {% extends "base.html" %}
 {% block content %}
+
+{% set ticker = model.ticker %}
+{% set interval = model.interval %}
+{% set period = model.period %}
+{% set money = model.money %}
+{% set buy = model.buy %}
+{% set sell = model.sell %}
+{% set trade_cost = model.trade_cost %}
+
+{% if interval == "1m" %}
+    {% set om = 'selected' %}
+{% elif interval == "2m" %}
+    {% set tm = 'selected' %}
+{% elif interval == "5m" %}
+    {% set fm = 'selected' %}
+{% elif interval == "15m" %}
+    {% set ftm = 'selected' %}
+{% elif interval == "30m" %}
+    {% set ttm = 'selected' %}
+{% elif interval == "60m" %}
+    {% set stm = 'selected' %}
+{% elif interval == "90m" %}
+    {% set ntm = 'selected' %}
+{% endif %}
+
+{% if period == '1d' %}
+    {% set od = 'selected' %}
+{% elif period == '5d' %}
+    {% set fd = 'selected' %}
+{% elif period == '1mo' %}
+    {% set omo = 'selected' %}
+{% elif period == '3mo' %}
+    {% set tmo = 'selected' %}
+{% elif period == '6mo' %}
+    {% set smo = 'selected' %}
+{% endif %}
+
+
+
+
 <div class="container algo-intro">
     <h1>Static Range algorithm</h1>
     <p>Fill out the form below with the stock information that you would like to run through the algorithm.</p>
+    <table id="parameter-explanation" class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Explanation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Ticker</th>
+                        <td>Official symbol used for trading on the New York Stock Exchange</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Period</th>
+                        <td>Total period over which to run the trading algorithm dating back from the time of execution.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Interval</th>
+                        <td>Data intervals within the specified period. Smaller intervals will yield more accurate results,
+                         but are not available for longer periods.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Account balance</th>
+                        <td>Beginning balance of available money to be traded.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Buy point</th>
+                        <td>Price at which to purchase shares if there is money in the account.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Sell point</th>
+                        <td>Price at which to sell any shares that are currently owned.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cost per trade</th>
+                        <td>Brokerage fee per transaction. This amount will be charged from the account every time a stock
+                        is bought or sold.</td>
+                    </tr>
+                </tbody>
+            </table>
 </div>
+
 
 <div class="container page-form">
   <form id="stock-data-form" class="stock-data-form" action="/calc/static_range" method="post">
@@ -12,18 +93,18 @@
       <div class="form-group row">
           <label for="ticker" class="col-lg-6 col-form-label">Ticker</label>
           <div class="col-lg-6">
-                <input type="text" id="ticker" class="form-control" name="ticker" required>
+                <input type="text" id="ticker" value="{{ model.ticker }}" class="form-control" name="ticker" required>
           </div>
       </div>
       <div class="form-group row">
           <label for="period" class="col-lg-6 col-form-label">Period</label>
           <div class="col-lg-6">
                 <select id="period" class="form-control" name="period">
-                    <option>1d</option>
-                    <option>5d</option>
-                    <option>1mo</option>
-                    <option>3mo</option>
-                    <option>6mo</option>
+                    <option {{od}}>1d</option>
+                    <option {{fd}}>5d</option>
+                    <option {{omo}}>1mo</option>
+                    <option {{tmo}}>3mo</option>
+                    <option {{smo}}>6mo</option>
                 </select>
           </div>
       </div>
@@ -31,13 +112,13 @@
           <label for="interval" class="col-lg-6 col-form-label">Interval</label>
           <div class="col-lg-6">
                 <select id="interval" class="form-control" name="interval">
-                    <option>1m</option>
-                    <option>2m</option>
-                    <option>5m</option>
-                    <option>15m</option>
-                    <option>30m</option>
-                    <option>60m</option>
-                    <option>90m</option>
+                    <option {{om}}>1m</option>
+                    <option {{tm}}>2m</option>
+                    <option {{fm}}>5m</option>
+                    <option {{ftm}}>15m</option>
+                    <option {{ttm}}>30m</option>
+                    <option {{stm}}>60m</option>
+                    <option {{ntm}}>90m</option>
                 </select>
           </div>
       </div>
@@ -48,7 +129,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend">$</span>
                 </div>
-                <input type="number" step="0.01" id="money" class="form-control" name="money" aria-describedby="inputGroupPrepend" required>
+                <input type="number" step="0.01" id="money" class="form-control" name="money" value="{{money}}" aria-describedby="inputGroupPrepend" required>
               </div>
           </div>
       </div>
@@ -59,7 +140,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2">$</span>
                 </div>
-                <input type="number" step="0.0001" id="buy" class="form-control" name="buy" aria-describedby="inputGroupPrepend2" required>
+                <input type="number" step="0.0001" id="buy" class="form-control" name="buy" value="{{buy}}" aria-describedby="inputGroupPrepend2" required>
               </div>
           </div>
       </div>
@@ -70,7 +151,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend3">$</span>
                 </div>
-                <input type="number" step="0.0001" id="sell" class="form-control" name="sell" aria-describedby="inputGroupPrepend3" required>
+                <input type="number" step="0.0001" id="sell" class="form-control" name="sell" value="{{sell}}" aria-describedby="inputGroupPrepend3" required>
               </div>
           </div>
       </div>
@@ -81,7 +162,15 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend4">$</span>
                 </div>
-                <input type="number" step="0.01" id="trade_cost" class="form-control" name="trade_cost" aria-describedby="inputGroupPrepend4" required>
+                <input type="number" step="0.01" id="trade_cost" class="form-control" name="trade_cost" value="{{trade_cost}}" aria-describedby="inputGroupPrepend4" required>
+              </div>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="model_name" class="col-lg-6 col-form-label">Name this model? (Optional)</label>
+          <div class="col-lg-6">
+              <div class="input-group">
+                <input type="text" id="model_name" class="form-control" name="model_name">
               </div>
           </div>
       </div>
@@ -91,8 +180,5 @@
     </div>
   </form>
 </div>
-<div class="container">
-    <h2>How it works</h2>
-    <
-</div>
+
 {% endblock %}

@@ -20,6 +20,9 @@ body {
 .log-text{
     color: #263238;
 }
+.center-header{
+    padding-top: 50px;
+}
 
 /* Home page */
 .jumbotron {
@@ -104,7 +107,7 @@ body {
 }
 /* Strategies Page */
 .info-intro{
-    padding-top: 50px;
+    padding: 50px 0px;
 }
 .checker-flex{
     width: 100%;
@@ -135,57 +138,43 @@ body {
 }
 
 /* About Page */
-
-.concept-flex {
+.flex-col-three-sm{
+    color: #263238;
+    padding: 0px 30px;
+    width: 330px;
+}
+.abt-checker {
+    height: 300px;
+}
+.concept-background {
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-.concept-pic{
-    flex-grow: 1;
-    flex-basis: 0;
-    min-width: 350px;
-    height: 600px;
-    width: 50%;
-    background-repeat: no-repeat;
-    background-size: 100%;
-}
-.concept-text{
-    flex-grow: 1;
-    flex-basis: 0;
-    min-width: 350px;
-    width:50%;
-    text-align: center;
-}
-.concept-container{
-    padding: 3%;
-}
-.concept-background{
-    height: 400px;
-    background-color: #B8B8B8;
-    background-image: url("../assets/The_Concept.png");
-    background-position: top left;
-}
-.volume-background{
-    height: 400px;
-    background-color: #D0D0D0;
-    background-image: url("../assets/Volume.png");
-    background-position: top right;
-}
-.volatility-background{
-    height: 400px;
     background-color: #E8E8E8;
-    background-image: url("../assets/Volatility.png");
-    background-position: top left;
+    padding: auto auto;
 }
-.concept-conclusion {
-    margin: 20px auto;
-    padding: 30px;
-    background-color: #263238;
+.about-concept{
+    display: inline-block;
+    padding-top: 30px;
+    margin: 30px auto;
 }
-
+.three-icon{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.about-uses{
+    padding-top: 30px;
+}
+.limitation-background {
+    width: 100%;
+    background-color: #4095BF;
+}
+.about-limitations{
+    display: table;
+    padding: 40px 0px;
+    margin: 30px auto;
+}
+.about-start-button{
+    margin: 30px auto;
+}
 /* Algo pages */
 .algo-intro{
     padding: 50px 100px;

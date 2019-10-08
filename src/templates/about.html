@@ -2,24 +2,133 @@
 {% block content %}
 <div class="container">
     <div class="info-intro">
-        <h1>About SenseBot</h1>
+        <h1>About Sense bot</h1>
         <p>A general overview of what SenseBot does and how it does it.</p>
     </div>
-    <div id="concept" class="about-concept">
+</div>
+<div class="concept-background text-center">
+    <div id="concept" class="container about-concept">
         <h2>Concept</h2>
         <p>In a world where nearly everyone has access to algorithmic trading technologies but it is only used by Wall
         Street brokers, we're trying to make learning and experimenting more accessible.</p>
+        <div class="home-col-flex">
+            <div class="flex-col-three-sm">
+                <div class="text-center three-icon">
+                    <img src="../static/assets/Simple.png" height="100px">
+                </div>
+                <h2>Simple</h2>
+                <p>Sense bot is designed to look more like your favorite social media platform than your typical brokerage site.
+                We try to make navigation easy for people of all backgrounds so that users feel empowered, not overwhelmed.</p>
+            </div>
+            <div class="flex-col-three-sm">
+                <div class="text-center three-icon">
+                    <img src="../static/assets/Transparent.png" height="100px">
+                </div>
+                <h2>Transparent</h2>
+                <p>No degree in finance? No problem! At Sense we try to provide information in terms that everyone can understand.
+                The core concepts to our platform are not that difficult, so we want to eliminate the tricky syntax that prevents
+                people without a business degree from understanding them.</p>
+            </div>
+            <div class="flex-col-three-sm">
+                <div class="text-center three-icon">
+                    <img src="../static/assets/Fun.png" height="100px">
+                </div>
+                <h2>Fun</h2>
+                <p>Playing with money is fun, especially when you aren't risking your life savings. By simplifying the experience,
+                we're making it fun to test out your ideas and grow your financial literacy.</p>
+            </div>
+        </div>
     </div>
+</div>
+<div class="container">
     <div id="uses" class="about-uses">
         <h2>Uses</h2>
         <p>SenseBot originated as a test-mechanism for low-cap stocks, but the possibilities don't end there!</p>
+        <div class="checker-flex">
+            <div class="checker-item abt-checker">
+                <div class="checker-content">
+                    <img src="../static/assets/Build_models.png" width="80%">
+                </div>
+            </div>
+            <div class="checker-item abt-checker">
+                <div class="checker-content">
+                    <h3>Building models</h3>
+                    <p>With nearly instant feedback, you can quickly adjust your models to iron out problems and optimize
+                    profits.</p>
+                </div>
+            </div>
+        </div>
+        <div class="checker-flex-two">
+            <div class="checker-item abt-checker">
+                <div class="checker-content">
+                    <h3>Comparing stocks</h3>
+                    <p>A model that fails for one stock may be a raging success for another. Quickly apply models
+                    to different stocks to explore different performance across entire industries.</p>
+                </div>
+            </div>
+            <div class="checker-item abt-checker">
+                <div class="checker-content">
+                    <img src="../static/assets/Compare_stocks.png" width="80%">
+                </div>
+            </div>
+        </div>
+        <div class="checker-flex">
+            <div class="checker-item abt-checker">
+                <div class="checker-content">
+                    <img src="../static/assets/Find_help.png" width="80%">
+                </div>
+            </div>
+            <div class="checker-item abt-checker">
+                <div class="checker-content">
+                    <h3>Find help</h3>
+                    <p>Post to the boards to see if others have ideas that can take your model to the next level.</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div is="limitations" class="about-limitations">
+</div>
+<div class="limitation-background text-center text-light">
+    <div id="limitations" class="container about-limitations text-left">
         <h2>Limitations</h2>
-        <p>As with any financial analysis tool, SenseBot isn't perfect. Calculations are based on educated estimates of
+        <p style="padding-bottom:30px;">As with any financial analysis tool, SenseBot isn't perfect. Calculations are based on educated estimates of
         bid/ask availability. As a result, we cannot predict exactly how the stock would have performed, but we can get
         pretty close!</p>
+        <div class="accordion text-dark text-center" id="limitation-accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Results are an estimate, not an exact figure of performance.
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#limitation-accordion">
+                    <div class="card-body">
+                        Due to the limitations of publicly accessible stock market data, Sense bot is not able to execute trades
+                        based on actual transaction, Level I, &amp; Level II data. Historical stock availability is estimated based
+                        on volume over a given interval and does not take into account coinciding Bid/Ask sizes.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Historical results &ne; Future performance
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#limitation-accordion">
+                    <div class="card-body">
+                        Just because a model yielded good results in the past does not mean that it will preform the same in the future.
+                        Many factors contribute to stock price and performance, some of which are completely unpredictable.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
+</div>
+<div class="about-start-button text-center">
+    <a class="btn btn-secondary btn-lg btn-start" href="/strategies" role="button">Get Started</a>
 </div>
 {% endblock %}
