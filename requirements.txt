@@ -5,3 +5,13 @@ pymongo==3.9.0
 yfinance==0.1.45
 
 dnspython==1.16.0
+
+bcrypt==3.1.7
+
+Flask-Bcrypt==0.7.1
+
+Flask-Mail==0.9.1
+
+Flask-Login==0.4.1
+
+Jinja2==2.10.3
