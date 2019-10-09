@@ -11,13 +11,13 @@ processes = Blueprint('processes', __name__)
 
 @processes.route('/static_range')
 def static_range_template():
-    model = Model.get_by_id('5c5c5651b3144092ab2b8bf5f4daeada')
-    return render_template('static_range.html', model=model)
+    mod = Model.get_by_id('5c5c5651b3144092ab2b8bf5f4daeada')
+    return render_template('static_range.html', mod=mod)
 
 @processes.route('/static_range/<string:model_id>')
 def static_range_template_model(model_id):
-    model = Model.get_by_id(model_id)
-    return render_template('static_range.html', model=model)
+    mod = Model.get_by_id(model_id)
+    return render_template('static_range.html', mod=mod)
 
 @processes.route('/moving_average')
 def moving_average_template():
