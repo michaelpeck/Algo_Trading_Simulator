@@ -11,8 +11,8 @@ processes = Blueprint('processes', __name__)
 
 @processes.route('/static_range')
 def static_range_template():
-    mod = Model.get_by_id('5c5c5651b3144092ab2b8bf5f4daeada')
-    return render_template('static_range.html', mod=mod)
+
+    return render_template('static_range.html')
 
 @processes.route('/static_range/<string:model_id>')
 def static_range_template_model(model_id):
