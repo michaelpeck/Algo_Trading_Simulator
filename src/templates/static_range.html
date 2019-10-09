@@ -1,41 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% set ticker = mod.ticker %}
-{% set interval = mod.interval %}
-{% set period = mod.period %}
-{% set money = mod.money %}
-{% set buy = mod.buy %}
-{% set sell = mod.sell %}
-{% set trade_cost = mod.trade_cost %}
-
-{% if interval == "1m" %}
-    {% set om = 'selected' %}
-{% elif interval == "2m" %}
-    {% set tm = 'selected' %}
-{% elif interval == "5m" %}
-    {% set fm = 'selected' %}
-{% elif interval == "15m" %}
-    {% set ftm = 'selected' %}
-{% elif interval == "30m" %}
-    {% set ttm = 'selected' %}
-{% elif interval == "60m" %}
-    {% set stm = 'selected' %}
-{% elif interval == "90m" %}
-    {% set ntm = 'selected' %}
-{% endif %}
-
-{% if period == '1d' %}
-    {% set od = 'selected' %}
-{% elif period == '5d' %}
-    {% set fd = 'selected' %}
-{% elif period == '1mo' %}
-    {% set omo = 'selected' %}
-{% elif period == '3mo' %}
-    {% set tmo = 'selected' %}
-{% elif period == '6mo' %}
-    {% set smo = 'selected' %}
-{% endif %}
 
 
 
