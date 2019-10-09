@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbc7624e-06c9-4c46-b27c-17675d6eef32" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/processes/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/processes/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/static_range.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/static_range.html" afterDir="false" />
-    </list>
+    <list default="true" id="cbc7624e-06c9-4c46-b27c-17675d6eef32" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,14 +37,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/processes/routes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+            <state relative-caret-position="256">
+              <caret line="16" column="51" lean-forward="true" selection-start-line="16" selection-start-column="51" selection-end-line="16" selection-end-column="51" />
               <folding>
                 <element signature="e#28#107#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -185,6 +191,7 @@
         <option value="$PROJECT_DIR$/src/templates/home.html" />
         <option value="$PROJECT_DIR$/src/templates/static_range.html" />
         <option value="$PROJECT_DIR$/src/processes/routes.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -207,29 +214,6 @@
             <path>
               <item name="Algo_Trading_Simulator" type="b2602c69:ProjectViewProjectNode" />
               <item name="Algo_Trading_Simulator" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Algo_Trading_Simulator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Algo_Trading_Simulator" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Algo_Trading_Simulator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Algo_Trading_Simulator" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="processes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Algo_Trading_Simulator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Algo_Trading_Simulator" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Algo_Trading_Simulator" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Algo_Trading_Simulator" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="users" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -674,11 +658,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/processes/routes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+        <state relative-caret-position="256">
+          <caret line="16" column="51" lean-forward="true" selection-start-line="16" selection-start-column="51" selection-end-line="16" selection-end-column="51" />
           <folding>
             <element signature="e#28#107#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
         </state>
       </provider>
     </entry>
