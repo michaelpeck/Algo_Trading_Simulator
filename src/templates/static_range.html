@@ -1,13 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% set ticker = mod.ticker %}
-{% set interval = mod.interval %}
-{% set period = mod.period %}
-{% set money = mod.money %}
-{% set buy = mod.buy %}
-{% set sell = mod.sell %}
-{% set trade_cost = mod.trade_cost %}
+{% if mod != "" %}
+    {% set ticker = mod.ticker %}
+    {% set interval = mod.interval %}
+    {% set period = mod.period %}
+    {% set money = mod.money %}
+    {% set buy = mod.buy %}
+    {% set sell = mod.sell %}
+    {% set trade_cost = mod.trade_cost %}
+{% else %}
+    {% set ticker = "" %}
+    {% set interval = "" %}
+    {% set period = "" %}
+    {% set money = "" %}
+    {% set buy = "" %}
+    {% set sell = "" %}
+    {% set trade_cost = "" %}
+{% endif %}
 
 {% if interval == "1m" %}
     {% set om = 'selected' %}
@@ -92,7 +102,7 @@
             <div class="form-group row">
                 <label for="ticker" class="col-lg-6 col-form-label">Ticker</label>
                 <div class="col-lg-6">
-                    <input type="text" id="ticker" value="{{ model.ticker }}" class="form-control" name="ticker" required>
+                    <input type="text" id="ticker" value="{{ ticker }}" class="form-control" name="ticker" required>
                 </div>
             </div>
             <div class="form-group row">
