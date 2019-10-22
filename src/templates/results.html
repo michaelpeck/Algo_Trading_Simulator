@@ -66,9 +66,98 @@
             </table>
         </div>
     </div>
-
+    {% set axis_dt = [] %}
+    {% for i in range(results.td|length) %}
+        {% set date = results.td[i] %}
+        {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+results.tt[i]+':00' %}
+        {{ axis_dt.append(dt)|default("", True) }}
+    {% endfor %}
+    {% set range = results.sell|float - results.buy|float %}
+    {% set min = results.buy|float - range/2 %}
+    {% set max = results.sell|float + range/2 %}
+    {% set high = results.sell|float %}
+    {% set low = results.buy|float %}
+    <div id="log"></div>
+    <div class="chart-div">
+        <canvas id="myChart"></canvas>
+    </div>
     {% set url  = '/static_range/' + results.model_id %}
     <a href="{{ url }}" class="btn btn-info" role="button">Try again</a>
 
 </div>
+<script type="text/javascript">
+window.onload = function () {
+var datetime = JSON.parse('{{axis_dt|tojson|safe}}');
+var tradetype = JSON.parse('{{results.ty|tojson|safe}}');
+var tradeprice = JSON.parse('{{results.tp|tojson|safe}}');
+var min = JSON.parse('{{ min|tojson|safe }}');
+var max = JSON.parse('{{ max|tojson|safe }}');
+var high = JSON.parse('{{ high|tojson|safe }}');
+var low = JSON.parse('{{ low|tojson|safe }}');
+var pointBackgroundColors = [];
+var i;
+var dataset = new Array();
+for (i=0; i< datetime.length; i++){
+    var dict = { x: datetime[i], y: tradeprice[i]}
+    dataset.push(dict)
+}
+//document.getElementById('log').innerText = JSON.stringify(dataset, null, 4);
+var ctx = document.getElementById('myChart');
+var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data:     {
+        datasets: [
+            {
+                data: dataset,
+                pointBackgroundColor: pointBackgroundColors,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#2d6886"
+            },
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time'
+                },
+                gridLines: {
+                    display:false
+                }
+                }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Price [$]'
+                },
+                display: true,
+                ticks: {
+                    min: min,
+                    max: max
+                }
+            }]
+        },
+        legend: {
+            display: false,
+        }
+    }
+});
+
+for (i = 0; i < myLineChart.data.datasets[0].data.length; i++) {
+    if (myLineChart.data.datasets[0].data[i]['y'] > low) {
+        pointBackgroundColors.push("#90EE90");
+    } else {
+        pointBackgroundColors.push("red");
+    }
+}
+
+myLineChart.update();
+
+
+}
+</script>
 {% endblock %}
+

@@ -7,6 +7,8 @@ import datetime
 class Post(object):
 
     def __init__(self, user_id, title, content, author, date=datetime.datetime.utcnow(), _id=None):
+        self.date = "" if date is None else date.strftime("%d-%m-%Y")
+        self.time = "" if date is None else date.strftime("%H:%M")
         self.user_id = user_id
         self.title = title
         self.content = content
@@ -30,7 +32,8 @@ class Post(object):
             'author': self.author,
             'content': self.content,
             'title': self.title,
-            'date': self.date
+            'date': self.date,
+            'time': self.time
         }
 
     @classmethod

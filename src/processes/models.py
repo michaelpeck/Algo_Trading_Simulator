@@ -20,7 +20,8 @@ class Model(object):
     @classmethod
     def create_model(cls, ticker, period, interval, money, buy, sell, trade_cost, name, user_id):
         new_model = cls(ticker, period, interval, money, buy, sell, trade_cost, name, user_id)
-        new_model.save_to_mongo()
+        if name != "":
+            new_model.save_to_mongo()
         return new_model._id
 
     def save_to_mongo(self):

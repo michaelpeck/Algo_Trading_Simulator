@@ -7,9 +7,10 @@ from flask import Flask, session
 __author__ = 'michaelpeck'
 
 class User(object):
-    def __init__(self, first_name, last_name, email, password, user_id=None, _id=None):
+    def __init__(self, first_name, last_name, username, email, password, user_id=None, _id=None):
         self.first_name = first_name
         self.last_name = last_name
+        self.username = username
         self.email = email
         self.password = password
         self.user_id = uuid.uuid4().hex if user_id is None else user_id
@@ -41,10 +42,10 @@ class User(object):
         return False
 
     @classmethod
-    def register(cls, first_name, last_name, email, password):
+    def register(cls, first_name, last_name, username, email, password):
         user = cls.get_by_email(email)
         if user is None:
-            new_user = cls(first_name, last_name, email, password)
+            new_user = cls(first_name, last_name, username, email, password)
             new_user.save_to_mongo()
             session['email'] = email
             return True
@@ -69,6 +70,7 @@ class User(object):
         return {
             "first_name": self.first_name,
             "last_name": self.last_name,
+            "username": self.username,
             "email": self.email,
             "user_id": self.user_id,
             "password": self.password

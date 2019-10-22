@@ -15,6 +15,10 @@ class Database(object):
         Database.db[collection].insert(data)
 
     @staticmethod
+    def delete_one(collection, query):
+        Database.db[collection].delete_one(query)
+
+    @staticmethod
     def find(collection, query):
         return Database.db[collection].find(query)
 

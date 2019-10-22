@@ -1,8 +1,22 @@
 body {
     font-family: 'Raleway', sans-serif;
 }
+html, body {
+    height: 100%;
+    margin: 0;
+}
+.foot-wrapper {
+  min-height: 100%;
+  /* Equal to height of footer */
+  /* But also accounting for potential margin-bottom of last child */
+  margin-bottom: -100px;
+}
+.push {
+  height: 100px;
+}
 .page-form{
     max-width: 500px;
+    padding-bottom: 50px;
 }
 .page-button{
     padding-top:20px;
@@ -23,7 +37,14 @@ body {
 .center-header{
     padding-top: 50px;
 }
-
+footer {
+    width: 100%;
+    height: 100px;
+    background-color: #D3D3D3;
+}
+.footer-text{
+    padding-top: 40px;
+}
 /* Home page */
 .jumbotron {
     padding-bottom: 0px;
@@ -79,7 +100,7 @@ body {
 }
 .flex-col-two{
     color: #263238;
-    padding: 30px 30px;
+    padding: 50px 30px;
     width: 600px;
     display: flex;
     justify-content: center;
@@ -207,6 +228,25 @@ body {
     width:50%;
     padding: 1%;
 }
+.chart-div{
+    width: 600px;;
+    height: 400px;
+    padding: 20px;
+    margin: auto;
+    display: block;
+}
+canvas {
+    padding: 0;
+    margin: auto;
+    display: block;
+    width: 500px;
+    height: 400px;
+}
+
+/* Login page */
+.btn-register{
+    background-color: #4095BF;
+}
 
 /* Profile page */
 .profile-header {
@@ -218,3 +258,8 @@ body {
     padding-bottom:50px;
 }
 
+/* New post page */
+
+.new-post-form{
+    max-width: 600px;
+}

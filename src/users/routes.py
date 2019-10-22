@@ -42,11 +42,18 @@ def login_user():
 def register_user():
     first_name = request.form['first']
     last_name = request.form['last']
+    username = request.form['username']
     email = request.form['email']
     password = request.form['password']
-    User.register(first_name, last_name, email, password)
-
-    return render_template("profile.html", email=session['email'])
+    User.register(first_name, last_name, username, email, password)
+    User.login(email)
+    user = User.get_by_email(session['email'])
+    entries = user.get_entries()
+    models = user.get_models()
+    user_id = user.get_id()
+    posts = Post.from_user(user_id)
+    return render_template("profile.html", user=user, entries=entries, models=models, posts=posts,
+                           email=session['email'])
 
 @users.route('/profile')
 def profile_template():

@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, redirect, session, Blueprint
 from src.users.user import User
 from src.processes.models import Model
 from src.processes.calculation import Calculation
+from src.posts.post import Post
+import datetime as dt
 
 
 processes = Blueprint('processes', __name__)
@@ -37,7 +39,8 @@ def calc_data():
     sell = request.form['sell']
     trade_cost = request.form['trade_cost']
     model_name = request.form['model_name']
-
+    date = dt.datetime.now().strftime("%d-%m-%Y")
+    time = dt.datetime.now().strftime("%H:%M")
     if session['email'] != None:
         user = User.get_id_by_email(session['email'])
         user_id = user.user_id
@@ -45,12 +48,27 @@ def calc_data():
         user_id = "guest"
 
     model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, model_name, user_id)
-    transaction = Calculation.static_range("SR", ticker, period, interval, money, buy, sell, trade_cost, user_id, model_id)
+    transaction = Calculation.static_range("SR", ticker, period, interval, money, buy, sell, trade_cost, user_id, date, time, model_id)
     url = "/results/" + transaction
     return redirect(url)
 
 @processes.route('/results/<string:transaction_id>')
 def get_results(transaction_id):
     results = Calculation.from_mongo(transaction_id)
-
     return render_template('results.html', results=results)
+
+@processes.route('/entry/<string:transaction_id>')
+def get_entry(transaction_id):
+    entry = Calculation.from_mongo(transaction_id)
+    return render_template('entry.html', entry=entry)
+
+@processes.route('/delete/<string:transaction_id>')
+def delete_entry(transaction_id):
+    Calculation.delete_entry_by_id(transaction_id)
+    user = User.get_by_email(session['email'])
+    entries = user.get_entries()
+    models = user.get_models()
+    user_id = user.get_id()
+    posts = Post.from_user(user_id)
+
+    return render_template("profile.html", user=user, entries=entries, models=models, posts=posts, email=session['email'])

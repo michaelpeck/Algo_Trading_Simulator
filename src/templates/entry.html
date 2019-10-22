@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center">
+    <h1>Calculations</h1>
+    <div class="results-flex text-dark">
+        <div class="results-criteria text-center">
+            <h3>Criteria</h3>
+            <table class="table table-bordered text-left">
+                <tbody>
+                    <tr>
+                        <td><h5>Starting balance</h5></td>
+                        <td><h5>{{ entry.money }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Ticker</h5></td>
+                        <td><h5>{{ entry.ticker }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Period</h5></td>
+                        <td><h5>{{ entry.period }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Interval</h5></td>
+                        <td><h5>{{ entry.interval }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Buy point</h5></td>
+                        <td><h5>{{ entry.buy }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Sell point</h5></td>
+                        <td><h5>{{ entry.sell }}</h5></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="results-results text-center">
+            <h3>Results</h3>
+            <table class="table table-bordered text-left">
+                <tbody>
+                    <tr>
+                        <td><h5>Ending balance</h5></td>
+                        <td><h5>{{ entry.final_money }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Ending shares owned</h5></td>
+                        <td><h5>{{ entry.final_owned }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Ending balance if liquidated</h5></td>
+                        <td><h5>{{ entry.final_liquid }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Total trades</h5></td>
+                        <td><h5>{{ entry.trades }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Buys</h5></td>
+                        <td><h5>{{ entry.buys }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Sells</h5></td>
+                        <td><h5>{{ entry.sells }}</h5></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="/profile" class="btn btn-info" role="button">Profile</a>
+
+</div>
+{% endblock %}
