@@ -30,7 +30,7 @@ def weighted_moving_average_template():
     return render_template('weighted_moving_average.html')
 
 @processes.route('/calc/static_range', methods=['POST'])
-def calc_data():
+def calc_static_range():
     ticker = request.form['ticker']
     period = request.form['period']
     interval = request.form['interval']
@@ -38,17 +38,42 @@ def calc_data():
     buy = request.form['buy']
     sell = request.form['sell']
     trade_cost = request.form['trade_cost']
-    model_name = request.form['model_name']
-    date = dt.datetime.now().strftime("%d-%m-%Y")
-    time = dt.datetime.now().strftime("%H:%M")
+    date_stamp = dt.datetime.now()
+    type_info = {'type': 'SR',
+                 'buy': buy,
+                 'sell': sell}
     if session['email'] != None:
         user = User.get_id_by_email(session['email'])
         user_id = user.user_id
     else:
         user_id = "guest"
 
-    model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, model_name, user_id)
-    transaction = Calculation.static_range("SR", ticker, period, interval, money, buy, sell, trade_cost, user_id, date, time, model_id)
+    model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, user_id)
+    transaction = Calculation.static_range(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
+    url = "/results/" + transaction
+    return redirect(url)
+
+@processes.route('/calc/moving_average', methods=['POST'])
+def calc_moving_average():
+    ticker = request.form['ticker']
+    period = request.form['period']
+    interval = request.form['interval']
+    money = request.form['money']
+    buy = request.form['buy']
+    sell = request.form['sell']
+    trade_cost = request.form['trade_cost']
+    date_stamp = dt.datetime.now()
+    type_info = {'type': 'MA',
+                 'buy': buy,
+                 'sell': sell}
+    if session['email'] != None:
+        user = User.get_id_by_email(session['email'])
+        user_id = user.user_id
+    else:
+        user_id = "guest"
+
+    model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, user_id)
+    transaction = Calculation.moving_average(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
     url = "/results/" + transaction
     return redirect(url)
 

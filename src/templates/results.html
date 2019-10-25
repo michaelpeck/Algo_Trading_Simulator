@@ -25,11 +25,11 @@
                     </tr>
                     <tr>
                         <td><h5>Buy point</h5></td>
-                        <td><h5>{{ results.buy }}</h5></td>
+                        <td><h5>{{ results.type_info['buy'] }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Sell point</h5></td>
-                        <td><h5>{{ results.sell }}</h5></td>
+                        <td><h5>{{ results.type_info['sell'] }}</h5></td>
                     </tr>
                 </tbody>
             </table>
@@ -52,15 +52,15 @@
                     </tr>
                     <tr>
                         <td><h5>Total trades</h5></td>
-                        <td><h5>{{ results.trades }}</h5></td>
+                        <td><h5></h5></td>
                     </tr>
                     <tr>
                         <td><h5>Buys</h5></td>
-                        <td><h5>{{ results.buys }}</h5></td>
+                        <td><h5></h5></td>
                     </tr>
                     <tr>
                         <td><h5>Sells</h5></td>
-                        <td><h5>{{ results.sells }}</h5></td>
+                        <td><h5></h5></td>
                     </tr>
                 </tbody>
             </table>
@@ -72,11 +72,11 @@
         {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+results.tt[i]+':00' %}
         {{ axis_dt.append(dt)|default("", True) }}
     {% endfor %}
-    {% set range = results.sell|float - results.buy|float %}
-    {% set min = results.buy|float - range/2 %}
-    {% set max = results.sell|float + range/2 %}
-    {% set high = results.sell|float %}
-    {% set low = results.buy|float %}
+    {% set range = results.type_info['sell']|float - results.type_info['buy']|float %}
+    {% set min = results.type_info['buy']|float - range/2 %}
+    {% set max = results.type_info['sell']|float + range/2 %}
+    {% set high = results.type_info['sell']|float %}
+    {% set low = results.type_info['buy']|float %}
     <div id="log"></div>
     <div class="chart-div">
         <canvas id="myChart"></canvas>
@@ -145,7 +145,6 @@ var myLineChart = new Chart(ctx, {
         }
     }
 });
-
 for (i = 0; i < myLineChart.data.datasets[0].data.length; i++) {
     if (myLineChart.data.datasets[0].data[i]['y'] > low) {
         pointBackgroundColors.push("#90EE90");
@@ -153,10 +152,7 @@ for (i = 0; i < myLineChart.data.datasets[0].data.length; i++) {
         pointBackgroundColors.push("red");
     }
 }
-
 myLineChart.update();
-
-
 }
 </script>
 {% endblock %}
