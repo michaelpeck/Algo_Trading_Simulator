@@ -10,7 +10,7 @@ import datetime as dt
 
 processes = Blueprint('processes', __name__)
 
-@processes.route('/static_range')
+@processes.route('/static_r')
 def static_range_template():
     mod = ""
     return render_template('static_range.html', mod=mod)
