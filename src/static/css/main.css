@@ -257,6 +257,9 @@ canvas {
 .profile-text {
     padding-bottom:50px;
 }
+#user_entries_wrapper{
+    margin: auto;
+}
 
 /* New post page */
 

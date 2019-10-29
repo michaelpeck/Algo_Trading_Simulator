@@ -6,7 +6,7 @@
 </div>
 
 <div class="container page-form">
-  <form id="stock-data-form" class="stock-data-form" action="/calc/stock_data" method="post">
+  <form id="stock-data-form" class="stock-data-form" action="/calc/moving_average" method="post">
     <h3 class="text-center" style="padding-bottom: 20px;">Parameters</h3>
     <div class="form-group">
       <div class="form-group row">
@@ -19,8 +19,6 @@
           <label for="period" class="col-lg-6 col-form-label">Period</label>
           <div class="col-lg-6">
                 <select id="period" class="form-control" name="period">
-                    <option>1d</option>
-                    <option>5d</option>
                     <option>1mo</option>
                     <option>3mo</option>
                     <option>6mo</option>
@@ -31,13 +29,13 @@
           <label for="interval" class="col-lg-6 col-form-label">Interval</label>
           <div class="col-lg-6">
                 <select id="interval" class="form-control" name="interval">
-                    <option>1m</option>
                     <option>2m</option>
                     <option>5m</option>
                     <option>15m</option>
                     <option>30m</option>
                     <option>60m</option>
                     <option>90m</option>
+                    <option>1d</option>
                 </select>
           </div>
       </div>
