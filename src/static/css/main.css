@@ -208,6 +208,10 @@ footer {
 }
 
 /* Results page */
+.results-container{
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
 .results-flex {
     width: 100%;
     display: flex;

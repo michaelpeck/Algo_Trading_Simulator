@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% set sc = 0 %}
+{% set bc = 0 %}
+
+{% for i in ty %}
+    {% if i == 's' %}
+        {% set sc += 1 %}
+    {% elif i == 'b' %}
+        {% set bc += 1 %}
+    {% endif %}
+{% endfor %}
+
+<div class="container text-center results-container">
+    <h1>Weighted Moving Average Results</h1>
+    <div class="results-flex text-dark">
+        <div class="results-criteria text-center">
+            <h3>Criteria</h3>
+            <table class="table table-bordered text-left">
+                <tbody>
+                    <tr>
+                        <td><h5>Starting balance</h5></td>
+                        <td><h5>{{ results.money }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Ticker</h5></td>
+                        <td><h5>{{ results.ticker }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Period</h5></td>
+                        <td><h5>{{ results.period }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Length of average</h5></td>
+                        <td><h5>{{ results.type_info['length'] }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Buy point</h5></td>
+                        <td><h5>{{ bc }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Sell point</h5></td>
+                        <td><h5>{{ sc }}</h5></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="results-results text-center">
+            <h3>Results</h3>
+            <table class="table table-bordered text-left">
+                <tbody>
+                    <tr>
+                        <td><h5>Ending balance</h5></td>
+                        <td><h5>{{ results.final_money }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Ending shares owned</h5></td>
+                        <td><h5>{{ results.final_owned }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Ending balance if liquidated</h5></td>
+                        <td><h5>{{ results.final_liquid }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Total trades</h5></td>
+                        <td><h5>{{ results.ty|length }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Buys</h5></td>
+                        <td><h5>{{ results.ty|selectattr('b')|list|length }}</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Sells</h5></td>
+                        <td><h5>{{ results.ty|selectattr('s')|list|length }}</h5></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% set axis_dt = [] %}
+    {% for i in range(results.td|length) %}
+        {% set date = results.td[i] %}
+        {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+results.tt[i]+':00' %}
+        {{ axis_dt.append(dt)|default("", True) }}
+    {% endfor %}
+    {% set range = results.type_info['sell']|float - results.type_info['buy']|float %}
+    {% set min = results.type_info['buy']|float - range/2 %}
+    {% set max = results.type_info['sell']|float + range/2 %}
+    {% set high = results.type_info['sell']|float %}
+    {% set low = results.type_info['buy']|float %}
+    <div id="log"></div>
+    <div class="chart-div">
+        <canvas id="myChart"></canvas>
+    </div>
+    {% set url  = '/weighted_moving_average/' + results.model_id %}
+    <a href="{{ url }}" class="btn btn-info" role="button">Try again</a>
+
+</div>
+<script type="text/javascript">
+window.onload = function () {
+var datetime = JSON.parse('{{axis_dt|tojson|safe}}');
+var tradetype = JSON.parse('{{results.ty|tojson|safe}}');
+var tradeprice = JSON.parse('{{results.tp|tojson|safe}}');
+var min = JSON.parse('{{ min|tojson|safe }}');
+var max = JSON.parse('{{ max|tojson|safe }}');
+var high = JSON.parse('{{ high|tojson|safe }}');
+var low = JSON.parse('{{ low|tojson|safe }}');
+var pointBackgroundColors = [];
+var i;
+var dataset = new Array();
+for (i=0; i< datetime.length; i++){
+    var dict = { x: datetime[i], y: tradeprice[i]}
+    dataset.push(dict)
+}
+//document.getElementById('log').innerText = JSON.stringify(dataset, null, 4);
+var ctx = document.getElementById('myChart');
+var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data:     {
+        datasets: [
+            {
+                data: dataset,
+                pointBackgroundColor: pointBackgroundColors,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#2d6886"
+            },
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time'
+                },
+                gridLines: {
+                    display:false
+                }
+                }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Price [$]'
+                },
+                display: true,
+                ticks: {
+                    min: min,
+                    max: max
+                }
+            }]
+        },
+        legend: {
+            display: false,
+        }
+    }
+});
+for (i = 0; i < myLineChart.data.datasets[0].data.length; i++) {
+    if (myLineChart.data.datasets[0].data[i]['y'] > low) {
+        pointBackgroundColors.push("#90EE90");
+    } else {
+        pointBackgroundColors.push("red");
+    }
+}
+myLineChart.update();
+}
+</script>
+{% endblock %}
+

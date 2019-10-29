@@ -1,7 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container text-center">
-    <h1>Calculations</h1>
+
+{% set sc = 0 %}
+{% set bc = 0 %}
+
+{% for i in ty %}
+    {% if i == 's' %}
+        {% set sc += 1 %}
+    {% elif i == 'b' %}
+        {% set bc += 1 %}
+    {% endif %}
+{% endfor %}
+
+<div class="container text-center results-container">
+    <h1>Static Range Results</h1>
     <div class="results-flex text-dark">
         <div class="results-criteria text-center">
             <h3>Criteria</h3>
@@ -52,15 +64,15 @@
                     </tr>
                     <tr>
                         <td><h5>Total trades</h5></td>
-                        <td><h5></h5></td>
+                        <td><h5>{{ results.ty|length }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Buys</h5></td>
-                        <td><h5></h5></td>
+                        <td><h5>{{ bc }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Sells</h5></td>
-                        <td><h5></h5></td>
+                        <td><h5>{{ sc }}</h5></td>
                     </tr>
                 </tbody>
             </table>

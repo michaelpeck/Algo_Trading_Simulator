@@ -5,7 +5,7 @@ import datetime as dt
 from src.common.database import Database
 
 class Model(object):
-    def __init__(self, ticker, period, interval, money, buy, sell, trade_cost, user_id=None, name=None, _id=None):
+    def __init__(self, ticker, period, interval, money, buy, sell, trade_cost, type_info=None, user_id=None, name=None, _id=None):
         self.ticker = ticker
         self.period = period
         self.interval = interval
@@ -13,13 +13,14 @@ class Model(object):
         self.buy = buy
         self.sell = sell
         self.trade_cost = trade_cost
+        self.type_info = type_info
         self.name = "" if name is None else name
         self._id = uuid.uuid4().hex if _id is None else _id
         self.user_id = user_id
 
     @classmethod
-    def create_model(cls, ticker, period, interval, money, buy, sell, trade_cost, user_id):
-        new_model = cls(ticker, period, interval, money, buy, sell, trade_cost, user_id)
+    def create_model(cls, ticker, period, interval, money, buy, sell, trade_cost, user_id, type_info=None):
+        new_model = cls(ticker, period, interval, money, buy, sell, trade_cost, user_id, type_info)
         new_model.save_to_mongo()
         return new_model._id
 
@@ -37,7 +38,8 @@ class Model(object):
             'interval': self.interval,
             'buy': self.buy,
             'sell': self.sell,
-            'trade_cost': self.trade_cost
+            'trade_cost': self.trade_cost,
+            'type_info': self.type_info
         }
 
     @classmethod

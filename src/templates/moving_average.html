@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
+
+{% if mod != "" %}
+    {% set ticker = mod.ticker %}
+    {% set period = mod.period %}
+    {% set length = mod.type_info['length'] %}
+    {% set money = mod.money %}
+    {% set buy = mod.buy %}
+    {% set sell = mod.sell %}
+    {% set trade_cost = mod.trade_cost %}
+{% else %}
+    {% set ticker = "" %}
+    {% set period = "" %}
+    {% set length = "" %}
+    {% set money = "" %}
+    {% set buy = "" %}
+    {% set sell = "" %}
+    {% set trade_cost = "" %}
+{% endif %}
+
+{% if period == '1mo' %}
+    {% set omo = 'selected' %}
+{% elif period == '3mo' %}
+    {% set tmo = 'selected' %}
+{% elif period == '6mo' %}
+    {% set smo = 'selected' %}
+{% elif period == '1y' %}
+    {% set oy = 'selected' %}
+{% elif period == '2y' %}
+    {% set ty = 'selected' %}
+{% elif period == '5y' %}
+    {% set fy = 'selected' %}
+{% endif %}
+
 <div class="container algo-intro">
     <h1>Moving average algorithm</h1>
     <p>Fill out the form below with the stock information that you would like to run through the algorithm.</p>
@@ -18,6 +51,10 @@
             <tr>
                 <th scope="row">Period</th>
                 <td>Total period over which to run the trading algorithm dating back from the time of execution.</td>
+            </tr>
+            <tr>
+                <th scope="row">Length of average</th>
+                <td>Amount of days included in the moving average (ie. 5 day moving average, 10 day moving average, etc.).</td>
             </tr>
             <tr>
                 <th scope="row">Account balance</th>
@@ -39,7 +76,9 @@
         </tbody>
     </table>
 </div>
-
+<div class="text-center">
+    <p>Note: Calculations made based on a 10 day moving average. Trading period begins 10 days after the start of the period.</p>
+</div>
 <div class="container page-form">
   <form id="stock-data-form" class="stock-data-form" action="/calc/moving_average" method="post">
     <h3 class="text-center" style="padding-bottom: 20px;">Parameters</h3>
@@ -47,17 +86,31 @@
       <div class="form-group row">
           <label for="ticker" class="col-lg-6 col-form-label">Ticker</label>
           <div class="col-lg-6">
-                <input type="text" id="ticker" class="form-control" name="ticker" required>
+                <input type="text" id="ticker" class="form-control" name="ticker" value="{{ticker}}" required>
           </div>
       </div>
       <div class="form-group row">
           <label for="period" class="col-lg-6 col-form-label">Period</label>
           <div class="col-lg-6">
                 <select id="period" class="form-control" name="period">
-                    <option>1mo</option>
-                    <option>3mo</option>
-                    <option>6mo</option>
+                    <option {{omo}}>1mo</option>
+                    <option {{tmo}}>3mo</option>
+                    <option {{smo}}>6mo</option>
+                    <option {{oy}}>1y</option>
+                    <option {{ty}}>2y</option>
+                    <option {{fy}}>5y</option>
                 </select>
+          </div>
+      </div>
+      <div class="form-group row">
+          <label for="length" class="col-lg-6 col-form-label">Length of average</label>
+          <div class="col-lg-6">
+              <div class="input-group">
+                <input type="number" step="1" id="length" class="form-control" name="length" value="{{length}}" aria-describedby="inputGroupAppend" required>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="inputGroupAppend">days</span>
+                </div>
+              </div>
           </div>
       </div>
       <div class="form-group row">
@@ -67,7 +120,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend">$</span>
                 </div>
-                <input type="number" step="0.01" id="money" class="form-control" name="money" aria-describedby="inputGroupPrepend" required>
+                <input type="number" step="0.01" id="money" class="form-control" name="money" value="{{money}}" aria-describedby="inputGroupPrepend" required>
               </div>
           </div>
       </div>
@@ -78,7 +131,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2">$</span>
                 </div>
-                <input type="number" step="0.0001" id="buy" class="form-control" name="buy" aria-describedby="inputGroupPrepend2" required>
+                <input type="number" step="0.0001" id="buy" class="form-control" name="buy" value="{{buy}}" aria-describedby="inputGroupPrepend2" required>
               </div>
           </div>
       </div>
@@ -89,7 +142,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend3">$</span>
                 </div>
-                <input type="number" step="0.0001" id="sell" class="form-control" name="sell" aria-describedby="inputGroupPrepend3" required>
+                <input type="number" step="0.0001" id="sell" class="form-control" name="sell" value="{{sell}}" aria-describedby="inputGroupPrepend3" required>
               </div>
           </div>
       </div>
@@ -100,7 +153,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend4">$</span>
                 </div>
-                <input type="number" step="0.01" id="trade_cost" class="form-control" name="trade_cost" aria-describedby="inputGroupPrepend4" required>
+                <input type="number" step="0.01" id="trade_cost" class="form-control" name="trade_cost" value="{{trade_cost}}" aria-describedby="inputGroupPrepend4" required>
               </div>
           </div>
       </div>

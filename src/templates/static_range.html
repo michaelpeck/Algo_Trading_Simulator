@@ -17,18 +17,20 @@
     {% set buy = "" %}
     {% set sell = "" %}
     {% set trade_cost = "" %}
-    {% set om = '' %}
-    {% set tm = '' %}
-    {% set fm = '' %}
-    {% set ftm = '' %}
-    {% set ttm = '' %}
-    {% set stm = '' %}
-    {% set ntm = '' %}
-    {% set od = '' %}
-    {% set fd = '' %}
-    {% set omo = '' %}
-    {% set tmo = '' %}
-    {% set smo = '' %}
+{% endif %}
+
+{% if period == '1d' %}
+    {% set od = 'selected' %}
+{% elif period == '5d' %}
+    {% set fd = 'selected' %}
+{% elif period == '1mo' %}
+    {% set omo = 'selected' %}
+{% elif period == '3mo' %}
+    {% set tmo = 'selected' %}
+{% elif period == '6mo' %}
+    {% set smo = 'selected' %}
+{% elif period == '1y' %}
+    {% set oy = 'selected' %}
 {% endif %}
 
 {% if interval == "1m" %}
@@ -45,18 +47,8 @@
     {% set stm = 'selected' %}
 {% elif interval == "90m" %}
     {% set ntm = 'selected' %}
-{% endif %}
-
-{% if period == '1d' %}
-    {% set od = 'selected' %}
-{% elif period == '5d' %}
-    {% set fd = 'selected' %}
-{% elif period == '1mo' %}
-    {% set omo = 'selected' %}
-{% elif period == '3mo' %}
-    {% set tmo = 'selected' %}
-{% elif period == '6mo' %}
-    {% set smo = 'selected' %}
+{% elif interval == "1d" %}
+    {% set odi = 'selected' %}
 {% endif %}
 
 <div class="container algo-intro">
@@ -103,7 +95,9 @@
         </tbody>
     </table>
 </div>
-
+<div class="text-center">
+    <p>Note: Intraday intervals not available past 1 month periods. 1 minute intervals not available past 5 day periods.</p>
+</div>
 
 <div class="container page-form">
     <form id="stock-data-form" class="stock-data-form" action="/calc/static_range" method="post">
@@ -124,6 +118,7 @@
                             <option {{omo}}>1mo</option>
                             <option {{tmo}}>3mo</option>
                             <option {{smo}}>6mo</option>
+                            <option {{oy}}>1y</option>
                         </select>
                   </div>
             </div>
@@ -138,6 +133,7 @@
                             <option {{ttm}}>30m</option>
                             <option {{stm}}>60m</option>
                             <option {{ntm}}>90m</option>
+                            <option {{odi}}>1d</option>
                         </select>
                   </div>
             </div>

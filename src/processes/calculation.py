@@ -120,7 +120,7 @@ class Calculation(object):
         bd = float(type_info['buy'])
         sd = float(type_info['sell'])
         trade_cost = float(trade_cost)
-        ma_length = 10
+        ma_length = int(type_info['length'])
         ma_conv = ma_length - 1
         ma_sum = 0
         td = []  # trade date
@@ -197,9 +197,104 @@ class Calculation(object):
         new_entry.save_to_mongo()
         return new_entry._id
 
+    @classmethod
+    def weighted_moving_average(cls, type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id):
+        new_entry = cls(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
+        stock = yf.Ticker(ticker)
+        df = stock.history(period=period, interval=interval)
+        owned = 0
+        count = 0
+        trade_money = float(money)
+        trade_cost = float(trade_cost)
+        bd = float(type_info['buy'])
+        sd = float(type_info['sell'])
+        trade_cost = float(trade_cost)
+        wma_length = int(type_info['length'])
+        wma_conv = wma_length - 1
+        wma_sum = 0
+        weight = 0
+        weight_sum = 0
+        for k in range(1, wma_length + 1):
+            weight_sum += k
+
+        td = []  # trade date
+        tt = []  # trade time
+        ty = []  # trade type
+        tp = []  # trade price
+        tv = []  # trade volume
+        for i in range(0, df.shape[0] - wma_conv):
+            for j in range(0, wma_length):
+                weight += 1
+                wma_sum += (df.iloc[i + j, 3]*weight)
+            weight = 0
+            df.loc[df.index[i + wma_conv], 'WMA_' + str(wma_length)] = np.round((wma_sum / weight_sum), 4)
+            wma_sum = 0
+        for index, row in df.iloc[wma_length:].iterrows():
+            count += 1
+            available_money = trade_money - trade_cost
+            available_volume = row['Volume'] / 40
+            low = round(row['Low'], 4)
+            high = round(row['High'], 4)
+            date = index.to_pydatetime().strftime("%d-%m-%Y")
+            time = index.to_pydatetime().strftime("%H:%M")
+            lvalue = (low * available_volume)
+            hvalue = (high * available_volume)
+            buy = row['WMA_' + str(wma_length)] - bd
+            sell = row['WMA_' + str(wma_length)] + sd
+            if available_money > 0 and low <= buy and lvalue > trade_cost:
+                if lvalue > available_money > 0:
+                    owned += (available_money / low)
+                    trade_money = 0
+                    td.append(date)
+                    tt.append(time)
+                    ty.append('b')
+                    tp.append(low)
+                    tv.append(available_volume)
+                elif available_money > lvalue > 0:
+                    owned += (lvalue / low)
+                    trade_money -= trade_cost
+                    trade_money -= lvalue
+                    td.append(date)
+                    tt.append(time)
+                    ty.append('b')
+                    tp.append(low)
+                    tv.append(available_volume)
+            if owned > 0 and high >= sell and hvalue > trade_cost:
+                if available_volume > owned:
+                    trade_money += (owned * high)
+                    trade_money -= trade_cost
+                    owned = 0
+                    td.append(date)
+                    tt.append(time)
+                    ty.append('s')
+                    tp.append(high)
+                    tv.append(available_volume)
+                elif owned > available_volume:
+                    trade_money += (available_volume * high)
+                    trade_money -= trade_cost
+                    owned -= available_volume
+                    td.append(date)
+                    tt.append(time)
+                    ty.append('s')
+                    tp.append(high)
+                    tv.append(available_volume)
+        if owned > 0:
+            liquid_money = (trade_money - trade_cost) + df.Low.ix[count - 1] * owned
+        else:
+            liquid_money = trade_money
+        new_entry.final_money = round(trade_money, 2)
+        new_entry.final_owned = round(owned)
+        new_entry.final_liquid = round(liquid_money, 2)
+        new_entry.td = td
+        new_entry.tt = tt
+        new_entry.ty = ty
+        new_entry.tp = tp
+        new_entry.tv = tv
+        new_entry.save_to_mongo()
+        return new_entry._id
+
     def save_to_mongo(self):
         Database.insert(collection='entries', data=self.json())
-
 
     def json(self):
         return{
