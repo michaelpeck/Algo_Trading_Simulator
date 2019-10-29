@@ -56,7 +56,7 @@ def calc_static_range():
 def calc_moving_average():
     ticker = request.form['ticker']
     period = request.form['period']
-    interval = request.form['interval']
+    interval = '1d'
     money = request.form['money']
     buy = request.form['buy']
     sell = request.form['sell']
