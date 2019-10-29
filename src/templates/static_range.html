@@ -17,6 +17,18 @@
     {% set buy = "" %}
     {% set sell = "" %}
     {% set trade_cost = "" %}
+    {% set om = '' %}
+    {% set tm = '' %}
+    {% set fm = '' %}
+    {% set ftm = '' %}
+    {% set ttm = '' %}
+    {% set stm = '' %}
+    {% set ntm = '' %}
+    {% set od = '' %}
+    {% set fd = '' %}
+    {% set omo = '' %}
+    {% set tmo = '' %}
+    {% set smo = '' %}
 {% endif %}
 
 {% if interval == "1m" %}
@@ -46,7 +58,6 @@
 {% elif period == '6mo' %}
     {% set smo = 'selected' %}
 {% endif %}
-
 
 
 <div class="container algo-intro">
