@@ -10,11 +10,12 @@ import datetime as dt
 
 processes = Blueprint('processes', __name__)
 
-@processes.route('/static_range')
+@processes.route('/range')
 def static_range_template():
-    return render_template('static_range.html')
+    mod = ""
+    return render_template('static_range.html', mod=mod)
 
-@processes.route('/static_range/<string:model_id>')
+@processes.route('/range/<string:model_id>')
 def static_range_template_model(model_id):
     mod = Model.get_by_id(model_id)
     return render_template('static_range.html', mod=mod)
