@@ -1,5 +1,8 @@
 # Algo_Trading_Simulator
- Algorithmic trading webapp
+
+Sense bot is an algorithmic trade calculating Python webapp.
+
+It is hosted at www.sensebot.co.
 
 *** SUMMARY ***
 
