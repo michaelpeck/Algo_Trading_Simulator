@@ -1,17 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% set sc = 0 %}
-{% set bc = 0 %}
-
-{% for i in ty %}
-    {% if i == 's' %}
-        {% set sc += 1 %}
-    {% elif i == 'b' %}
-        {% set bc += 1 %}
-    {% endif %}
-{% endfor %}
-
 <div class="container text-center results-container">
     <h1>Static Range Results</h1>
     <div class="results-flex text-dark">
@@ -68,11 +57,11 @@
                     </tr>
                     <tr>
                         <td><h5>Buys</h5></td>
-                        <td><h5>{{ bc }}</h5></td>
+                        <td><h5>{{ results.ty|select('equalto','b')|list|length }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Sells</h5></td>
-                        <td><h5>{{ sc }}</h5></td>
+                        <td><h5>{{ results.ty|select('equalto','s')|list|length }}</h5></td>
                     </tr>
                 </tbody>
             </table>

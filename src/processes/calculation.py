@@ -128,6 +128,8 @@ class Calculation(object):
         ty = []  # trade type
         tp = []  # trade price
         tv = []  # trade volume
+        store_ma = []
+        store_ma_x = []
         for i in range(0, df.shape[0] - ma_conv):
             for j in range(0, ma_length):
                 ma_sum += df.iloc[i + j, 3]
@@ -145,6 +147,8 @@ class Calculation(object):
             hvalue = (high * available_volume)
             buy = row['SMA_' + str(ma_length)] - bd
             sell = row['SMA_' + str(ma_length)] + sd
+            store_ma.append(float(row['SMA_' + str(ma_length)]))
+            store_ma_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T' + time + ':00')
             if available_money > 0 and low <= buy and lvalue > trade_cost:
                 if lvalue > available_money > 0:
                     owned += (available_money / low)
@@ -186,6 +190,7 @@ class Calculation(object):
             liquid_money = (trade_money - trade_cost) + df.Low.ix[count - 1] * owned
         else:
             liquid_money = trade_money
+        new_entry.type_info['ma'] = [store_ma, store_ma_x]
         new_entry.final_money = round(trade_money, 2)
         new_entry.final_owned = round(owned)
         new_entry.final_liquid = round(liquid_money, 2)
@@ -222,6 +227,8 @@ class Calculation(object):
         ty = []  # trade type
         tp = []  # trade price
         tv = []  # trade volume
+        store_wma = []
+        store_wma_x = []
         for i in range(0, df.shape[0] - wma_conv):
             for j in range(0, wma_length):
                 weight += 1
@@ -241,6 +248,8 @@ class Calculation(object):
             hvalue = (high * available_volume)
             buy = row['WMA_' + str(wma_length)] - bd
             sell = row['WMA_' + str(wma_length)] + sd
+            store_wma.append(float(row['WMA_' + str(wma_length)]))
+            store_wma_x.append(date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+time+':00')
             if available_money > 0 and low <= buy and lvalue > trade_cost:
                 if lvalue > available_money > 0:
                     owned += (available_money / low)
@@ -282,6 +291,7 @@ class Calculation(object):
             liquid_money = (trade_money - trade_cost) + df.Low.ix[count - 1] * owned
         else:
             liquid_money = trade_money
+        new_entry.type_info['wma'] =  [store_wma, store_wma_x]
         new_entry.final_money = round(trade_money, 2)
         new_entry.final_owned = round(owned)
         new_entry.final_liquid = round(liquid_money, 2)

@@ -234,8 +234,9 @@ footer {
     padding: 1%;
 }
 .chart-div{
-    width: 600px;;
-    height: 400px;
+    width: 90%;
+    min-width: 500px;
+    height: 500px;
     padding: 20px;
     margin: auto;
     display: block;

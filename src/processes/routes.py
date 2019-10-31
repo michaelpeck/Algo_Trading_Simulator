@@ -78,7 +78,8 @@ def calc_moving_average():
     type_info = {'type': 'MA',
                  'buy': buy,
                  'sell': sell,
-                 'length': length}
+                 'length': length,
+                 'ma':""}
     if session['email'] != None:
         user = User.get_id_by_email(session['email'])
         user_id = user.user_id
@@ -104,7 +105,8 @@ def calc_weighted_moving_average():
     type_info = {'type': 'WMA',
                  'buy': buy,
                  'sell': sell,
-                 'length': length}
+                 'length': length,
+                 'wma': ""}
     if session['email'] != None:
         user = User.get_id_by_email(session['email'])
         user_id = user.user_id
@@ -112,8 +114,8 @@ def calc_weighted_moving_average():
         user_id = "guest"
 
     model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, user_id)
-    transaction = Calculation.moving_average(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
-    url = "/ma_results/" + transaction
+    transaction = Calculation.weighted_moving_average(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
+    url = "/wma_results/" + transaction
     return redirect(url)
 
 @processes.route('/r_results/<string:transaction_id>')

@@ -57,11 +57,11 @@
                     </tr>
                     <tr>
                         <td><h5>Buys</h5></td>
-                        <td><h5>{{ ty|selectattr('equalto', 'b')|list|length }}</h5></td>
+                        <td><h5>{{ results.ty|select('equalto', 'b')|list|length }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Sells</h5></td>
-                        <td><h5>{{ ty|selectattr('equalto', 's')|list|length }}</h5></td>
+                        <td><h5>{{ results.ty|select('equalto', 's')|list|length }}</h5></td>
                     </tr>
                 </tbody>
             </table>
@@ -73,11 +73,11 @@
         {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+results.tt[i]+':00' %}
         {{ axis_dt.append(dt)|default("", True) }}
     {% endfor %}
-    {% set range = results.type_info['sell']|float - results.type_info['buy']|float %}
-    {% set min = results.type_info['buy']|float - range/2 %}
-    {% set max = results.type_info['sell']|float + range/2 %}
-    {% set high = results.type_info['sell']|float %}
-    {% set low = results.type_info['buy']|float %}
+    {% set range = results.tp|max|float - results.tp|min|float %}
+    {% set min = results.tp|min|float - range/2 %}
+    {% set max = results.tp|max|float + range/2 %}
+    {% set high = results.tp|max|float %}
+    {% set low = results.tp|min|float %}
     <div id="log"></div>
     <div class="chart-div">
         <canvas id="myChart"></canvas>
@@ -95,6 +95,7 @@ var min = JSON.parse('{{ min|tojson|safe }}');
 var max = JSON.parse('{{ max|tojson|safe }}');
 var high = JSON.parse('{{ high|tojson|safe }}');
 var low = JSON.parse('{{ low|tojson|safe }}');
+var ma = JSON.parse('{{ results.type_info['ma']|tojson|safe }}');
 var pointBackgroundColors = [];
 var i;
 var dataset = new Array();
@@ -102,7 +103,13 @@ for (i=0; i< datetime.length; i++){
     var dict = { x: datetime[i], y: tradeprice[i]}
     dataset.push(dict)
 }
-//document.getElementById('log').innerText = JSON.stringify(dataset, null, 4);
+
+var ma_dataset = new Array();
+for (i=0; i< ma[0].length; i++){
+    var dict = { x: ma[1][i], y: ma[0][i]}
+    ma_dataset.push(dict)
+}
+
 var ctx = document.getElementById('myChart');
 var myLineChart = new Chart(ctx, {
     type: 'line',
@@ -113,7 +120,16 @@ var myLineChart = new Chart(ctx, {
                 pointBackgroundColor: pointBackgroundColors,
                 fill: false,
                 lineTension: 0,
-                borderColor: "#2d6886"
+                borderColor: "#2d6886",
+                label: "Transactions"
+            },
+            {
+                data: ma_dataset,
+                pointRadius: 0,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#4095BF",
+                label: "Moving Average"
             },
         ]
     },
@@ -142,12 +158,12 @@ var myLineChart = new Chart(ctx, {
             }]
         },
         legend: {
-            display: false,
+            display: true,
         }
     }
 });
 for (i = 0; i < myLineChart.data.datasets[0].data.length; i++) {
-    if (myLineChart.data.datasets[0].data[i]['y'] > low) {
+    if (tradetype[i] == 's') {
         pointBackgroundColors.push("#90EE90");
     } else {
         pointBackgroundColors.push("red");
