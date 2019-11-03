@@ -3,7 +3,7 @@ __author__ = 'michaelpeck'
 import os
 
 class Config:
-    SECRET_KEY = 'michael'
+    SECRET_KEY = 'bee916dce86ac50579d89c947ffaba2e'
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
