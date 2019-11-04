@@ -3,12 +3,12 @@ __author__ = 'michaelpeck'
 import os
 
 class Config:
-    SECRET_KEY = '2eac05d302d10c2dbce05745a8c0d22a'
-    URI = "mongodb+srv://algo_trader:testpass@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true"
+    SECRET_KEY = 'ebe982043bc2960b20d1a518ea8112dc'
+    URI = "mongodb://localhost:27017/sensedb"
     DATABASE = 'AlgoTrading'
     MONGODB_SETTINGS = {
-        'db': 'AlgoTrading',
-        'host': 'mongodb+srv://algo_trader:testpass@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true'
+        'db': 'sensedb',
+        'host': "mongodb://localhost:27017/sensedb"
     }
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
