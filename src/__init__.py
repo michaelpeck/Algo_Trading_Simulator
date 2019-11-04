@@ -1,15 +1,13 @@
 __author__ = 'michaelpeck'
 
 from flask import Flask, session
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from src.config import Config
 from src.common.database import Database
+from flask_mongoengine import MongoEngine, Document
 
-sqldb = SQLAlchemy()
-bcrypt = Bcrypt()
+db = MongoEngine()
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
@@ -19,11 +17,9 @@ mail = Mail()
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(Config)
-
-    sqldb.init_app(app)
-    bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    db.init_app(app)
 
     from src.main.routes import main
     from src.users.routes import users
@@ -38,7 +34,7 @@ def create_app(config_class=Config):
 
     @app.before_first_request
     def initialize_database():
-        Database.initialize()
+        Database.initialize(Config)
         session['email'] = None
 
     return app
