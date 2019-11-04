@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
+
 <div class="container text-center results-container">
     <h1>Weighted Moving Average Results</h1>
     <div class="results-flex text-dark">
@@ -22,15 +23,15 @@
                     </tr>
                     <tr>
                         <td><h5>Length of average</h5></td>
-                        <td><h5>{{ results.type_info['length'] }}</h5></td>
+                        <td><h5>{{ results.av_length }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Buy point</h5></td>
-                        <td><h5>{{ results.type_info['buy'] }}</h5></td>
+                        <td><h5>{{ results.buy }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Sell point</h5></td>
-                        <td><h5>{{ results.type_info['sell'] }}</h5></td>
+                        <td><h5>{{ results.sell }}</h5></td>
                     </tr>
                 </tbody>
             </table>
@@ -57,11 +58,11 @@
                     </tr>
                     <tr>
                         <td><h5>Buys</h5></td>
-                        <td><h5>{{ results.ty|select('equalto','b')|list|length }}</h5></td>
+                        <td><h5>{{ results.ty|select('equalto', 'b')|list|length }}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>Sells</h5></td>
-                        <td><h5>{{ results.ty|select('equalto','s')|list|length }}</h5></td>
+                        <td><h5>{{ results.ty|select('equalto', 's')|list|length }}</h5></td>
                     </tr>
                 </tbody>
             </table>
@@ -82,7 +83,7 @@
     <div class="chart-div">
         <canvas id="myChart"></canvas>
     </div>
-    {% set url  = '/weighted_moving_average/' + results.model_id %}
+    {% set url  = '/weighted_moving_average/' + results.model.id|string %}
     <a href="{{ url }}" class="btn btn-info" role="button">Try again</a>
 
 </div>
@@ -95,7 +96,8 @@ var min = JSON.parse('{{ min|tojson|safe }}');
 var max = JSON.parse('{{ max|tojson|safe }}');
 var high = JSON.parse('{{ high|tojson|safe }}');
 var low = JSON.parse('{{ low|tojson|safe }}');
-var wma = JSON.parse('{{ results.type_info['wma']|tojson|safe }}');
+var wmax = JSON.parse('{{ results.graph_x|tojson|safe }}');
+var wmay = JSON.parse('{{ results.graph_y|tojson|safe }}');
 var pointBackgroundColors = [];
 var i;
 var dataset = new Array();
@@ -105,8 +107,8 @@ for (i=0; i< datetime.length; i++){
 }
 
 var wma_dataset = new Array();
-for (i=0; i< wma[0].length; i++){
-    var dict = { x: wma[1][i], y: wma[0][i]}
+for (i=0; i< wmax.length; i++){
+    var dict = { x: wmax[i], y: wmay[i]}
     wma_dataset.push(dict)
 }
 

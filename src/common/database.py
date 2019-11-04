@@ -2,13 +2,12 @@ import pymongo
 
 
 class Database(object):
-    URI = "mongodb+srv://algo_trader:testpass@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true"
     db = None
 
     @staticmethod
-    def initialize():
-        client = pymongo.MongoClient("mongodb+srv://algo_trader:testpass@cluster0-zpslf.mongodb.net/test?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true")
-        Database.db = client.get_database('AlgoTrading')
+    def initialize(Config):
+        client = pymongo.MongoClient(Config.URI)
+        Database.db = client.get_database(Config.DATABASE)
 
     @staticmethod
     def insert(collection, data):
