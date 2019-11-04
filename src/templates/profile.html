@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="row text-dark profile-header">
-            <h1>Hello {{ user.first_name }}</h1>
+            <h1>Hello {{ user.username }}</h1>
         </div>
         <div class="row text-dark">
             <h3>Results</h3>
@@ -25,8 +25,8 @@
                 <tbody>
                 {% for entry in entries %}
                     <tr>
-                        {% set url = "/entry/" + entry._id %}
-                        {% set d_url = "/delete/" + entry._id %}
+                        {% set url = "/entry/" + entry.id|string %}
+                        {% set d_url = "/delete/" + entry.id|string %}
                         {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
                         {% if change < 0 %}
                             {% set c = 'red' %}

@@ -1,10 +1,11 @@
 __author__ = 'michaelpeck'
 
 from flask import Flask, render_template, request, redirect, session, Blueprint
-from src.users.user import User
+from flask_login import current_user
 from src.processes.models import Model
 from src.processes.calculation import Calculation
 from src.posts.post import Post
+from src.users.forms import (StaticRangeForm)
 import datetime as dt
 
 
@@ -13,11 +14,11 @@ processes = Blueprint('processes', __name__)
 @processes.route('/range')
 def static_range_template():
     mod = ""
-    return render_template('static_range.html', mod=mod)
+    return render_template('static_range.html', title='Static Range', mod=mod)
 
 @processes.route('/range/<string:model_id>')
 def static_range_template_model(model_id):
-    mod = Model.get_by_id(model_id)
+    mod = Model.objects(pk=model_id).first()
     return render_template('static_range.html', mod=mod)
 
 @processes.route('/moving_average')
@@ -27,7 +28,7 @@ def moving_average_template():
 
 @processes.route('/moving_average/<string:model_id>')
 def moving_average_template_model(model_id):
-    mod = Model.get_by_id(model_id)
+    mod = Model.objects(pk=model_id).first()
     return render_template('moving_average.html', mod=mod)
 
 @processes.route('/weighted_moving_average')
@@ -37,7 +38,7 @@ def weighted_moving_average_template():
 
 @processes.route('/weighted_moving_average/<string:model_id>')
 def weighted_moving_average_template_model(model_id):
-    mod = Model.get_by_id(model_id)
+    mod = Model.objects(pk=model_id).first()
     return render_template('weighted_moving_average.html', mod=mod)
 
 @processes.route('/calc/static_range', methods=['POST'])
@@ -49,19 +50,23 @@ def calc_static_range():
     buy = request.form['buy']
     sell = request.form['sell']
     trade_cost = request.form['trade_cost']
-    date_stamp = dt.datetime.now()
-    type_info = {'type': 'SR',
-                 'buy': buy,
-                 'sell': sell}
-    if session['email'] != None:
-        user = User.get_id_by_email(session['email'])
-        user_id = user.user_id
+    date_stamp = str(dt.datetime.now())
+    type_info = 'SR'
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        this_mod = Model(mod_type='SR', ticker=ticker, period=period, interval=interval, money=money, buy=buy,
+                         sell=sell, trade_cost=trade_cost, owner=user_id).save()
+        transaction = Calculation(type_info=type_info, ticker=ticker, period=period, interval=interval, buy=buy,
+                                  sell=sell, money=money, trade_cost=trade_cost, owner=user_id, date_stamp=date_stamp,
+                                  model=this_mod.id).static_range()
     else:
-        user_id = "guest"
+        this_mod = Model(mod_type='SR', ticker=ticker, period=period, interval=interval, money=money, buy=buy,
+                         sell=sell, trade_cost=trade_cost).save()
+        transaction = Calculation(type_info=type_info, ticker=ticker, period=period, interval=interval, buy=buy,
+                                  sell=sell, money=money, trade_cost=trade_cost, date_stamp=date_stamp,
+                                  model=this_mod.id).static_range()
 
-    model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, user_id)
-    transaction = Calculation.static_range(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
-    url = "/r_results/" + transaction
+    url = "/r_results/" + str(transaction)
     return redirect(url)
 
 @processes.route('/calc/moving_average', methods=['POST'])
@@ -74,21 +79,23 @@ def calc_moving_average():
     buy = request.form['buy']
     sell = request.form['sell']
     trade_cost = request.form['trade_cost']
-    date_stamp = dt.datetime.now()
-    type_info = {'type': 'MA',
-                 'buy': buy,
-                 'sell': sell,
-                 'length': length,
-                 'ma':""}
-    if session['email'] != None:
-        user = User.get_id_by_email(session['email'])
-        user_id = user.user_id
+    date_stamp = str(dt.datetime.now())
+    type_info = 'MA'
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        this_mod = Model(mod_type='MA', ticker=ticker, period=period, interval=interval, money=money, buy=buy,
+                         sell=sell, trade_cost=trade_cost, av_length=length, owner=user_id).save()
+        transaction = Calculation(type_info=type_info, ticker=ticker, period=period, interval=interval, buy=buy,
+                                  sell=sell, money=money, trade_cost=trade_cost, owner=user_id, date_stamp=date_stamp,
+                                  model=this_mod.id, av_length=length).moving_average()
     else:
-        user_id = "guest"
+        this_mod = Model(mod_type='MA', ticker=ticker, period=period, interval=interval, money=money, buy=buy,
+                         sell=sell, trade_cost=trade_cost, av_length=length).save()
+        transaction = Calculation(type_info=type_info, ticker=ticker, period=period, interval=interval, buy=buy,
+                                  sell=sell, money=money, trade_cost=trade_cost, date_stamp=date_stamp,
+                                  model=this_mod.id, av_length=length).moving_average()
 
-    model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, user_id)
-    transaction = Calculation.moving_average(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
-    url = "/ma_results/" + transaction
+    url = "/ma_results/" + str(transaction)
     return redirect(url)
 
 @processes.route('/calc/weighted_moving_average', methods=['POST'])
@@ -101,50 +108,52 @@ def calc_weighted_moving_average():
     buy = request.form['buy']
     sell = request.form['sell']
     trade_cost = request.form['trade_cost']
-    date_stamp = dt.datetime.now()
-    type_info = {'type': 'WMA',
-                 'buy': buy,
-                 'sell': sell,
-                 'length': length,
-                 'wma': ""}
-    if session['email'] != None:
-        user = User.get_id_by_email(session['email'])
-        user_id = user.user_id
+    date_stamp = str(dt.datetime.now())
+    type_info = 'WMA'
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        this_mod = Model(mod_type='WMA', ticker=ticker, period=period, interval=interval, money=money, buy=buy,
+                         sell=sell, trade_cost=trade_cost, av_length=length, owner=user_id).save()
+        transaction = Calculation(type_info=type_info, ticker=ticker, period=period, interval=interval, buy=buy,
+                                  sell=sell, money=money, trade_cost=trade_cost, owner=user_id, date_stamp=date_stamp,
+                                  model=this_mod.id, av_length=length).weighted_moving_average()
     else:
-        user_id = "guest"
+        this_mod = Model(mod_type='WMA', ticker=ticker, period=period, interval=interval, money=money, buy=buy,
+                         sell=sell, trade_cost=trade_cost, av_length=length).save()
+        transaction = Calculation(type_info=type_info, ticker=ticker, period=period, interval=interval, buy=buy,
+                                  sell=sell, money=money, trade_cost=trade_cost, date_stamp=date_stamp,
+                                  model=this_mod.id, av_length=length).weighted_moving_average()
 
-    model_id = Model.create_model(ticker, period, interval, money, buy, sell, trade_cost, user_id)
-    transaction = Calculation.weighted_moving_average(type_info, ticker, period, interval, money, trade_cost, user_id, date_stamp, model_id)
-    url = "/wma_results/" + transaction
+    url = "/wma_results/" + str(transaction)
     return redirect(url)
 
 @processes.route('/r_results/<string:transaction_id>')
 def get_r_results(transaction_id):
-    results = Calculation.from_mongo(transaction_id)
+    results = Calculation.objects(pk=transaction_id).first()
     return render_template('r_results.html', results=results)
 
 @processes.route('/ma_results/<string:transaction_id>')
 def get_ma_results(transaction_id):
-    results = Calculation.from_mongo(transaction_id)
+    results = Calculation.objects(pk=transaction_id).first()
     return render_template('ma_results.html', results=results)
 
 @processes.route('/wma_results/<string:transaction_id>')
 def get_wma_results(transaction_id):
-    results = Calculation.from_mongo(transaction_id)
+    results = Calculation.objects(pk=transaction_id).first()
     return render_template('wma_results.html', results=results)
 
 @processes.route('/entry/<string:transaction_id>')
 def get_entry(transaction_id):
-    entry = Calculation.from_mongo(transaction_id)
+    entry = Calculation.objects(pk=transaction_id).first()
     return render_template('entry.html', entry=entry)
 
 @processes.route('/delete/<string:transaction_id>')
 def delete_entry(transaction_id):
-    Calculation.delete_entry_by_id(transaction_id)
-    user = User.get_by_email(session['email'])
+    Calculation.objects(pk=transaction_id).first().delete()
+    user = current_user
     entries = user.get_entries()
     models = user.get_models()
-    user_id = user.get_id()
+    user_id = user.id
     posts = Post.from_user(user_id)
 
     return render_template("profile.html", user=user, entries=entries, models=models, posts=posts, email=session['email'])

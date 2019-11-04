@@ -24,14 +24,14 @@
     <li class="nav-item">
       <a class="nav-link text-light nav-text" href="/strategies">Bot</a>
     </li>
-    {% if session['email'] != None %}
+    {% if current_user.is_authenticated %}
     <li class="nav-item">
       <a class="nav-link text-light nav-text" href="/profile">Profile</a>
     </li>
     <li class="nav-item log">
       <a class="nav-link nav-text log-text" href="/logout">Log out</a>
     </li>
-    {% elif session['email'] == None %}
+    {% elif current_user.is_authenticated == False %}
     <li class="nav-item log">
       <a class="nav-link nav-text log-text" href="/login">Login</a>
     </li>
