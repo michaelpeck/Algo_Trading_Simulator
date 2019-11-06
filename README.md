@@ -6,7 +6,7 @@ It is hosted at www.sensebot.co.
 
 Languages: Python3, Jinja2, HTML5, CSS3, Javascript
 
-Python packages: Pandas, Numpy, yFinance
+Python packages: Flask, Pandas, Numpy, yFinance
 
 Libraries: Bootstrap 4, DataTables, Chart.js
 
@@ -60,10 +60,11 @@ Jinja2
 
 Python packages:
 
+Flask - Application structure
 Pandas - used for data processing
 yfinance - used for data retrieval
 
-Storage:
+Database:
 
 MongoDB Atlas - remote server database
 
