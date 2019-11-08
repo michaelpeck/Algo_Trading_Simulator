@@ -2,20 +2,31 @@
 {% block content %}
     <div class="container">
         <div class="row text-dark profile-header">
-            <h1>Hello {{ user.username }}</h1>
+            <div class="bio-info">
+                <h1>Hello {{ user.username }}</h1>
+                <hr>
+                <h3>{{ user.bio }}</h3>
+                <div class="profile-button-container">
+                    <a href="/account" class="btn btn-lg btn-strategies text-light profile-button">Edit Profile</a>
+                    <a href="/forum" class="btn btn-lg btn-strategies text-light profile-button">Forum</a>
+                </div>
+            </div>
+            <div class="bio-pic">
+                <img class="rounded-circle account-img" src="{{ image_file }}">
+            </div>
         </div>
-        <div class="row text-dark">
-            <h3>Results</h3>
+        <div class="row text-dark profile-header">
+            <h1>Results</h1>
         </div>
         <div class="row text-center">
             <table id="user_entries" class="table table-striped table-dark">
                 <thead>
                     <tr>
                         <th scope="col">View</th>
+                        <th scope="col">Type</th>
                         <th scope="col">Ticker</th>
                         <th scope="col">Period</th>
-                        <th scope="col">Buy Point</th>
-                        <th scope="col">Sell Point</th>
+                        <th scope="col">Trades</th>
                         <th scope="col">Starting Balance</th>
                         <th scope="col">Ending Balance</th>
                         <th scope="col">% Change</th>
@@ -25,7 +36,7 @@
                 <tbody>
                 {% for entry in entries %}
                     <tr>
-                        {% set url = "/entry/" + entry.id|string %}
+                        {% set url = "/" + entry.type_info|string|lower + "_entry/" + entry.id|string %}
                         {% set d_url = "/delete/" + entry.id|string %}
                         {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
                         {% if change < 0 %}
@@ -36,10 +47,10 @@
                             {% set c = 'white' %}
                         {% endif %}
                         <th scope="row"><a href={{ url }}><img src="../static/assets/Plus.png" width="25px"></a></th>
+                        <td>{{ entry.type_info }}</td>
                         <td>{{ entry.ticker }}</td>
                         <td>{{ entry.period }}</td>
-                        <td>{{ entry.buy }}</td>
-                        <td>{{ entry.sell }}</td>
+                        <td>{{ entry.tt|length }}</td>
                         <td>{{ entry.money }}</td>
                         <td>{{ entry.final_money }}</td>
                         <td style="color:{{ c }}">{{ '%0.2f'| format(change|float) }}</td>
@@ -49,29 +60,20 @@
                 </tbody>
             </table>
         </div>
-        <div class="row text-dark">
-            <h3>Posts</h3>
+        <div class="row text-dark profile-header">
+            <h1>Posts</h1>
         </div>
-        <div class="row">
-            <table id="user_posts" class="table table-striped table-dark">
-                <thead>
-                    <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Content</th>
-                    </tr>
-                </thead>
+        <div>
+            {% if posts is not none %}
                 {% for post in posts %}
-                <tbody>
-                    <tr>
-                        <th scope="row">{{ post.title }}</th>
-                        <td>{{ post.date }}</td>
-                        <td>{{ post.content }}</td>
-                    </tr>
-                </tbody>
+                    <h3>{{ post.title }} | {{ post.date.strftime('%Y-%m-%d') }}</h3>
+                    <br>
+                    <p>{{ post.content }}</p>
+                    <hr>
                 {% endfor %}
-            </table>
-            <a href="/forum" class="btn btn-lg btn-strategies text-light" style="background-color: #4095BF; border:0px;">Forum</a>
+            {% elif posts is none %}
+                <h3>No posts yet</h3>
+            {% endif %}
         </div>
     </div>
 
