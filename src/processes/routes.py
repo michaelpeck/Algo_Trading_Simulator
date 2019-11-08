@@ -43,7 +43,7 @@ def weighted_moving_average_template_model(model_id):
 
 @processes.route('/calc/static_range', methods=['POST'])
 def calc_static_range():
-    ticker = request.form['ticker']
+    ticker = request.form['ticker'].upper()
     period = request.form['period']
     interval = request.form['interval']
     money = request.form['money']
@@ -71,7 +71,7 @@ def calc_static_range():
 
 @processes.route('/calc/moving_average', methods=['POST'])
 def calc_moving_average():
-    ticker = request.form['ticker']
+    ticker = request.form['ticker'].upper()
     period = request.form['period']
     interval = '1d'
     length = request.form['length']
@@ -100,7 +100,7 @@ def calc_moving_average():
 
 @processes.route('/calc/weighted_moving_average', methods=['POST'])
 def calc_weighted_moving_average():
-    ticker = request.form['ticker']
+    ticker = request.form['ticker'].upper()
     period = request.form['period']
     interval = '1d'
     length = request.form['length']
@@ -142,10 +142,20 @@ def get_wma_results(transaction_id):
     results = Calculation.objects(pk=transaction_id).first()
     return render_template('wma_results.html', results=results)
 
-@processes.route('/entry/<string:transaction_id>')
-def get_entry(transaction_id):
+@processes.route('/r_entry/<string:transaction_id>')
+def get_r_entry(transaction_id):
     entry = Calculation.objects(pk=transaction_id).first()
-    return render_template('entry.html', entry=entry)
+    return render_template('r_entry.html', entry=entry)
+
+@processes.route('/ma_entry/<string:transaction_id>')
+def get_ma_entry(transaction_id):
+    entry = Calculation.objects(pk=transaction_id).first()
+    return render_template('ma_entry.html', entry=entry)
+
+@processes.route('/wma_entry/<string:transaction_id>')
+def get_wma_entry(transaction_id):
+    entry = Calculation.objects(pk=transaction_id).first()
+    return render_template('wma_entry.html', entry=entry)
 
 @processes.route('/delete/<string:transaction_id>')
 def delete_entry(transaction_id):

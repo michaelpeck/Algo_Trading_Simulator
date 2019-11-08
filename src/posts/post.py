@@ -1,51 +1,14 @@
 __author__ = 'michaelpeck'
 
-import uuid
-from src.common.database import Database
-import datetime
-
-class Post(object):
-
-    def __init__(self, user_id, title, content, author, date=datetime.datetime.utcnow(), _id=None):
-        self.date = "" if date is None else date.strftime("%d-%m-%Y")
-        self.time = "" if date is None else date.strftime("%H:%M")
-        self.user_id = user_id
-        self.title = title
-        self.content = content
-        self.author = author
-        self.date = date
-        self._id = uuid.uuid4().hex if _id is None else _id
-
-    @classmethod
-    def create_post(cls, user_id, title, content, author):
-        new_post = cls(user_id, title, content, author)
-        new_post.save_to_mongo()
+from src import db
+from flask_login import UserMixin
 
 
-    def save_to_mongo(self):
-        Database.insert(collection='posts',data=self.json())
-
-    def json(self):
-        return{
-            '_id': self._id,
-            'user_id': self.user_id,
-            'author': self.author,
-            'content': self.content,
-            'title': self.title,
-            'date': self.date,
-            'time': self.time
-        }
-
-    @classmethod
-    def from_mongo(cls, id):
-        post_data = Database.find_one(collection='posts', query = {'_id': id})
-        return cls(**post_data)
-
-
-    @staticmethod
-    def from_user(id):
-        return [post for post in Database.find(collection = 'posts', query = {'user_id': id})]
-
-    @staticmethod
-    def all_posts():
-        return [post for post in Database.find_all(collection='posts')]
+class Post(UserMixin, db.Document):
+    meta = {'collection': 'posts'}
+    title = db.StringField(max_length=30)
+    date = db.DateTimeField()
+    content = db.StringField(max_length=1000)
+    author = db.StringField(max_length=30)
+    tags = db.ListField()
+    owner = db.LazyReferenceField('User')

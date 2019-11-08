@@ -22,7 +22,10 @@ class User(UserMixin, db.Document):
     email = db.StringField(max_length=30)
     password = db.StringField()
     image_file = db.StringField(default='default.jpg')
+    bio = db.StringField(max_length=200)
+    entries = db.LazyReferenceField('Calculation')
     models = db.LazyReferenceField('Model')
+    posts = db.LazyReferenceField('Post')
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
