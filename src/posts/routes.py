@@ -24,3 +24,8 @@ def new_post():
         flash('Your post has been created!', 'success')
         return redirect(url_for('posts.forum'))
     return render_template('new_post.html', title='New Post', form=form)
+
+@posts.route('/post/<string:post_id>')
+def post_page(post_id):
+    post = Post.objects(pk=post_id).first()
+    return render_template('/post.html', post=post)

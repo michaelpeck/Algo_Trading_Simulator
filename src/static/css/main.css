@@ -320,3 +320,10 @@ canvas {
 .new-post-form{
     max-width: 600px;
 }
+
+/* Forum */
+.single-post{
+    background-color: #E8E8E8;
+    margin: 50px;
+    padding: 50px;
+}

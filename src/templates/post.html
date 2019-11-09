@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row text-dark profile-header">
+        <h1>Forum post</h1>
+    </div>
+    <div class="single-post">
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.author }} | {{ post.date.strftime('%Y-%m-%d') }}</p>
+        <hr>
+        <p>{{ post.content }}</p>
+    </div>
+    <div class="row text-center">
+        <a href="/forum" class="btn btn-lg btn-strategies text-light" style="background-color: #4095BF; border:0px;">Back to forum</a>
+    </div>
+</div>
+{% endblock %}
