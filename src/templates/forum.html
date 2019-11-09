@@ -28,18 +28,16 @@
                         <th scope="col">Post</th>
                     </tr>
                 </thead>
-                {% if posts is not none %}
-                    {% for post in posts %}
-                    <tbody>
-                        <tr>
-                            <th scope="row">{{ post.title|truncate(30, True, '...') }}</th>
-                            <th>{{ post.author }}</th>
-                            <td>{{ post.date.strftime('%Y-%m-%d') }}</td>
-                            <td>{{ post.content|truncate(60, True, '...') }}</td>
-                        </tr>
-                    </tbody>
-                    {% endfor %}
-                {% endif %}
+                <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <th scope="row">{{ post.title|truncate(30, True, '...') }}</th>
+                        <th>{{ post.author }}</th>
+                        <td>{{ post.date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ post.content|truncate(60, True, '...') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
