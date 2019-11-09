@@ -11,8 +11,8 @@ posts = Blueprint('posts', __name__)
 
 @posts.route('/forum')
 def forum():
-    posts = Post.objects()
-    return render_template('/forum.html', posts=posts)
+    forum_posts = Post.objects()
+    return render_template('/forum.html', forum_posts=forum_posts)
 
 @posts.route("/new_post", methods=['Get', 'POST'])
 @login_required
