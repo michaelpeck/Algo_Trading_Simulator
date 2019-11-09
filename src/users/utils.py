@@ -14,10 +14,22 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(current_app.root_path, 'static/assets/profile_pics', picture_fn)
 
-    output_size = (125, 125)
+    output_size = (250, 250)
     i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
+    w, h = i.size
+    if w > h:
+        diff = (w - h)/2
+        j = i.crop((diff,0,w-diff,h))
+        j.thumbnail(output_size)
+        j.save(picture_path)
+    elif h > w:
+        diff = (h - w)/2
+        j = i.crop((0,diff,w,h-diff))
+        j.thumbnail(output_size)
+        j.save(picture_path)
+    else:
+        i.thumbnail(output_size)
+        i.save(picture_path)
 
     return picture_fn
 

@@ -304,6 +304,7 @@ canvas {
 }
 .account-pic {
     width: 250px;
+    height: 250px;
 }
 .account-text {
     padding-left: 50px;
