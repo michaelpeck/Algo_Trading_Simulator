@@ -33,3 +33,5 @@ flask-mongoengine==0.9.5
 Werkzeug==0.16.0
 
 itsdangerous==1.1.0
+
+realtime-stock==1.0.0
