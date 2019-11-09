@@ -29,12 +29,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for i in forum_posts %}
+                {% for post in posts %}
                     <tr>
-                        <td scope="row">{{ i.title|truncate(30, True, '...') }}</td>
-                        <td>{{ i.author }}</td>
-                        <td>{{ i.date.strftime('%Y-%m-%d') }}</td>
-                        <td>{{ i.content|truncate(60, True, '...') }}</td>
+                        <td scope="row">{{ post.title|truncate(30, True, '...') }}</td>
+                        <td>{{ post.author }}</td>
+                        <td>{{ post.date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ post.content|truncate(60, True, '...') }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
