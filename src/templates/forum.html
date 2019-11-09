@@ -31,8 +31,8 @@
                 <tbody>
                 {% for post in posts %}
                     <tr>
-                        <th scope="row">{{ post.title|truncate(30, True, '...') }}</th>
-                        <th>{{ post.author }}</th>
+                        <td scope="row">{{ post.title|truncate(30, True, '...') }}</td>
+                        <td>{{ post.author }}</td>
                         <td>{{ post.date.strftime('%Y-%m-%d') }}</td>
                         <td>{{ post.content|truncate(60, True, '...') }}</td>
                     </tr>
