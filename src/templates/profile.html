@@ -69,7 +69,7 @@
             <h2>Posts</h2>
         </div>
         <div class="profile-posts">
-            {% if posts is defined %}
+            {% if posts|length >0 %}
                 {% for post in posts %}
                 {% set url = "/post/" + post.id|string %}
                     <div class="profile-post-container">
@@ -85,8 +85,10 @@
                         <hr>
                     {% endif %}
                 {% endfor %}
-            {% elif posts is none %}
-                <h3>No posts yet</h3>
+            {% elif posts|length == 0 %}
+                <div>
+                    <p>You do not have any posts yet.</p>
+                </div>
             {% endif %}
         </div>
     </div>
