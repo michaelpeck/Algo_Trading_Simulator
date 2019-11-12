@@ -4,6 +4,7 @@
 # Michael's
 run.*
 config.*
+profile_pics/
 
 # User-specific stuff
 .idea/**/workspace.xml

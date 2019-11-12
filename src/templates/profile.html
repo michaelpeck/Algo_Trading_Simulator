@@ -3,12 +3,17 @@
     <div class="container">
         <div class="row text-dark profile-header">
             <div class="bio-info">
-                <h1>Hello {{ user.username }}</h1>
+                <h1>{{ user.username }}</h1>
                 <hr>
-                <h3>{{ user.bio }}</h3>
-                <div class="profile-button-container">
-                    <a href="/account" class="btn btn-lg btn-strategies text-light profile-button">Edit Profile</a>
-                    <a href="/forum" class="btn btn-lg btn-strategies text-light profile-button">Forum</a>
+                <div class="bio-section">
+                    <p>{{ user.bio }}</p>
+                </div>
+
+                <div class="profile-button-container-1">
+                    <a href="/account" class="btn btn-lg btn-block text-light profile-button">Edit Profile</a>
+                </div>
+                <div class="profile-button-container-2">
+                    <a href="/forum" class="btn btn-lg btn-block text-light profile-button">Forum</a>
                 </div>
             </div>
             <div class="bio-pic">
@@ -16,7 +21,7 @@
             </div>
         </div>
         <div class="row text-dark profile-header">
-            <h1>Results</h1>
+            <h2>Results</h2>
         </div>
         <div class="row text-center">
             <table id="user_entries" class="table table-striped table-dark">
@@ -61,15 +66,24 @@
             </table>
         </div>
         <div class="row text-dark profile-header">
-            <h1>Posts</h1>
+            <h2>Posts</h2>
         </div>
-        <div>
-            {% if posts is not none %}
+        <div class="profile-posts">
+            {% if posts is defined %}
                 {% for post in posts %}
-                    <h3>{{ post.title }} | {{ post.date.strftime('%Y-%m-%d') }}</h3>
-                    <br>
-                    <p>{{ post.content }}</p>
-                    <hr>
+                {% set url = "/post/" + post.id|string %}
+                    <div class="profile-post-container">
+                        <div class="profile-post-plus">
+                            <a href={{ url }}><img src="../static/assets/Plus.png"></a>
+                        </div>
+                        <div class="profile-post-content">
+                            <h4>{{ post.title }} | {{ post.date.strftime('%Y-%m-%d') }}</h4>
+                            <p>{{ post.content }}</p>
+                        </div>
+                    </div>
+                    {% if not loop.last %}
+                        <hr>
+                    {% endif %}
                 {% endfor %}
             {% elif posts is none %}
                 <h3>No posts yet</h3>

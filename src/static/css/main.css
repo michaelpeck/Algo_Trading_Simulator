@@ -5,6 +5,25 @@ html, body {
     height: 100%;
     margin: 0;
 }
+h1 {
+    font-size: 60px;
+}
+h2 {
+    font-size: 48px;
+}
+h3 {
+    font-size: 36px;
+}
+h4 {
+    font-size: 28px;
+}
+h5 {
+    font-size: 24px;
+}
+p {
+    font-size: 18px;
+}
+
 .foot-wrapper {
   min-height: 100%;
   /* Equal to height of footer */
@@ -81,7 +100,7 @@ footer {
 }
 .flex-col-three{
     color: #263238;
-    padding: 0px 30px;
+    padding: 0px 25px;
     width: 400px;
 }
 .home-about{
@@ -182,6 +201,15 @@ footer {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+.what-is-at {
+     padding: 100px 0px;
+}
+.what-is-at img {
+    float: right;
+    vertical-align: top;
+    margin:0px 20px;
+    width: 250px;
+}
 .about-uses{
     padding-top: 30px;
 }
@@ -265,21 +293,27 @@ canvas {
     min-width: 300px;
     position: relative;
 }
-.profile-button-container{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    padding-top: 10px;
+.profile-button-container-1{
+    width: 50%;
+    height: 65px;
+    padding: 10px;
+    float:left;
+}
+.profile-button-container-2{
+    margin-left: 50%;
+    height: 65px;
+    padding: 10px;
 }
 .profile-button {
-    width: 200px;
     background-color: #4095BF;
     border:0px;
-    display: inline;
 }
-
+.bio-section {
+    padding: 10px;
+}
+.bio-section p{
+    color: #a2a2a2;
+}
 .bio-pic {
     height: 250px;
     width: 50%;
@@ -294,7 +328,30 @@ canvas {
     width: 100%;
 }
 .page-item.active {
-
+}
+.profile-posts {
+    background-color: #E8E8E8;
+    width: 100%;
+    padding: 30px;
+    margin: 20px;
+}
+.profile-post-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap-reverse;
+}
+.profile-post-plus {
+    width: 45px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+.profile-post-plus img{
+    width: 25px;
+    height: 25px;
+}
+.profile-post-content {
+    width: 90%
 }
 /* Account */
 .account-info {

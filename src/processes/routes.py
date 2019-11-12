@@ -1,20 +1,28 @@
 __author__ = 'michaelpeck'
 
-from flask import Flask, render_template, request, redirect, session, Blueprint
+from flask import Flask, render_template, request, redirect, session, Blueprint, flash, url_for
 from flask_login import current_user
 from src.processes.models import Model
 from src.processes.calculation import Calculation
 from src.posts.post import Post
-from src.users.forms import (StaticRangeForm)
+from src.processes.forms import (StaticRangeForm)
 import datetime as dt
 
 
 processes = Blueprint('processes', __name__)
 
-@processes.route('/range')
+@processes.route('/range', methods=['GET', 'POST'])
 def static_range_template():
     mod = ""
-    return render_template('static_range.html', title='Static Range', mod=mod)
+    date_stamp = str(dt.datetime.now())
+    form = StaticRangeForm()
+    if form.validate_on_submit():
+        sr_calc = Calculation(type_info='SR', ticker=form.ticker.data, period=form.period.data, interval=form.interval.data,
+                              buy=form.buy.data, sell=form.sell.data, money=form.money.data, trade_cost=form.trade_cost.data,
+                              date_stamp=date_stamp).static_range()
+        flash('Your calculation is complete!', 'success')
+        return redirect(url_for('get_r_results', transaction_id=sr_calc.id))
+    return render_template('static_range.html', title='Static Range', mod=mod, form=form)
 
 @processes.route('/range/<string:model_id>')
 def static_range_template_model(model_id):
