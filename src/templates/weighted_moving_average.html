@@ -80,87 +80,133 @@
     <p>Note: Trading period begins X days after the start of the period (X = Length of average).</p>
 </div>
 <div class="container page-form">
-  <form id="stock-data-form" class="stock-data-form" action="/calc/weighted_moving_average" method="post">
-    <h3 class="text-center" style="padding-bottom: 20px;">Parameters</h3>
-    <div class="form-group">
-      <div class="form-group row">
-          <label for="ticker" class="col-lg-6 col-form-label">Ticker</label>
-          <div class="col-lg-6">
-                <input type="text" id="ticker" class="form-control" name="ticker" value="{{ticker}}" required>
-          </div>
-      </div>
-      <div class="form-group row">
-          <label for="period" class="col-lg-6 col-form-label">Period</label>
-          <div class="col-lg-6">
-                <select id="period" class="form-control" name="period">
-                    <option {{omo}}>1mo</option>
-                    <option {{tmo}}>3mo</option>
-                    <option {{smo}}>6mo</option>
-                    <option {{oy}}>1y</option>
-                    <option {{ty}}>2y</option>
-                    <option {{fy}}>5y</option>
-                </select>
-          </div>
-      </div>
-      <div class="form-group row">
-          <label for="length" class="col-lg-6 col-form-label">Length of average</label>
-          <div class="col-lg-6">
-              <div class="input-group">
-                <input type="number" step="1" id="length" class="form-control" name="length" value="{{length}}" aria-describedby="inputGroupAppend" required>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="inputGroupAppend">days</span>
-                </div>
-              </div>
-          </div>
-      </div>
-      <div class="form-group row">
-          <label for="money" class="col-lg-6 col-form-label">Account balance</label>
-          <div class="col-lg-6">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupPrepend">$</span>
-                </div>
-                <input type="number" step="0.01" id="money" class="form-control" name="money" value="{{money}}" aria-describedby="inputGroupPrepend" required>
-              </div>
-          </div>
-      </div>
-      <div class="form-group row">
-          <label for="buy" class="col-lg-6 col-form-label">Buy point</label>
-          <div class="col-lg-6">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupPrepend2">$</span>
-                </div>
-                <input type="number" step="0.01" id="buy" class="form-control" name="buy" value="{{buy}}" aria-describedby="inputGroupPrepend2" required>
-              </div>
-          </div>
-      </div>
-      <div class="form-group row">
-          <label for="sell" class="col-lg-6 col-form-label">Sell point</label>
-          <div class="col-lg-6">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupPrepend3">$</span>
-                </div>
-                <input type="number" step="0.01" id="sell" class="form-control" name="sell" value="{{sell}}" aria-describedby="inputGroupPrepend3" required>
-              </div>
-          </div>
-      </div>
-      <div class="form-group row">
-          <label for="trade_cost" class="col-lg-6 col-form-label">Cost per trade</label>
-          <div class="col-lg-6">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupPrepend4">$</span>
-                </div>
-                <input type="number" step="0.01" id="trade_cost" class="form-control" name="trade_cost" value="{{trade_cost}}" aria-describedby="inputGroupPrepend4" required>
-              </div>
-          </div>
-      </div>
-    </div>
-    <div class="page-button text-center">
-      <button type="submit" class="btn btn-secondary">Submit</button>
-    </div>
-  </form>
+    <form id="stock-data-form" class="stock-data-form" method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Parameters</legend>
+            <div class="form-group row">
+                {{ form.ticker.label(class="col-lg-6 col-form-label") }}
+
+                {% if form.ticker.errors %}
+                    {{ form.ticker(class="col-lg-6 form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.ticker.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.ticker(class="col-lg-6 form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group row">
+                {{ form.period.label(class="col-lg-6 form-control-label") }}
+
+                {% if form.period.errors %}
+                    {{ form.period(class="col-lg-6 form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.period.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.period(class="col-lg-6 form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group row">
+                {{ form.length.label(class="col-lg-6 form-control-label") }}
+
+                {% if form.length.errors %}
+                    {{ form.length(class="col-lg-6 form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.length.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% set append = 'days' %}
+                    <div class="col-lg-6 input-group-append" style="padding: 0px">
+                        {{ form.length(class="form-control") }}
+                        <span class="input-group-text">{{ append | safe }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group row">
+                {{ form.money.label(class="col-lg-6 form-control-label") }}
+
+                {% if form.money.errors %}
+                    {{ form.money(class="col-lg-6 form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.money.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.money(class="form-control") }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group row">
+                {{ form.buy.label(class="col-lg-6 form-control-label") }}
+
+                {% if form.buy.errors %}
+                    {{ form.buy(class="col-lg-6 form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.buy.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.buy(class="form-control") }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group row">
+                {{ form.sell.label(class="col-lg-6 form-control-label") }}
+
+                {% if form.sell.errors %}
+                    {{ form.sell(class="col-lg-6 form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.sell.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.sell(class="form-control") }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group row">
+                {{ form.trade_cost.label(class="col-lg-6 form-control-label") }}
+
+                {% if form.trade_cost.errors %}
+                    {{ form.trade_cost(class="col-lg-6 form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.trade_cost.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.trade_cost(class="form-control") }}
+                    </div>
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group text-center">
+            {{ form.submit(class="btn btn-secondary") }}
+        </div>
+    </form>
 </div>
+
 {% endblock %}

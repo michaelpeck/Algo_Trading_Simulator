@@ -100,111 +100,127 @@
 </div>
 
 <div class="container page-form">
-    <form id="stock-data-form" class="stock-data-form" action="/calc/static_range" method="post">
+    <form id="stock-data-form" class="stock-data-form" method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Parameters</legend>
-            <div class="form-group">
-                {{ form.ticker.label(class="form-control-label") }}
+            <div class="form-group row">
+                {{ form.ticker.label(class="col-lg-6 col-form-label") }}
 
                 {% if form.ticker.errors %}
-                    {{ form.ticker(class="form-control form-control-lg is-invalid") }}
+                    {{ form.ticker(class="col-lg-6 form-control is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.ticker.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.ticker(class="form-control form-control-lg") }}
+                    {{ form.ticker(class="col-lg-6 form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
-                {{ form.period.label(class="form-control-label") }}
+            <div class="form-group row">
+                {{ form.period.label(class="col-lg-6 form-control-label") }}
 
                 {% if form.period.errors %}
-                    {{ form.period(class="form-control form-control-lg is-invalid") }}
+                    {{ form.period(class="col-lg-6 form-control is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.period.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.period(class="form-control form-control-lg") }}
+                    {{ form.period(class="col-lg-6 form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
-                {{ form.interval.label(class="form-control-label") }}
+            <div class="form-group row">
+                {{ form.interval.label(class="col-lg-6 form-control-label") }}
 
                 {% if form.interval.errors %}
-                    {{ form.interval(class="form-control form-control-lg is-invalid") }}
+                    {{ form.interval(class="col-lg-6 form-control is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.interval.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.interval(class="form-control form-control-lg") }}
+                    {{ form.interval(class="col-lg-6 form-control") }}
                 {% endif %}
             </div>
-            <div class="form-group">
-                {{ form.money.label(class="form-control-label") }}
+            <div class="form-group row">
+                {{ form.money.label(class="col-lg-6 form-control-label") }}
 
                 {% if form.money.errors %}
-                    {{ form.money(class="form-control form-control-lg is-invalid") }}
+                    {{ form.money(class="col-lg-6 form-control is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.money.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.money(class="form-control form-control-lg") }}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.money(class="form-control") }}
+                    </div>
                 {% endif %}
             </div>
-            <div class="form-group">
-                {{ form.buy.label(class="form-control-label") }}
+            <div class="form-group row">
+                {{ form.buy.label(class="col-lg-6 form-control-label") }}
 
                 {% if form.buy.errors %}
-                    {{ form.buy(class="form-control form-control-lg is-invalid") }}
+                    {{ form.buy(class="col-lg-6 form-control is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.buy.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.buy(class="form-control form-control-lg") }}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.buy(class="form-control") }}
+                    </div>
                 {% endif %}
             </div>
-            <div class="form-group">
-                {{ form.sell.label(class="form-control-label") }}
+            <div class="form-group row">
+                {{ form.sell.label(class="col-lg-6 form-control-label") }}
 
                 {% if form.sell.errors %}
-                    {{ form.sell(class="form-control form-control-lg is-invalid") }}
+                    {{ form.sell(class="col-lg-6 form-control is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.sell.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.sell(class="form-control form-control-lg") }}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.sell(class="form-control") }}
+                    </div>
                 {% endif %}
             </div>
-            <div class="form-group">
-                {{ form.trade_cost.label(class="form-control-label") }}
+            <div class="form-group row">
+                {{ form.trade_cost.label(class="col-lg-6 form-control-label") }}
 
                 {% if form.trade_cost.errors %}
-                    {{ form.trade_cost(class="form-control form-control-lg is-invalid") }}
+                    {{ form.trade_cost(class="col-lg-6 form-control is-invalid") }}
                     <div class="invalid-feedback">
                         {% for error in form.trade_cost.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.trade_cost(class="form-control form-control-lg") }}
+                    {% set prepend = '$' %}
+                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                        <span class="input-group-text">{{ prepend | safe }}</span>
+                        {{ form.trade_cost(class="form-control") }}
+                    </div>
                 {% endif %}
             </div>
         </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+        <div class="form-group text-center">
+            {{ form.submit(class="btn btn-secondary") }}
         </div>
     </form>
 </div>

@@ -110,7 +110,7 @@ class Calculation(UserMixin, db.Document):
 
     def moving_average(self):
         stock = yf.Ticker(self.ticker)
-        df = stock.history(period=self.period, interval=self.interval)
+        df = stock.history(period=self.period, interval='1d')
         owned = 0
         count = 0
         trade_money = self.money
@@ -202,7 +202,7 @@ class Calculation(UserMixin, db.Document):
 
     def weighted_moving_average(self):
         stock = yf.Ticker(self.ticker)
-        df = stock.history(period=self.period, interval=self.interval)
+        df = stock.history(period=self.period, interval='1d')
         owned = 0
         count = 0
         trade_money = self.money

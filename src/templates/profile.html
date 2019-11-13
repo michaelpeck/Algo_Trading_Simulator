@@ -35,7 +35,7 @@
                         <th scope="col">Starting Balance</th>
                         <th scope="col">Ending Balance</th>
                         <th scope="col">% Change</th>
-                        <th scope="col" style="color:red">Delete</th>
+                        <th scope="col" style="color:#DC3545">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,9 +45,9 @@
                         {% set d_url = "/delete/" + entry.id|string %}
                         {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
                         {% if change < 0 %}
-                            {% set c = 'red' %}
+                            {% set c = '#DC3545' %}
                         {% elif change > 0 %}
-                            {% set c = 'green' %}
+                            {% set c = '#90EE90' %}
                         {% elif change == 0 %}
                             {% set c = 'white' %}
                         {% endif %}

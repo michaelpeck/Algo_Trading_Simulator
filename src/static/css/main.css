@@ -327,7 +327,15 @@ canvas {
     margin: auto;
     width: 100%;
 }
-.page-item.active {
+.page-item.active .page-link{
+    background-color: #4095BF;
+    border-color: #4095BF;
+}
+.page-link {
+    color: #4095BF;
+}
+.page-link:hover {
+    color: #4095BF;
 }
 .profile-posts {
     background-color: #E8E8E8;

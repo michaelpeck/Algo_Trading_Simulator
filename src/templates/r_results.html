@@ -82,8 +82,12 @@
     <div class="chart-div">
         <canvas id="myChart"></canvas>
     </div>
-    {% set url  = '/range/' + results.model.id|string %}
-    <a href="{{ url }}" class="btn btn-info" role="button">Try again</a>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group text-center">
+            {{ form.submit(class="btn btn-info") }}
+        </div>
+    </form>
 
 </div>
 <script type="text/javascript">
