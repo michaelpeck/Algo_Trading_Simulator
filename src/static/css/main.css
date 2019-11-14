@@ -93,7 +93,7 @@ footer {
 }
 .home-col-flex{
     width: 100%;
-    padding: 60px 5%;
+    padding: 60px 0px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -119,13 +119,19 @@ footer {
 }
 .flex-col-two{
     color: #263238;
-    padding: 50px 30px;
-    width: 600px;
+    padding: 0px 0px;
+    width: 90%;
+    max-width: 700px;
+    min-width: 350px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-content: center;
 }
 .home-strategies-text{
+    width: 50%;
+    min-width: 300px;
+    padding: 50px 0px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -133,12 +139,12 @@ footer {
     width: 180px;
 }
 .home-strategies-buttons{
+    width: 350px;
+    padding: 50px 0px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
-    flex-grow: 1;
-    flex-basis: 0;
 }
 .btn-strategies{
     width: 280px;
@@ -207,7 +213,7 @@ footer {
 .what-is-at img {
     float: right;
     vertical-align: top;
-    margin:0px 20px;
+    margin:20px;
     width: 250px;
 }
 .about-uses{
@@ -219,7 +225,7 @@ footer {
 }
 .about-limitations{
     display: table;
-    padding: 40px 0px;
+    padding: 40px 8%;
     margin: 30px auto;
 }
 .about-start-button{
