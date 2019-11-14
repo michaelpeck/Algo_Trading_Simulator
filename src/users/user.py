@@ -22,7 +22,7 @@ class User(UserMixin, db.Document):
     email = db.StringField(max_length=30)
     password = db.StringField()
     image_file = db.StringField(default='default.jpg')
-    bio = db.StringField(max_length=200)
+    bio = db.StringField(max_length=200, default='This is my bio...')
     entries = db.LazyReferenceField('Calculation')
     models = db.LazyReferenceField('Model')
     posts = db.LazyReferenceField('Post')
