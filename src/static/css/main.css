@@ -23,7 +23,10 @@ h5 {
 p {
     font-size: 18px;
 }
-
+.nav-item {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .foot-wrapper {
   min-height: 100%;
   /* Equal to height of footer */
