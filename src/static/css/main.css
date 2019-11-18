@@ -574,14 +574,15 @@ canvas {
     width: 100%;
     margin: 0px;
     padding: 1%;
-    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .tool-bar-half{
     height: 10%;
     width: 100%;
     margin: 0px;
     padding: 1%;
-    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -649,7 +650,7 @@ canvas {
     justify-content: center;
 }
 .dash-button-contain {
-    padding: 1%;
+    padding: 0px 1%;
     width: 32.5%;
     display: inline-block;
 }
