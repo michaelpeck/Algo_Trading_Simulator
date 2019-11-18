@@ -8,6 +8,7 @@ from src import db
 
 class Calculation(UserMixin, db.Document):
     meta = {'collection': 'entries'}
+    keep = db.BooleanField(default=True)
     date_stamp = db.StringField(max_length=40)
     type_info = db.StringField()
     buy = db.FloatField()

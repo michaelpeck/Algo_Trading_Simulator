@@ -1,37 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if mod != "" %}
-    {% set ticker = mod.ticker %}
-    {% set period = mod.period %}
-    {% set length = mod.av_length %}
-    {% set money = mod.money %}
-    {% set buy = mod.buy %}
-    {% set sell = mod.sell %}
-    {% set trade_cost = mod.trade_cost %}
-{% else %}
-    {% set ticker = "" %}
-    {% set period = "" %}
-    {% set length = "" %}
-    {% set money = "" %}
-    {% set buy = "" %}
-    {% set sell = "" %}
-    {% set trade_cost = "" %}
-{% endif %}
-
-{% if period == '1mo' %}
-    {% set omo = 'selected' %}
-{% elif period == '3mo' %}
-    {% set tmo = 'selected' %}
-{% elif period == '6mo' %}
-    {% set smo = 'selected' %}
-{% elif period == '1y' %}
-    {% set oy = 'selected' %}
-{% elif period == '2y' %}
-    {% set ty = 'selected' %}
-{% elif period == '5y' %}
-    {% set fy = 'selected' %}
-{% endif %}
 
 <div class="container algo-intro">
     <h1>Moving average algorithm</h1>

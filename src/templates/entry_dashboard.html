@@ -1,0 +1,839 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dash-contain">
+    <div class="dash-select" id="dash-selection">
+        <div class="dash-select-content">
+            <div class="dash-select-head">
+                <h1>Entry Dashboard</h1>
+            </div>
+            <div class="dash-select-choice" onClick="openPanels('dash-selection','four-panel-wrapper')">
+                <button class="btn dash-select-btn"><h3>Four Panels</h3></button>
+            </div>
+            <div class="dash-select-choice" onClick="openPanels('dash-selection','two-panel-wrapper')">
+                <button class="btn dash-select-btn"><h3>Two Panels</h3></button>
+            </div>
+        </div>
+    </div>
+    <div class="four-panel-wrapper" id="four-panel-wrapper">
+        <div id="expand-area-four" class="dash-expand">
+            <div class="dash-expand-box" id="expand-box-four">
+                <div class="expand-btn-container">
+                    <a href="/profile" class="btn btn-secondary d-e-btn btn-block">Profile</a>
+                </div>
+                <div class="expand-btn-container">
+                    <button class="btn btn-secondary d-e-btn btn-block" onClick="togglePanels('four-panel-wrapper', 'two-panel-wrapper')">Two Panels</button>
+                </div>
+            </div>
+            <div id="expand-button-four" class="dash-expand-button">
+                <img src="../static/assets/down_notch.png" width="50px" onClick="expandMenu('expand-button-four', 'collapse-button-four', 'expand-box-four')">
+            </div>
+            <div class="dash-collapse-button" id="collapse-button-four">
+                <img src="../static/assets/up_notch.png" width="50px" onClick="expandMenu('collapse-button-four', 'expand-button-four', 'expand-box-four')">
+            </div>
+        </div>
+        <div class="four-panel" id="four-panels">
+            <div class="dash-four-row">
+                <div id="d-q2" class="quarter-container" style="background:#f8f8f8;">
+                    <div class="quarter-content">
+                        <div id="table-q2" class="dash-entries-table">
+                            <table class="table table-striped table-dark table-sm dash-entries">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">View</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Ticker</th>
+                                        <th scope="col">Period</th>
+                                        <th scope="col">Trades</th>
+                                        <th scope="col">Start $</th>
+                                        <th scope="col">% Chg</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for entry in entries %}
+                                    {% set trid2 = 'q2' + loop.index|string %}
+                                    {% set passing = [ entry.buy, entry.sell, entry.td, entry.tt, entry.ty, entry.tp ] %}
+                                    <tr id="{{trid2}}" data-buy='{{ entry.buy|tojson }}' data-sell='{{ entry.sell|tojson }}' data-td='{{ entry.td|tojson }}'
+                                        data-tt='{{ entry.tt|tojson }}' data-ty='{{ entry.ty|tojson }}' data-tp='{{ entry.tp|tojson }}'
+                                        data-wmax='{{ entry.graph_x|tojson }}' data-wmay='{{ entry.graph_y|tojson }}'
+                                        data-money='{{ entry.money|tojson }}' data-ticker='{{ entry.ticker|tojson }}'
+                                        data-period='{{ entry.period|tojson }}' data-interval='{{ entry.interval|tojson }}'
+                                        data-avlength='{{ entry.av_length|tojson }}' data-finalmoney='{{ entry.final_money|tojson }}'
+                                        data-finalowned='{{ entry.final_owned|tojson }}' data-finalliquid='{{ entry.final_liquid|tojson }}'>
+                                        {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
+                                        {% if change < 0 %}
+                                            {% set c = '#DC3545' %}
+                                        {% elif change > 0 %}
+                                            {% set c = '#90EE90' %}
+                                        {% elif change == 0 %}
+                                            {% set c = 'white' %}
+                                        {% endif %}
+                                        <th scope="row"><img src="../static/assets/Plus.png" width="25px" onClick="displayEntry('table-q2', 'entry-q2', '{{ trid2 }}')"></th>
+                                        <td>{{ entry.type_info }}</td>
+                                        <td>{{ entry.ticker }}</td>
+                                        <td>{{ entry.period }}</td>
+                                        <td>{{ entry.tt|length }}</td>
+                                        <td>{{ entry.money }}</td>
+                                        <td style="color:{{ c }}">{{ '%0.2f'| format(change|float) }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="dash-entry" id="entry-q2">
+                            <div class="tool-bar">
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-e-btn btn-block" onClick="showEntries('entry-q2', 'table-q2')">Entries</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-i-btn btn-block" onClick="toggle('chart-q2', 'info-q2')">Info</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-g-btn btn-block" onClick="toggle('info-q2', 'chart-q2')">Graph</button>
+                                </div>
+                            </div>
+                            <div id='chart-q2' class="quarter-chart">
+                                <canvas class="dash-chart" id="q2Chart"></canvas>
+                            </div>
+                            <div id='info-q2' class="quarter-info">
+                                <div class="dash-results-flex text-dark">
+                                    <div class="dash-criteria text-center">
+                                        <h3>Criteria</h3>
+                                        <table class="table table-sm  table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Starting balance</h5></td>
+                                                    <td><h5 id="q2money"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ticker</h5></td>
+                                                    <td><h5 id="q2ticker"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Period</h5></td>
+                                                    <td><h5 id="q2period"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5 id="q2label">Length of average</h5></td>
+                                                    <td><h5 id="q2avint"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buy point</h5></td>
+                                                    <td><h5 id="q2buy"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sell point</h5></td>
+                                                    <td><h5 id="q2sell"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dash-results text-center">
+                                        <h3>Results</h3>
+                                        <table class="table table-sm table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Ending balance</h5></td>
+                                                    <td><h5 id="q2ebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ending shares</h5></td>
+                                                    <td><h5 id="q2eshares"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Liquid balance</h5></td>
+                                                    <td><h5 id="q2lebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Total trades</h5></td>
+                                                    <td><h5 id="q2trades"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buys</h5></td>
+                                                    <td><h5 id="q2buys"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sells</h5></td>
+                                                    <td><h5 id="q2sells"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="d-q1" class="quarter-container" style="background:#f8f8f8;">
+                    <div class="quarter-content">
+                        <div id="table-q1" class="dash-entries-table">
+                            <table class="table table-striped table-dark table-sm dash-entries">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">View</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Ticker</th>
+                                        <th scope="col">Period</th>
+                                        <th scope="col">Trades</th>
+                                        <th scope="col">Start $</th>
+                                        <th scope="col">% Chg</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for entry in entries %}
+                                    {% set trid1 = 'q1' + loop.index|string %}
+                                    {% set passing = [ entry.buy, entry.sell, entry.td, entry.tt, entry.ty, entry.tp ] %}
+                                    <tr id="{{trid1}}" data-buy='{{ entry.buy|tojson }}' data-sell='{{ entry.sell|tojson }}' data-td='{{ entry.td|tojson }}'
+                                        data-tt='{{ entry.tt|tojson }}' data-ty='{{ entry.ty|tojson }}' data-tp='{{ entry.tp|tojson }}'
+                                        data-wmax='{{ entry.graph_x|tojson }}' data-wmay='{{ entry.graph_y|tojson }}'
+                                        data-money='{{ entry.money|tojson }}' data-ticker='{{ entry.ticker|tojson }}'
+                                        data-period='{{ entry.period|tojson }}' data-interval='{{ entry.interval|tojson }}'
+                                        data-avlength='{{ entry.av_length|tojson }}' data-finalmoney='{{ entry.final_money|tojson }}'
+                                        data-finalowned='{{ entry.final_owned|tojson }}' data-finalliquid='{{ entry.final_liquid|tojson }}'>
+                                        {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
+                                        {% if change < 0 %}
+                                            {% set c = '#DC3545' %}
+                                        {% elif change > 0 %}
+                                            {% set c = '#90EE90' %}
+                                        {% elif change == 0 %}
+                                            {% set c = 'white' %}
+                                        {% endif %}
+                                        <th scope="row"><img src="../static/assets/Plus.png" width="25px" onClick="displayEntry('table-q1', 'entry-q1', '{{ trid1 }}')"></th>
+                                        <td>{{ entry.type_info }}</td>
+                                        <td>{{ entry.ticker }}</td>
+                                        <td>{{ entry.period }}</td>
+                                        <td>{{ entry.tt|length }}</td>
+                                        <td>{{ entry.money }}</td>
+                                        <td style="color:{{ c }}">{{ '%0.2f'| format(change|float) }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="dash-entry" id="entry-q1">
+                            <div class="tool-bar">
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-e-btn btn-block" onClick="showEntries('entry-q1', 'table-q1')">Entries</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-i-btn btn-block" onClick="toggle('chart-q1', 'info-q1')">Info</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-g-btn btn-block" onClick="toggle('info-q1', 'chart-q1')">Graph</button>
+                                </div>
+                            </div>
+                            <div id='chart-q1' class="quarter-chart">
+                                <canvas class="dash-chart" id="q1Chart"></canvas>
+                            </div>
+                            <div id='info-q1' class="quarter-info">
+                                <div class="dash-results-flex text-dark">
+                                    <div class="dash-criteria text-center">
+                                        <h3>Criteria</h3>
+                                        <table class="table table-sm  table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Starting balance</h5></td>
+                                                    <td><h5 id="q1money"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ticker</h5></td>
+                                                    <td><h5 id="q1ticker"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Period</h5></td>
+                                                    <td><h5 id="q1period"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5 id="q1label">Length of average</h5></td>
+                                                    <td><h5 id="q1avint"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buy point</h5></td>
+                                                    <td><h5 id="q1buy"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sell point</h5></td>
+                                                    <td><h5 id="q1sell"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dash-results text-center">
+                                        <h3>Results</h3>
+                                        <table class="table table-sm table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Ending balance</h5></td>
+                                                    <td><h5 id="q1ebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ending shares</h5></td>
+                                                    <td><h5 id="q1eshares"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Liquid balance</h5></td>
+                                                    <td><h5 id="q1lebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Total trades</h5></td>
+                                                    <td><h5 id="q1trades"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buys</h5></td>
+                                                    <td><h5 id="q1buys"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sells</h5></td>
+                                                    <td><h5 id="q1sells"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-four-row">
+                <div id="d-q3" class="quarter-container" style="background:#f8f8f8;">
+                    <div class="quarter-content">
+                        <div id="table-q3" class="dash-entries-table">
+                            <table class="table table-striped table-dark table-sm dash-entries">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">View</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Ticker</th>
+                                        <th scope="col">Period</th>
+                                        <th scope="col">Trades</th>
+                                        <th scope="col">Start $</th>
+                                        <th scope="col">% Chg</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for entry in entries %}
+                                    {% set trid3 = 'q3' + loop.index|string %}
+                                    {% set passing = [ entry.buy, entry.sell, entry.td, entry.tt, entry.ty, entry.tp ] %}
+                                    <tr id="{{ trid3 }}" data-buy='{{ entry.buy|tojson }}' data-sell='{{ entry.sell|tojson }}' data-td='{{ entry.td|tojson }}'
+                                        data-tt='{{ entry.tt|tojson }}' data-ty='{{ entry.ty|tojson }}' data-tp='{{ entry.tp|tojson }}'
+                                        data-wmax='{{ entry.graph_x|tojson }}' data-wmay='{{ entry.graph_y|tojson }}'
+                                        data-money='{{ entry.money|tojson }}' data-ticker='{{ entry.ticker|tojson }}'
+                                        data-period='{{ entry.period|tojson }}' data-interval='{{ entry.interval|tojson }}'
+                                        data-avlength='{{ entry.av_length|tojson }}' data-finalmoney='{{ entry.final_money|tojson }}'
+                                        data-finalowned='{{ entry.final_owned|tojson }}' data-finalliquid='{{ entry.final_liquid|tojson }}'>
+                                        {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
+                                        {% if change < 0 %}
+                                            {% set c = '#DC3545' %}
+                                        {% elif change > 0 %}
+                                            {% set c = '#90EE90' %}
+                                        {% elif change == 0 %}
+                                            {% set c = 'white' %}
+                                        {% endif %}
+                                        <th scope="row"><img src="../static/assets/Plus.png" width="25px" onClick="displayEntry('table-q3', 'entry-q3', '{{ trid3 }}')"></th>
+                                        <td>{{ entry.type_info }}</td>
+                                        <td>{{ entry.ticker }}</td>
+                                        <td>{{ entry.period }}</td>
+                                        <td>{{ entry.tt|length }}</td>
+                                        <td>{{ entry.money }}</td>
+                                        <td style="color:{{ c }}">{{ '%0.2f'| format(change|float) }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="dash-entry" id="entry-q3">
+                            <div class="tool-bar">
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-e-btn btn-block" onClick="showEntries('entry-q3', 'table-q3')">Entries</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-i-btn btn-block" onClick="toggle('chart-q3', 'info-q3')">Info</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-g-btn btn-block" onClick="toggle('info-q3', 'chart-q3')">Graph</button>
+                                </div>
+                            </div>
+                            <div id='chart-q3' class="quarter-chart">
+                                <canvas class="dash-chart" id="q3Chart"></canvas>
+                            </div>
+                            <div id='info-q3' class="quarter-info">
+                                <div class="dash-results-flex text-dark">
+                                    <div class="dash-criteria text-center">
+                                        <h3>Criteria</h3>
+                                        <table class="table table-sm  table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Starting balance</h5></td>
+                                                    <td><h5 id="q3money"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ticker</h5></td>
+                                                    <td><h5 id="q3ticker"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Period</h5></td>
+                                                    <td><h5 id="q3period"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5 id="q3label">Length of average</h5></td>
+                                                    <td><h5 id="q3avint"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buy point</h5></td>
+                                                    <td><h5 id="q3buy"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sell point</h5></td>
+                                                    <td><h5 id="q3sell"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dash-results text-center">
+                                        <h3>Results</h3>
+                                        <table class="table table-sm table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Ending balance</h5></td>
+                                                    <td><h5 id="q3ebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ending shares</h5></td>
+                                                    <td><h5 id="q3eshares"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Liquid balance</h5></td>
+                                                    <td><h5 id="q3lebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Total trades</h5></td>
+                                                    <td><h5 id="q3trades"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buys</h5></td>
+                                                    <td><h5 id="q3buys"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sells</h5></td>
+                                                    <td><h5 id="q3sells"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="d-q4" class="quarter-container" style="background:#f8f8f8;">
+                    <div class="quarter-content">
+                        <div id="table-q4" class="dash-entries-table">
+                            <table class="table table-striped table-dark table-sm dash-entries">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">View</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Ticker</th>
+                                        <th scope="col">Period</th>
+                                        <th scope="col">Trades</th>
+                                        <th scope="col">Start $</th>
+                                        <th scope="col">% Chg</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for entry in entries %}
+                                    {% set trid4 = 'q4' + loop.index|string %}
+                                    {% set passing = [ entry.buy, entry.sell, entry.td, entry.tt, entry.ty, entry.tp ] %}
+                                    <tr id="{{ trid4 }}" data-buy='{{ entry.buy|tojson }}' data-sell='{{ entry.sell|tojson }}' data-td='{{ entry.td|tojson }}'
+                                        data-tt='{{ entry.tt|tojson }}' data-ty='{{ entry.ty|tojson }}' data-tp='{{ entry.tp|tojson }}'
+                                        data-wmax='{{ entry.graph_x|tojson }}' data-wmay='{{ entry.graph_y|tojson }}'
+                                        data-money='{{ entry.money|tojson }}' data-ticker='{{ entry.ticker|tojson }}'
+                                        data-period='{{ entry.period|tojson }}' data-interval='{{ entry.interval|tojson }}'
+                                        data-avlength='{{ entry.av_length|tojson }}' data-finalmoney='{{ entry.final_money|tojson }}'
+                                        data-finalowned='{{ entry.final_owned|tojson }}' data-finalliquid='{{ entry.final_liquid|tojson }}'>
+                                        {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
+                                        {% if change < 0 %}
+                                            {% set c = '#DC3545' %}
+                                        {% elif change > 0 %}
+                                            {% set c = '#90EE90' %}
+                                        {% elif change == 0 %}
+                                            {% set c = 'white' %}
+                                        {% endif %}
+                                        <th scope="row"><img src="../static/assets/Plus.png" width="25px" onClick="displayEntry('table-q4', 'entry-q4', '{{ trid4 }}')"></th>
+                                        <td>{{ entry.type_info }}</td>
+                                        <td>{{ entry.ticker }}</td>
+                                        <td>{{ entry.period }}</td>
+                                        <td>{{ entry.tt|length }}</td>
+                                        <td>{{ entry.money }}</td>
+                                        <td style="color:{{ c }}">{{ '%0.2f'| format(change|float) }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="dash-entry" id="entry-q4">
+                            <div class="tool-bar">
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-e-btn btn-block" onClick="showEntries('entry-q4', 'table-q4')">Entries</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-i-btn btn-block" onClick="toggle('chart-q4', 'info-q4')">Info</button>
+                                </div>
+                                <div class="dash-button-contain">
+                                    <button class="btn btn-secondary d-g-btn btn-block" onClick="toggle('info-q4', 'chart-q4')">Graph</button>
+                                </div>
+                            </div>
+                            <div id='chart-q4' class="quarter-chart">
+                                <canvas class="dash-chart" id="q4Chart"></canvas>
+                            </div>
+                            <div id='info-q4' class="quarter-info">
+                                <div class="dash-results-flex text-dark">
+                                    <div class="dash-criteria text-center">
+                                        <h3>Criteria</h3>
+                                        <table class="table table-sm  table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Starting balance</h5></td>
+                                                    <td><h5 id="q4money"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ticker</h5></td>
+                                                    <td><h5 id="q4ticker"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Period</h5></td>
+                                                    <td><h5 id="q4period"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5 id="q4label">Length of average</h5></td>
+                                                    <td><h5 id="q4avint"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buy point</h5></td>
+                                                    <td><h5 id="q4buy"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sell point</h5></td>
+                                                    <td><h5 id="q4sell"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dash-results text-center">
+                                        <h3>Results</h3>
+                                        <table class="table table-sm table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Ending balance</h5></td>
+                                                    <td><h5 id="q4ebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ending shares</h5></td>
+                                                    <td><h5 id="q4eshares"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Liquid balance</h5></td>
+                                                    <td><h5 id="q4lebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Total trades</h5></td>
+                                                    <td><h5 id="q4trades"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buys</h5></td>
+                                                    <td><h5 id="q4buys"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sells</h5></td>
+                                                    <td><h5 id="q4sells"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="two-panel-wrapper" id="two-panel-wrapper">
+        <div id="expand-area-two" class="dash-expand">
+            <div class="dash-expand-box" id="expand-box-two">
+                <div class="expand-btn-container">
+                    <a href="/profile" class="btn btn-secondary d-e-btn btn-block">Profile</a>
+                </div>
+                <div class="expand-btn-container">
+                    <button class="btn btn-secondary d-e-btn btn-block" onClick="togglePanels('two-panel-wrapper', 'four-panel-wrapper')">Four Panels</button>
+                </div>
+            </div>
+            <div id="expand-button-two" class="dash-expand-button">
+                <img src="../static/assets/down_notch.png" width="50px" onClick="expandMenu('expand-button-two', 'collapse-button-two', 'expand-box-two')">
+            </div>
+            <div class="dash-collapse-button" id="collapse-button-two">
+                <img src="../static/assets/up_notch.png" width="50px" onClick="expandMenu('collapse-button-two', 'expand-button-two', 'expand-box-two')">
+            </div>
+        </div>
+        <div class="two-panel" id="two-panels">
+            <div class="dash-two-row">
+                <div id="d-q5" class="half-container" style="background:#f8f8f8;">
+                    <div class="half-content">
+                        <div id="table-q5" class="dash-entries-table">
+                            <table class="table table-striped table-dark table-sm dash-entries-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">View</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Ticker</th>
+                                        <th scope="col">Period</th>
+                                        <th scope="col">Trades</th>
+                                        <th scope="col">Start $</th>
+                                        <th scope="col">% Chg</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for entry in entries %}
+                                    {% set trid5 = 'q5' + loop.index|string %}
+                                    {% set passing = [ entry.buy, entry.sell, entry.td, entry.tt, entry.ty, entry.tp ] %}
+                                    <tr id="{{ trid5 }}" data-buy='{{ entry.buy|tojson }}' data-sell='{{ entry.sell|tojson }}' data-td='{{ entry.td|tojson }}'
+                                        data-tt='{{ entry.tt|tojson }}' data-ty='{{ entry.ty|tojson }}' data-tp='{{ entry.tp|tojson }}'
+                                        data-wmax='{{ entry.graph_x|tojson }}' data-wmay='{{ entry.graph_y|tojson }}'
+                                        data-money='{{ entry.money|tojson }}' data-ticker='{{ entry.ticker|tojson }}'
+                                        data-period='{{ entry.period|tojson }}' data-interval='{{ entry.interval|tojson }}'
+                                        data-avlength='{{ entry.av_length|tojson }}' data-finalmoney='{{ entry.final_money|tojson }}'
+                                        data-finalowned='{{ entry.final_owned|tojson }}' data-finalliquid='{{ entry.final_liquid|tojson }}'>
+                                        {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
+                                        {% if change < 0 %}
+                                            {% set c = '#DC3545' %}
+                                        {% elif change > 0 %}
+                                            {% set c = '#90EE90' %}
+                                        {% elif change == 0 %}
+                                            {% set c = 'white' %}
+                                        {% endif %}
+                                        <th scope="row"><img src="../static/assets/Plus.png" width="25px" onClick="displayEntry('table-q5', 'entry-q5', '{{ trid5 }}')"></th>
+                                        <td>{{ entry.type_info }}</td>
+                                        <td>{{ entry.ticker }}</td>
+                                        <td>{{ entry.period }}</td>
+                                        <td>{{ entry.tt|length }}</td>
+                                        <td>{{ entry.money }}</td>
+                                        <td style="color:{{ c }}">{{ '%0.2f'| format(change|float) }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="dash-entry" id="entry-q5">
+                            <div class="tool-bar-half">
+                                <div class="dash-button-contain-2">
+                                    <button class="btn btn-secondary d-e-btn btn-block" onClick="showEntries('entry-q5', 'table-q5')">Entries</button>
+                                </div>
+                            </div>
+                            <div id='info-q5' class="half-info">
+                                <div class="dash-results-flex text-dark">
+                                    <div class="dash-criteria text-center">
+                                        <h3>Criteria</h3>
+                                        <table class="table table-sm  table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Starting balance</h5></td>
+                                                    <td><h5 id="q5money"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ticker</h5></td>
+                                                    <td><h5 id="q5ticker"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Period</h5></td>
+                                                    <td><h5 id="q5period"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5 id="q5label">Length of average</h5></td>
+                                                    <td><h5 id="q5avint"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buy point</h5></td>
+                                                    <td><h5 id="q5buy"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sell point</h5></td>
+                                                    <td><h5 id="q5sell"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dash-results text-center">
+                                        <h3>Results</h3>
+                                        <table class="table table-sm table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Ending balance</h5></td>
+                                                    <td><h5 id="q5ebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ending shares</h5></td>
+                                                    <td><h5 id="q5eshares"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Liquid balance</h5></td>
+                                                    <td><h5 id="q5lebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Total trades</h5></td>
+                                                    <td><h5 id="q5trades"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buys</h5></td>
+                                                    <td><h5 id="q5buys"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sells</h5></td>
+                                                    <td><h5 id="q5sells"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id='chart-q5' class="half-chart">
+                                <canvas class="dash-chart" id="q5Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="d-q6" class="half-container" style="background:#f8f8f8;">
+                    <div class="half-content">
+                        <div id="table-q6" class="dash-entries-table">
+                            <table class="table table-striped table-dark table-sm dash-entries-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">View</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Ticker</th>
+                                        <th scope="col">Period</th>
+                                        <th scope="col">Trades</th>
+                                        <th scope="col">Start $</th>
+                                        <th scope="col">% Chg</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for entry in entries %}
+                                    {% set trid6 = 'q6' + loop.index|string %}
+                                    {% set passing = [ entry.buy, entry.sell, entry.td, entry.tt, entry.ty, entry.tp ] %}
+                                    <tr id="{{ trid6 }}" data-buy='{{ entry.buy|tojson }}' data-sell='{{ entry.sell|tojson }}' data-td='{{ entry.td|tojson }}'
+                                        data-tt='{{ entry.tt|tojson }}' data-ty='{{ entry.ty|tojson }}' data-tp='{{ entry.tp|tojson }}'
+                                        data-wmax='{{ entry.graph_x|tojson }}' data-wmay='{{ entry.graph_y|tojson }}'
+                                        data-money='{{ entry.money|tojson }}' data-ticker='{{ entry.ticker|tojson }}'
+                                        data-period='{{ entry.period|tojson }}' data-interval='{{ entry.interval|tojson }}'
+                                        data-avlength='{{ entry.av_length|tojson }}' data-finalmoney='{{ entry.final_money|tojson }}'
+                                        data-finalowned='{{ entry.final_owned|tojson }}' data-finalliquid='{{ entry.final_liquid|tojson }}'>
+                                        {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
+                                        {% if change < 0 %}
+                                            {% set c = '#DC3545' %}
+                                        {% elif change > 0 %}
+                                            {% set c = '#90EE90' %}
+                                        {% elif change == 0 %}
+                                            {% set c = 'white' %}
+                                        {% endif %}
+                                        <th scope="row"><img src="../static/assets/Plus.png" width="25px" onClick="displayEntry('table-q6', 'entry-q6', '{{ trid6 }}')"></th>
+                                        <td>{{ entry.type_info }}</td>
+                                        <td>{{ entry.ticker }}</td>
+                                        <td>{{ entry.period }}</td>
+                                        <td>{{ entry.tt|length }}</td>
+                                        <td>{{ entry.money }}</td>
+                                        <td style="color:{{ c }}">{{ '%0.2f'| format(change|float) }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="dash-entry" id="entry-q6">
+                            <div class="tool-bar-half">
+                                <div class="dash-button-contain-2">
+                                    <button class="btn btn-secondary d-e-btn btn-block" onClick="showEntries('entry-q6', 'table-q6')">Entries</button>
+                                </div>
+                            </div>
+                            <div id='info-q6' class="half-info">
+                                <div class="dash-results-flex text-dark">
+                                    <div class="dash-criteria text-center">
+                                        <h3>Criteria</h3>
+                                        <table class="table table-sm  table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Starting balance</h5></td>
+                                                    <td><h5 id="q6money"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ticker</h5></td>
+                                                    <td><h5 id="q6ticker"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Period</h5></td>
+                                                    <td><h5 id="q6period"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5 id="q6label">Length of average</h5></td>
+                                                    <td><h5 id="q6avint"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buy point</h5></td>
+                                                    <td><h5 id="q6buy"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sell point</h5></td>
+                                                    <td><h5 id="q6sell"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dash-results text-center">
+                                        <h3>Results</h3>
+                                        <table class="table table-sm table-bordered text-left">
+                                            <tbody>
+                                                <tr>
+                                                    <td><h5>Ending balance</h5></td>
+                                                    <td><h5 id="q6ebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Ending shares</h5></td>
+                                                    <td><h5 id="q6eshares"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Liquid balance</h5></td>
+                                                    <td><h5 id="q6lebalance"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Total trades</h5></td>
+                                                    <td><h5 id="q6trades"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Buys</h5></td>
+                                                    <td><h5 id="q6buys"></h5></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><h5>Sells</h5></td>
+                                                    <td><h5 id="q6sells"></h5></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id='chart-q6' class="half-chart">
+                                <canvas class="dash-chart" id="q6Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script type="text/javascript">
+function setData
+</script>
+{% endblock %}

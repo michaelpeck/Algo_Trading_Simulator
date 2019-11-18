@@ -13,6 +13,7 @@ TYPES = (('SR', 'Static Range'),
 
 class Model(UserMixin, db.Document):
     meta = {'collection': 'models'}
+    keep = db.BooleanField(default=True)
     name = db.StringField(max_length=30)
     mod_type = db.StringField(max_length=3, choices=TYPES)
     ticker = db.StringField(max_length=6)

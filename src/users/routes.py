@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from src.common.database import Database
 from src.users.user import User
 from src.posts.post import Post
+from src.processes.calculation import Calculation
 from src.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                                    RequestResetForm, ResetPasswordForm)
 from src.users.utils import save_picture, send_reset_email
@@ -15,14 +16,28 @@ users = Blueprint('users', __name__)
 
 
 @users.route('/profile')
+@login_required
 def profile_template():
     user = current_user
     entries = user.get_entries()
+    for entry in entries:
+        if entry.keep is False:
+            Calculation.objects(pk=entry.id).delete()
     models = user.get_models()
     posts = Post.objects(owner=user.id)
     image_file = url_for('static', filename='assets/profile_pics/' + current_user.image_file)
 
     return render_template("profile.html", user=user, entries=entries, models=models , posts=posts, image_file=image_file)
+
+@users.route('/entry_dashboard')
+@login_required
+def entry_dashboard_template():
+    user = current_user
+    entries = user.get_entries()
+    for entry in entries:
+        if entry.keep is False:
+            Calculation.objects(pk=entry.id).delete()
+    return render_template("entry_dashboard.html", user=user, entries=entries)
 
 
 @users.route("/register", methods=['GET', 'POST'])

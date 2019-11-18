@@ -83,12 +83,28 @@
     <div class="chart-div">
         <canvas id="myChart"></canvas>
     </div>
-    <form method="POST" action="" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="form-group text-center">
-            {{ form.submit(class="btn btn-info") }}
-        </div>
-    </form>
+    <div class="row text-center button-row">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group text-center">
+                {{ form.submit(class="btn btn-ta") }}
+            </div>
+        </form>
+        {% if current_user.is_authenticated %}
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ eform.hidden_tag() }}
+                <div class="form-group text-center">
+                    {{ eform.saveentry(class="btn btn-se") }}
+                </div>
+            </form>
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ mform.hidden_tag() }}
+                <div class="form-group text-center">
+                    {{ mform.savemodel(class="btn btn-smo") }}
+                </div>
+            </form>
+        {% endif %}
+    </div>
 
 </div>
 <script type="text/javascript">

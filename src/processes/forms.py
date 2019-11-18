@@ -41,8 +41,7 @@ class StaticRangeForm(FlaskForm):
 
 class MovingAverageForm(FlaskForm):
     ticker = StringField('Ticker', validators=[DataRequired(), Length(min=1, max=6)])
-    period = SelectField('Period', choices=[('5d', '5 days'),
-                                                ('1mo', '1 month'), ('3mo', '3 months'),
+    period = SelectField('Period', choices=[('1mo', '1 month'), ('3mo', '3 months'),
                                                 ('6mo', '6 months'), ('1y', '1 year')], validators=[DataRequired()])
     length = IntegerField('Length of average', validators=[DataRequired(),
                                                            NumberRange(min=0, message="Length of average must be positive")])
@@ -56,8 +55,7 @@ class MovingAverageForm(FlaskForm):
 
 class WeightedMovingAverageForm(FlaskForm):
     ticker = StringField('Ticker', validators=[DataRequired(), Length(min=1, max=6)])
-    period = SelectField('Period', choices=[('5d', '5 days'),
-                                                ('1mo', '1 month'), ('3mo', '3 months'),
+    period = SelectField('Period', choices=[('1mo', '1 month'), ('3mo', '3 months'),
                                                 ('6mo', '6 months'), ('1y', '1 year')], validators=[DataRequired()])
     length = IntegerField('Length of average', validators=[DataRequired(), NumberRange(min=0, message="Length of average must be positive")])
     money = DecimalField('Account balance', places=2, validators=[DataRequired(), NumberRange(min=0, message="Account balance must be positive")])
@@ -69,4 +67,11 @@ class WeightedMovingAverageForm(FlaskForm):
 
 class TryAgain(FlaskForm):
     submit = SubmitField('Try Again')
+
+class SaveEntry(FlaskForm):
+    saveentry = SubmitField('Save Entry')
+
+class SaveModel(FlaskForm):
+    name = StringField('Name', validators=[Length(max=20)])
+    savemodel = SubmitField('Save Model')
 
