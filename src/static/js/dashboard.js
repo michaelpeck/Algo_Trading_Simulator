@@ -97,6 +97,8 @@ function createGraph(entryid, id1) {
     var tradeprice = JSON.parse(document.getElementById(entryid).dataset.tp);
     var wmax = JSON.parse(document.getElementById(entryid).dataset.wmax);
     var wmay = JSON.parse(document.getElementById(entryid).dataset.wmay);
+    var chartx = JSON.parse(document.getElementById(entryid).dataset.chartx);
+    var charty = JSON.parse(document.getElementById(entryid).dataset.charty);
     var axis_dt = [];
     var i;
     var dt = '';
@@ -125,6 +127,11 @@ function createGraph(entryid, id1) {
         var dict = { x: wmax[i], y: wmay[i]}
         ma_dataset.push(dict)
     }
+    var chart_dataset = new Array();
+    for (i=0; i< chartx.length; i++){
+        var dict = { x: chartx[i], y: charty[i]}
+        chart_dataset.push(dict)
+    }
     var prefix = id1.slice(id1.length - 2);
     var arrpos = (parseInt(id1.slice(id1.length - 1)) - 1);
     var arr = [1,2,3,4,5,6];
@@ -150,6 +157,15 @@ function createGraph(entryid, id1) {
                 lineTension: 0,
                 borderColor: "#4095BF",
                 label: "Moving Average"
+            },
+            {
+                data: chart_dataset,
+                pointRadius: 0,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#90EE90",
+                borderWidth: 1,
+                label: "Price"
             },
             ]
         },

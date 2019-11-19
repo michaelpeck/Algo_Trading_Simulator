@@ -74,11 +74,11 @@
         {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+entry.tt[i]+':00' %}
         {{ axis_dt.append(dt)|default("", True) }}
     {% endfor %}
-    {% set range = entry.tp|max|float - entry.tp|min|float %}
-    {% set min = entry.tp|min|float - range/2 %}
-    {% set max = entry.tp|max|float + range/2 %}
     {% set high = entry.tp|max|float %}
     {% set low = entry.tp|min|float %}
+    {% set range = high - low %}
+    {% set min = low - range/2 %}
+    {% set max = high + range/2 %}
     <div id="log"></div>
     <div class="chart-div">
         <canvas id="myChart"></canvas>
@@ -95,6 +95,8 @@ var high = JSON.parse('{{ high|tojson|safe }}');
 var low = JSON.parse('{{ low|tojson|safe }}');
 var ma_x = JSON.parse('{{ entry.graph_x|tojson|safe }}');
 var ma_y = JSON.parse('{{ entry.graph_y|tojson|safe }}');
+var chartx = JSON.parse('{{ entry.chart_x|tojson|safe }}');
+var charty = JSON.parse('{{ entry.chart_y|tojson|safe }}');
 var pointBackgroundColors = [];
 var i;
 var dataset = new Array();
@@ -108,7 +110,11 @@ for (i=0; i< ma_x.length; i++){
     var dict = { x: ma_x[i], y: ma_y[i]}
     ma_dataset.push(dict)
 }
-
+var chart_dataset = new Array();
+for (i=0; i< chartx.length; i++){
+    var dict = { x: chartx[i], y: charty[i]}
+    chart_dataset.push(dict)
+}
 var ctx = document.getElementById('myChart');
 var myLineChart = new Chart(ctx, {
     type: 'line',
@@ -129,6 +135,15 @@ var myLineChart = new Chart(ctx, {
                 lineTension: 0,
                 borderColor: "#4095BF",
                 label: "Moving Average"
+            },
+            {
+                data: chart_dataset,
+                pointRadius: 0,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#90EE90",
+                borderWidth: 1,
+                label: "Price"
             },
         ]
     },

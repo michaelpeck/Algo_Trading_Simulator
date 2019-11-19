@@ -74,11 +74,11 @@
         {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+results.tt[i]+':00' %}
         {{ axis_dt.append(dt)|default("", True) }}
     {% endfor %}
-    {% set range = results.tp|max|float - results.tp|min|float %}
-    {% set min = results.tp|min|float - range/2 %}
-    {% set max = results.tp|max|float + range/2 %}
     {% set high = results.tp|max|float %}
     {% set low = results.tp|min|float %}
+    {% set range = high - low %}
+    {% set min = low - range/2 %}
+    {% set max = high + range/2 %}
     <div id="log"></div>
     <div class="chart-div">
         <canvas id="myChart"></canvas>

@@ -72,11 +72,11 @@
             {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+entry.tt[i]+':00' %}
             {{ axis_dt.append(dt)|default("", True) }}
         {% endfor %}
-        {% set range = entry.sell|float - entry.buy|float %}
-        {% set min = entry.buy|float - range/2 %}
-        {% set max = entry.sell|float + range/2 %}
-        {% set high = entry.sell|float %}
-        {% set low = entry.buy|float %}
+        {% set high = entry.tp|max|float %}
+        {% set low = entry.tp|min|float %}
+        {% set range = high - low %}
+        {% set min = low - range/2 %}
+        {% set max = high + range/2 %}
         <div id="log"></div>
         <div class="chart-div">
             <canvas id="myChart"></canvas>
@@ -93,6 +93,8 @@ var min = JSON.parse('{{ min|tojson|safe }}');
 var max = JSON.parse('{{ max|tojson|safe }}');
 var high = JSON.parse('{{ high|tojson|safe }}');
 var low = JSON.parse('{{ low|tojson|safe }}');
+var chartx = JSON.parse('{{ entry.chart_x|tojson|safe }}');
+var charty = JSON.parse('{{ entry.chart_y|tojson|safe }}');
 var pointBackgroundColors = [];
 var i;
 var dataset = new Array();
@@ -100,7 +102,11 @@ for (i=0; i< datetime.length; i++){
     var dict = { x: datetime[i], y: tradeprice[i]}
     dataset.push(dict)
 }
-//document.getElementById('log').innerText = JSON.stringify(dataset, null, 4);
+var chart_dataset = new Array();
+for (i=0; i< chartx.length; i++){
+    var dict = { x: chartx[i], y: charty[i]}
+    chart_dataset.push(dict)
+}
 var ctx = document.getElementById('myChart');
 var myLineChart = new Chart(ctx, {
     type: 'line',
@@ -112,6 +118,15 @@ var myLineChart = new Chart(ctx, {
                 fill: false,
                 lineTension: 0,
                 borderColor: "#2d6886"
+            },
+            {
+                data: chart_dataset,
+                pointRadius: 0,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#90EE90",
+                borderWidth: 1,
+                label: "Price"
             },
         ]
     },
