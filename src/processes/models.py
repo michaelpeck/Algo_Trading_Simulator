@@ -14,9 +14,21 @@ TYPES = (('SR', 'Static Range'),
 class Model(UserMixin, db.Document):
     meta = {'collection': 'models'}
     keep = db.BooleanField(default=True)
-    name = db.StringField(max_length=30)
     mod_type = db.StringField(max_length=3, choices=TYPES)
     ticker = db.StringField(max_length=6)
+    period = db.StringField(max_length=6)
+    interval = db.StringField(max_length=6)
+    money = db.FloatField()
+    buy = db.FloatField()
+    sell = db.FloatField()
+    av_length = db.IntField()
+    trade_cost = db.FloatField()
+
+
+class UserModel(UserMixin, db.Document):
+    meta = {'collection': 'user_models'}
+    name = db.StringField(max_length=30)
+    mod_type = db.StringField(max_length=3, choices=TYPES)
     period = db.StringField(max_length=6)
     interval = db.StringField(max_length=6)
     money = db.FloatField()

@@ -1,7 +1,7 @@
 
 from datetime import datetime
 from src.processes.calculation import Calculation
-from src.processes.models import Model
+from src.processes.models import UserModel
 from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
@@ -24,7 +24,7 @@ class User(UserMixin, db.Document):
     image_file = db.StringField(default='default.jpg')
     bio = db.StringField(max_length=200, default='This is my bio...')
     entries = db.LazyReferenceField('Calculation')
-    models = db.LazyReferenceField('Model')
+    models = db.LazyReferenceField('UserModel')
     posts = db.LazyReferenceField('Post')
 
     def get_reset_token(self, expires_sec=1800):
@@ -48,4 +48,4 @@ class User(UserMixin, db.Document):
         return Calculation.objects(owner=self.id)
 
     def get_models(self):
-        return Model.objects(owner=self.id)
+        return UserModel.objects(owner=self.id)

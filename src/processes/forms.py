@@ -3,7 +3,8 @@ __author__ = 'michaelpeck'
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SelectField, FloatField, DecimalField, IntegerField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, SelectField, FloatField, DecimalField, IntegerField, PasswordField, SubmitField, FormField
+
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from flask_login import current_user
 from src.users.user import User
@@ -74,4 +75,12 @@ class SaveEntry(FlaskForm):
 class SaveModel(FlaskForm):
     name = StringField('Name', validators=[Length(max=20)])
     savemodel = SubmitField('Save Model')
+
+class PickModel(FlaskForm):
+    model = SelectField('Model')
+    pop_model = SubmitField('Populate')
+
+class StockDataForm(FlaskForm):
+    check_ticker = StringField('Ticker', validators=[DataRequired(), Length(min=1, max=6)])
+    check = SubmitField('Check')
 

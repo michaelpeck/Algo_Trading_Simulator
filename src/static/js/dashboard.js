@@ -6,13 +6,17 @@ function openPanels(id1,id2) {
 		window.myLineChart = [1,2,3,4,5,6];
 
 }
-function expandMenu(id1, id2, id3) {
+function expandMenu(id1, id2, id3, id4, id5) {
     var x = document.getElementById(id1);
   	var y = document.getElementById(id2);
   	var z = document.getElementById(id3);
+  	var a = document.getElementById(id4);
+  	var b = document.getElementById(id5);
   	    x.style.display = "none";
 		y.style.display = "flex";
 		z.classList.toggle("box-expanded");
+		a.classList.toggle("expand-btn-show");
+		b.classList.toggle("expand-btn-show");
 }
 function togglePanels(id1, id2) {
     var x = document.getElementById(id1);

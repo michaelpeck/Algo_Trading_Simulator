@@ -240,8 +240,13 @@ footer {
 
 }
 .stock-data-form{
-    padding: 50px;
+    padding: 40px;
     background-color: #E8E8E8;
+}
+.preset-data-form{
+    padding: 40px;
+    background-color: #A9A9A9;
+    margin-bottom: 40px;
 }
 
 /* Results page */
@@ -368,7 +373,7 @@ canvas {
     background-color: #E8E8E8;
     width: 100%;
     padding: 30px;
-    margin: 20px;
+    margin-bottom: 40px;
 }
 .profile-post-container {
     width: 100%;
@@ -453,9 +458,15 @@ canvas {
     align-items: center;
     justify-content: center;
 }
+.dash-expand-button img {
+    margin-top: -3px;
+    border-top: 3px solid #263238;
+}
 .dash-expand {
     width: 100%;
     min-width: 1200px;
+    margin-bottom: -6px;
+    padding-bottom: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -482,10 +493,25 @@ canvas {
 .expand-btn-container {
     width: 50%;
     height: 100%;
-    padding: 5%;
     display: flex;
+    visibility: hidden;
+    opacity: 0;
     align-items: center;
     justify-content: center;
+    transition: visibility 0.3s ease-out, opacity 0.3s ease-out;
+    -webkit-transition: visibility 0.3s ease-out, opacity 0.3s ease-out;
+}
+.b-c-l {
+    padding: 5% 2.5% 5% 5%;
+}
+.b-c-r {
+    padding: 5% 5% 5% 2.5%;
+}
+.expand-btn-show {
+    transition: visibility 1.2s ease-in, opacity 1.2s ease-in;
+    -webkit-transition: visibility 1.2s ease-in, opacity 1.2s ease-in;
+    visibility: visible;
+    opacity: 1;
 }
 .dash-collapse-button {
     height: 25px;
@@ -494,6 +520,10 @@ canvas {
     align-items: center;
     justify-content: center;
     justify-content: center;
+}
+.dash-collapse-button img {
+    margin-top: -3px;
+    border-top: 3px solid #263238;
 }
 .four-panel-wrapper{
     display: none;

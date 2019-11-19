@@ -31,6 +31,7 @@ class Calculation(UserMixin, db.Document):
     graph_x = db.ListField()
     graph_y = db.ListField()
     model = db.LazyReferenceField('Model')
+    user_model = db.LazyReferenceField('UserModel')
 
 
     def static_range(self):

@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% if stock_info %}
+    {% set name = stock_info.name %}
+    {% set prev_close = stock_info.previous_close %}
+    {% set three_mo_avg_vol = stock_info.three_mo_avg_vol %}
+    {% set year_range = stock_info.year_range %}
+{% else %}
+    {% set name = '--' %}
+    {% set prev_close = '--' %}
+    {% set three_mo_avg_vol = '--' %}
+    {% set year_range = '--' %}
+{% endif %}
 
 <div class="container algo-intro">
     <h1>Moving average algorithm</h1>
@@ -50,132 +61,201 @@
 </div>
 
 <div class="container page-form">
-    <form id="stock-data-form" class="stock-data-form" method="POST" action="" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Parameters</legend>
-            <div class="form-group row">
-                {{ form.ticker.label(class="col-lg-6 col-form-label") }}
-
-                {% if form.ticker.errors %}
-                    {{ form.ticker(class="col-lg-6 form-control is-invalid") }}
+    <div class="preset-data-form">
+        <form id="pop-stock-form" method="POST" action="" enctype="multipart/form-data">
+            {{ sform.hidden_tag() }}
+            <legend class="border-bottom mb-4">Stock info</legend>
+            <fieldset class="form-group">
+                <div class="form-group row">
+                {{ sform.check_ticker.label(class="col-lg-4 col-form-label") }}
+                {% if sform.check_ticker.errors %}
+                    {{ sform.check_ticker(class="col-lg-4 form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.ticker.errors %}
+                        {% for error in sform.check_ticker.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.ticker(class="col-lg-6 form-control") }}
+                    {{ sform.check_ticker(class="col-lg-4 form-control") }}
                 {% endif %}
-            </div>
-            <div class="form-group row">
-                {{ form.period.label(class="col-lg-6 form-control-label") }}
-
-                {% if form.period.errors %}
-                    {{ form.period(class="col-lg-6 form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.period.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.period(class="col-lg-6 form-control") }}
-                {% endif %}
-            </div>
-            <div class="form-group row">
-                {{ form.length.label(class="col-lg-6 form-control-label") }}
-
-                {% if form.length.errors %}
-                    {{ form.length(class="col-lg-6 form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.length.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% set append = 'days' %}
-                    <div class="col-lg-6 input-group-append" style="padding: 0px">
-                        {{ form.length(class="form-control") }}
-                        <span class="input-group-text">{{ append | safe }}</span>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="form-group row">
-                {{ form.money.label(class="col-lg-6 form-control-label") }}
-
-                {% if form.money.errors %}
-                    {{ form.money(class="col-lg-6 form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.money.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% set prepend = '$' %}
-                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
-                        <span class="input-group-text">{{ prepend | safe }}</span>
-                        {{ form.money(class="form-control") }}
-                    </div>
-                {% endif %}
-            </div>
-            <div class="form-group row">
-                {{ form.buy.label(class="col-lg-6 form-control-label") }}
-
-                {% if form.buy.errors %}
-                    {{ form.buy(class="col-lg-6 form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.buy.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% set prepend = '$' %}
-                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
-                        <span class="input-group-text">{{ prepend | safe }}</span>
-                        {{ form.buy(class="form-control") }}
-                    </div>
-                {% endif %}
-            </div>
-            <div class="form-group row">
-                {{ form.sell.label(class="col-lg-6 form-control-label") }}
-
-                {% if form.sell.errors %}
-                    {{ form.sell(class="col-lg-6 form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.sell.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% set prepend = '$' %}
-                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
-                        <span class="input-group-text">{{ prepend | safe }}</span>
-                        {{ form.sell(class="form-control") }}
-                    </div>
-                {% endif %}
-            </div>
-            <div class="form-group row">
-                {{ form.trade_cost.label(class="col-lg-6 form-control-label") }}
-
-                {% if form.trade_cost.errors %}
-                    {{ form.trade_cost(class="col-lg-6 form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.trade_cost.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% set prepend = '$' %}
-                    <div class="col-lg-6 input-group-prepend" style="padding: 0px">
-                        <span class="input-group-text">{{ prepend | safe }}</span>
-                        {{ form.trade_cost(class="form-control") }}
-                    </div>
-                {% endif %}
-            </div>
-        </fieldset>
-        <div class="form-group text-center">
-            {{ form.submit(class="btn btn-secondary") }}
+                {{ sform.check(class="btn btn-secondary col-lg-4 form-control") }}
+                </div>
+            </fieldset>
+        </form>
+        <div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <td scope="col">{{ name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Previous close</th>
+                        <td scope="col">{{ prev_close }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Avg daily volume (3 month)</th>
+                        <td scope="col">{{ three_mo_avg_vol }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Fifty-two week range</th>
+                        <td scope="col">{{ year_range }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </form>
+    </div>
+    <div class="stock-data-form">
+        {% if current_user.is_authenticated %}
+            <form id="pop-model-form" method="POST" action="" enctype="multipart/form-data">
+                {{ mform.hidden_tag() }}
+                <legend class="border-bottom mb-4">Preset (optional)</legend>
+                <fieldset class="form-group">
+                    <div class="form-group row">
+                        {{ mform.model.label(class="col-lg-4 col-form-label") }}
+                        {% if mform.model.errors %}
+                            {{ mform.model(class="col-lg-4 form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in mform.model.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ mform.model(class="col-lg-4 form-control") }}
+                        {% endif %}
+                        {{ mform.pop_model(class="btn btn-secondary col-lg-4 form-control") }}
+                    </div>
+                </fieldset>
+            </form>
+        {% endif %}
+        <form id="stock-data-form" method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Parameters</legend>
+                <div class="form-group row">
+                    {{ form.ticker.label(class="col-lg-6 col-form-label") }}
+
+                    {% if form.ticker.errors %}
+                        {{ form.ticker(class="col-lg-6 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.ticker.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.ticker(class="col-lg-6 form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                    {{ form.period.label(class="col-lg-6 form-control-label") }}
+
+                    {% if form.period.errors %}
+                        {{ form.period(class="col-lg-6 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.period.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.period(class="col-lg-6 form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                    {{ form.length.label(class="col-lg-6 form-control-label") }}
+
+                    {% if form.length.errors %}
+                        {{ form.length(class="col-lg-6 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.length.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% set append = 'days' %}
+                        <div class="col-lg-6 input-group-append" style="padding: 0px">
+                            {{ form.length(class="form-control") }}
+                            <span class="input-group-text">{{ append | safe }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                    {{ form.money.label(class="col-lg-6 form-control-label") }}
+
+                    {% if form.money.errors %}
+                        {{ form.money(class="col-lg-6 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.money.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% set prepend = '$' %}
+                        <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                            <span class="input-group-text">{{ prepend | safe }}</span>
+                            {{ form.money(class="form-control") }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                    {{ form.buy.label(class="col-lg-6 form-control-label") }}
+
+                    {% if form.buy.errors %}
+                        {{ form.buy(class="col-lg-6 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.buy.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% set prepend = '$' %}
+                        <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                            <span class="input-group-text">{{ prepend | safe }}</span>
+                            {{ form.buy(class="form-control") }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                    {{ form.sell.label(class="col-lg-6 form-control-label") }}
+
+                    {% if form.sell.errors %}
+                        {{ form.sell(class="col-lg-6 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.sell.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% set prepend = '$' %}
+                        <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                            <span class="input-group-text">{{ prepend | safe }}</span>
+                            {{ form.sell(class="form-control") }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                    {{ form.trade_cost.label(class="col-lg-6 form-control-label") }}
+
+                    {% if form.trade_cost.errors %}
+                        {{ form.trade_cost(class="col-lg-6 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.trade_cost.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% set prepend = '$' %}
+                        <div class="col-lg-6 input-group-prepend" style="padding: 0px">
+                            <span class="input-group-text">{{ prepend | safe }}</span>
+                            {{ form.trade_cost(class="form-control") }}
+                        </div>
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group text-center">
+                {{ form.submit(class="btn btn-secondary") }}
+            </div>
+        </form>
+    </div>
+
 </div>
 {% endblock %}
