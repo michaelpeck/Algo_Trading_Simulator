@@ -480,7 +480,7 @@ canvas {
     border-right: 6px solid #263238;
     border-left: 6px solid #263238;
     border-bottom: 0.01px solid #263238;
-    transition: height 0.7s linear, border 0.7s ease-in;
+    transition: height 0.7s linear, border 0.8s ease-in;
     -webkit-transition: height 0.7s linear, border 0.8s ease-in;
 
 }
@@ -498,8 +498,8 @@ canvas {
     opacity: 0;
     align-items: center;
     justify-content: center;
-    transition: visibility 0.3s ease-out, opacity 0.3s ease-out;
-    -webkit-transition: visibility 0.3s ease-out, opacity 0.3s ease-out;
+    transition: visibility 0.2s ease-out, opacity 0.2s ease-out;
+    -webkit-transition: visibility 0.2s ease-out, opacity 0.2s ease-out;
 }
 .b-c-l {
     padding: 5% 2.5% 5% 5%;

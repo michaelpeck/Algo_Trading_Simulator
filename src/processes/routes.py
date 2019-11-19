@@ -19,7 +19,7 @@ def static_range_template(model_id=None):
     form = StaticRangeForm()
     mform = PickModel()
     sform = StockDataForm()
-    choices = [('N/A', 'No model')]
+    choices = [('', 'No model')]
     stock_info = ''
     if current_user.is_authenticated:
         models = current_user.get_models()
@@ -28,7 +28,7 @@ def static_range_template(model_id=None):
                 if model.mod_type == "SR":
                     choices.append((model.id, model.name))
     mform.model.choices = choices
-    if mform.pop_model.data:
+    if mform.pop_model.data and (mform.model.data != ''):
         return redirect(url_for('processes.static_range_template', model_id=mform.model.data))
     if sform.check.data:
         info = Check(ticker=sform.check_ticker.data.upper()).get_info()
@@ -77,7 +77,7 @@ def moving_average_template(model_id=None):
     form = MovingAverageForm()
     mform = PickModel()
     sform = StockDataForm()
-    choices = [('N/A', 'No model')]
+    choices = [('', 'No model')]
     stock_info = ''
     if current_user.is_authenticated:
         models = current_user.get_models()
@@ -86,7 +86,7 @@ def moving_average_template(model_id=None):
                 if model.mod_type == 'MA':
                     choices.append((model.id, model.name))
     mform.model.choices = choices
-    if mform.pop_model.data:
+    if mform.pop_model.data and (mform.model.data != ''):
         return redirect(url_for('processes.static_range_template', model_id=mform.model.data))
     if sform.check.data:
         info = Check(ticker=sform.check_ticker.data.upper()).get_info()
@@ -136,7 +136,7 @@ def weighted_moving_average_template(model_id=None):
     form = WeightedMovingAverageForm()
     mform = PickModel()
     sform = StockDataForm()
-    choices = [('N/A', 'No model')]
+    choices = [('', 'No model')]
     stock_info = ''
     if current_user.is_authenticated:
         models = current_user.get_models()
@@ -145,7 +145,7 @@ def weighted_moving_average_template(model_id=None):
                 if model.mod_type == 'WMA':
                     choices.append((model.id, model.name))
     mform.model.choices = choices
-    if mform.pop_model.data:
+    if mform.pop_model.data and (mform.model.data != ''):
         return redirect(url_for('processes.static_range_template', model_id=mform.model.data))
     if sform.check.data:
         info = Check(ticker=sform.check_ticker.data.upper()).get_info()
@@ -290,11 +290,11 @@ def get_wma_entry(transaction_id):
 
 @processes.route('/delete/<string:transaction_id>')
 def delete_entry(transaction_id):
-    Calculation.objects(pk=transaction_id).first().delete()
+    if Calculation.objects(pk=transaction_id).first():
+        Calculation.objects(pk=transaction_id).first().delete()
     user = current_user
     entries = user.get_entries()
     models = user.get_models()
-    user_id = user.id
-    posts = Post.from_user(user_id)
-
-    return render_template("profile.html", user=user, entries=entries, models=models, posts=posts, email=session['email'])
+    posts = Post.objects(owner=user.id)
+    image_file = url_for('static', filename='assets/profile_pics/' + current_user.image_file)
+    return render_template("profile.html", user=user, entries=entries, models=models, posts=posts, image_file=image_file)

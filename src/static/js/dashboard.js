@@ -60,8 +60,14 @@ function createTables(entryid, id1) {
     var finalmoney = JSON.parse(document.getElementById(entryid).dataset.finalmoney);
     var finalowned = JSON.parse(document.getElementById(entryid).dataset.finalowned);
     var finalliquid = JSON.parse(document.getElementById(entryid).dataset.finalliquid);
-    var tt = JSON.parse(document.getElementById(entryid).dataset.tt);
+    var ty = JSON.parse(document.getElementById(entryid).dataset.ty);
     var prefix = id1.slice(id1.length - 2);
+    var buys = ty.reduce(function(n, val) {
+        return n + (val === 'b');
+    }, 0);
+    var sells = ty.reduce(function(n, val) {
+        return n + (val === 's');
+    }, 0);
     document.getElementById(prefix+"money").innerHTML = money;
     document.getElementById(prefix+"ticker").innerHTML = ticker;
     document.getElementById(prefix+"period").innerHTML = period;
@@ -77,9 +83,9 @@ function createTables(entryid, id1) {
     document.getElementById(prefix+"ebalance").innerHTML = finalmoney;
     document.getElementById(prefix+"eshares").innerHTML = finalowned;
     document.getElementById(prefix+"lebalance").innerHTML = finalliquid;
-    document.getElementById(prefix+"trades").innerHTML = money;
-    document.getElementById(prefix+"buys").innerHTML = money;
-    document.getElementById(prefix+"sells").innerHTML = money;
+    document.getElementById(prefix+"trades").innerHTML = ty.length;
+    document.getElementById(prefix+"buys").innerHTML = buys;
+    document.getElementById(prefix+"sells").innerHTML = sells;
 }
 
 function createGraph(entryid, id1) {

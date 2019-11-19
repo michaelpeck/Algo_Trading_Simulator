@@ -47,7 +47,7 @@
                     <tr>
                         {% set url = "/" + entry.type_info|string|lower + "_entry/" + entry.id|string %}
                         {% set d_url = "/delete/" + entry.id|string %}
-                        {% set change = (((entry.final_money|float)-(entry.money|float))/(entry.money|float))*100 %}
+                        {% set change = (((entry.final_liquid|float)-(entry.money|float))/(entry.money|float))*100 %}
                         {% if change < 0 %}
                             {% set c = '#DC3545' %}
                         {% elif change > 0 %}
