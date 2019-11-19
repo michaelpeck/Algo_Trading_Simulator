@@ -118,6 +118,8 @@ var high = JSON.parse('{{ high|tojson|safe }}');
 var low = JSON.parse('{{ low|tojson|safe }}');
 var wmax = JSON.parse('{{ results.graph_x|tojson|safe }}');
 var wmay = JSON.parse('{{ results.graph_y|tojson|safe }}');
+var chartx = JSON.parse('{{ results.chart_x|tojson|safe }}');
+var charty = JSON.parse('{{ results.chart_y|tojson|safe }}');
 var pointBackgroundColors = [];
 var i;
 var dataset = new Array();
@@ -131,7 +133,11 @@ for (i=0; i< wmax.length; i++){
     var dict = { x: wmax[i], y: wmay[i]}
     wma_dataset.push(dict)
 }
-
+var chart_dataset = new Array();
+for (i=0; i< chartx.length; i++){
+    var dict = { x: chartx[i], y: charty[i]}
+    chart_dataset.push(dict)
+}
 var ctx = document.getElementById('myChart');
 var myLineChart = new Chart(ctx, {
     type: 'line',
@@ -152,6 +158,15 @@ var myLineChart = new Chart(ctx, {
                 lineTension: 0,
                 borderColor: "#4095BF",
                 label: "Weighted Moving Average"
+            },
+            {
+                data: chart_dataset,
+                pointRadius: 0,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#90EE90",
+                borderWidth: 1,
+                label: "Price"
             },
         ]
     },

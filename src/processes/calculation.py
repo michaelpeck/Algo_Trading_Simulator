@@ -1,6 +1,6 @@
 import yfinance as yf
 import numpy as np
-import datetime
+from datetime import datetime, timedelta
 from src.common.database import Database
 from flask_login import current_user, UserMixin
 from src import db
@@ -30,6 +30,8 @@ class Calculation(UserMixin, db.Document):
     tv = db.ListField()
     graph_x = db.ListField()
     graph_y = db.ListField()
+    chart_x = db.ListField()
+    chart_y = db.ListField()
     model = db.LazyReferenceField('Model')
     user_model = db.LazyReferenceField('UserModel')
 
@@ -48,6 +50,8 @@ class Calculation(UserMixin, db.Document):
         ty = []     #trade type
         tp = []     #trade price
         tv = []     #trade volume
+        store_chart_x = []
+        store_chart_y = []
         for index, row in df.iterrows():
             count += 1
             available_money = trade_money - trade_cost
@@ -56,6 +60,22 @@ class Calculation(UserMixin, db.Document):
             high = round(row['High'], 4)
             date = index.to_pydatetime().strftime("%d-%m-%Y")
             time = index.to_pydatetime().strftime("%H:%M")
+            etime = index.to_pydatetime() + timedelta(minutes=2)
+            endtime = etime.strftime("%H:%M")
+            if low != high:
+                if float(row['Open']) > float(row['Close']):
+                    store_chart_y.append(float(high))
+                    store_chart_x.append(date[6:10]+'-'+date[3:5]+'-'+date[0:2] + 'T' + time + ':00')
+                    store_chart_y.append(float(low))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T' + endtime + ':00')
+                elif float(row['Close']) > float(row['Open']):
+                    store_chart_y.append(float(low))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T' + time + ':00')
+                    store_chart_y.append(float(high))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T' + endtime + ':00')
+            elif low == high:
+                store_chart_y.append(low)
+                store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T' + time + ':00')
             lvalue = (low * available_volume)
             hvalue = (high * available_volume)
             if available_money > 0 and low <= buy and lvalue > trade_cost:
@@ -99,6 +119,8 @@ class Calculation(UserMixin, db.Document):
             liquid_money = (trade_money - trade_cost) + df.Low.ix[count-1]*owned
         else:
             liquid_money = trade_money
+        self.chart_x = store_chart_x
+        self.chart_y = store_chart_y
         self.final_money = round(trade_money, 2)
         self.final_owned = round(owned)
         self.final_liquid = round(liquid_money, 2)
@@ -129,6 +151,8 @@ class Calculation(UserMixin, db.Document):
         tv = []  # trade volume
         store_ma = []
         store_ma_x = []
+        store_chart_x = []
+        store_chart_y = []
         for i in range(0, df.shape[0] - ma_conv):
             for j in range(0, ma_length):
                 ma_sum += df.iloc[i + j, 3]
@@ -142,6 +166,20 @@ class Calculation(UserMixin, db.Document):
             high = round(row['High'], 4)
             date = index.to_pydatetime().strftime("%d-%m-%Y")
             time = index.to_pydatetime().strftime("%H:%M")
+            if low != high:
+                if float(row['Open']) > float(row['Close']):
+                    store_chart_y.append(float(high))
+                    store_chart_x.append(date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T09:30:00')
+                    store_chart_y.append(float(low))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T16:00:00')
+                elif float(row['Close']) > float(row['Open']):
+                    store_chart_y.append(float(low))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T09:30:00')
+                    store_chart_y.append(float(high))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T16:00:00')
+            elif low == high:
+                store_chart_y.append(low)
+                store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T12:45:00')
             lvalue = (low * available_volume)
             hvalue = (high * available_volume)
             buy = row['SMA_' + str(ma_length)] - bd
@@ -189,6 +227,8 @@ class Calculation(UserMixin, db.Document):
             liquid_money = (trade_money - trade_cost) + df.Low.ix[count - 1] * owned
         else:
             liquid_money = trade_money
+        self.chart_x = store_chart_x
+        self.chart_y = store_chart_y
         self.graph_y = store_ma
         self.graph_x = store_ma_x
         self.final_money = round(trade_money, 2)
@@ -225,6 +265,8 @@ class Calculation(UserMixin, db.Document):
         tv = []  # trade volume
         store_wma = []
         store_wma_x = []
+        store_chart_y = []
+        store_chart_x = []
         for i in range(0, df.shape[0] - wma_conv):
             for j in range(0, wma_length):
                 weight += 1
@@ -240,6 +282,20 @@ class Calculation(UserMixin, db.Document):
             high = round(row['High'], 4)
             date = index.to_pydatetime().strftime("%d-%m-%Y")
             time = index.to_pydatetime().strftime("%H:%M")
+            if low != high:
+                if float(row['Open']) > float(row['Close']):
+                    store_chart_y.append(float(high))
+                    store_chart_x.append(date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T09:30:00')
+                    store_chart_y.append(float(low))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T16:00:00')
+                elif float(row['Close']) > float(row['Open']):
+                    store_chart_y.append(float(low))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T09:30:00')
+                    store_chart_y.append(float(high))
+                    store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T16:00:00')
+            elif low == high:
+                store_chart_y.append(low)
+                store_chart_x.append(date[6:10] + '-' + date[3:5] + '-' + date[0:2] + 'T12:45:00')
             lvalue = (low * available_volume)
             hvalue = (high * available_volume)
             buy = row['WMA_' + str(wma_length)] - bd
@@ -287,6 +343,8 @@ class Calculation(UserMixin, db.Document):
             liquid_money = (trade_money - trade_cost) + df.Low.ix[count - 1] * owned
         else:
             liquid_money = trade_money
+        self.chart_x = store_chart_x
+        self.chart_y = store_chart_y
         self.graph_x = store_wma_x
         self.graph_y = store_wma
         self.final_money = round(trade_money, 2)

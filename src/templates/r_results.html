@@ -115,12 +115,19 @@ var min = JSON.parse('{{ min|tojson|safe }}');
 var max = JSON.parse('{{ max|tojson|safe }}');
 var high = JSON.parse('{{ high|tojson|safe }}');
 var low = JSON.parse('{{ low|tojson|safe }}');
+var chartx = JSON.parse('{{ results.chart_x|tojson|safe }}');
+var charty = JSON.parse('{{ results.chart_y|tojson|safe }}');
 var pointBackgroundColors = [];
 var i;
 var dataset = new Array();
 for (i=0; i< datetime.length; i++){
     var dict = { x: datetime[i], y: tradeprice[i]}
     dataset.push(dict)
+}
+var chart_dataset = new Array();
+for (i=0; i< chartx.length; i++){
+    var dict = { x: chartx[i], y: charty[i]}
+    chart_dataset.push(dict)
 }
 //document.getElementById('log').innerText = JSON.stringify(dataset, null, 4);
 var ctx = document.getElementById('myChart');
@@ -134,6 +141,15 @@ var myLineChart = new Chart(ctx, {
                 fill: false,
                 lineTension: 0,
                 borderColor: "#2d6886"
+            },
+            {
+                data: chart_dataset,
+                pointRadius: 0,
+                fill: false,
+                lineTension: 0,
+                borderColor: "#90EE90",
+                borderWidth: 1,
+                label: "Price"
             },
         ]
     },

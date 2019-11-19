@@ -169,7 +169,7 @@ def weighted_moving_average_template(model_id=None):
                                money=form.money.data,
                                trade_cost=form.trade_cost.data,
                                date_stamp=date_stamp,
-                               model=this_mod.id).moving_average()
+                               model=this_mod.id).weighted_moving_average()
         flash('Your calculation is complete!', 'success')
         return redirect(url_for('processes.get_wma_results', transaction_id=wma_calc))
     elif request.method == 'GET':
