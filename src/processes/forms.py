@@ -2,6 +2,7 @@ __author__ = 'michaelpeck'
 
 
 from flask_wtf import FlaskForm
+import yfinance as yf
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SelectField, FloatField, DecimalField, IntegerField, PasswordField, SubmitField, FormField
 
@@ -38,6 +39,11 @@ class StaticRangeForm(FlaskForm):
                 '1m', '2m', '5m', '15m', '30m', '60m', '90m'):
             self.interval.errors.append('Intraday data is only available up to 1 month.')
             return False
+        if self.ticker.data:
+            stock = yf.Ticker(self.ticker.data)
+            if stock.info == {}:
+                self.ticker.errors.append('There is no data for this stock.')
+                return False
         return True
 
 class MovingAverageForm(FlaskForm):
@@ -53,6 +59,16 @@ class MovingAverageForm(FlaskForm):
                               validators=[DataRequired(), NumberRange(min=0, max=15, message="Cost per trade cannot exceed $15")])
     submit = SubmitField('Submit')
 
+    def validate(self):
+        if not FlaskForm.validate(self):
+            return False
+        if self.ticker.data:
+            stock = yf.Ticker(self.ticker.data)
+            if stock.info == {}:
+                self.ticker.errors.append('There is no data for this stock.')
+                return False
+        return True
+
 
 class WeightedMovingAverageForm(FlaskForm):
     ticker = StringField('Ticker', validators=[DataRequired(), Length(min=1, max=6)])
@@ -65,6 +81,16 @@ class WeightedMovingAverageForm(FlaskForm):
     trade_cost = DecimalField('Cost per trade', places=2,
                               validators=[DataRequired(), NumberRange(min=0, max=15, message="Cost per trade cannot exceed $15")])
     submit = SubmitField('Submit')
+
+    def validate(self):
+        if not FlaskForm.validate(self):
+            return False
+        if self.ticker.data:
+            stock = yf.Ticker(self.ticker.data)
+            if stock.info == {}:
+                self.ticker.errors.append('There is no data for this stock.')
+                return False
+        return True
 
 class TryAgain(FlaskForm):
     submit = SubmitField('Try Again')

@@ -74,8 +74,13 @@
         {% set dt = date[6:10]+'-'+date[3:5]+'-'+date[0:2]+'T'+results.tt[i]+':00' %}
         {{ axis_dt.append(dt)|default("", True) }}
     {% endfor %}
-    {% set high = results.tp|max|float %}
-    {% set low = results.tp|min|float %}
+    {% if results.tp != [] %}
+        {% set high = results.tp|max|float %}
+        {% set low = results.tp|min|float %}
+    {% else %}
+        {% set high = 2 %}
+        {% set low = 1 %}
+    {% endif %}
     {% set range = high - low %}
     {% set min = low - range/2 %}
     {% set max = high + range/2 %}
