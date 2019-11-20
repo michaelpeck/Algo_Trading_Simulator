@@ -19,9 +19,10 @@ class Check(UserMixin, db.Document):
     def get_info(self):
         stock = yf.Ticker(self.ticker)
         info = stock.info
-        self.name = info['longName']
-        self.previous_close = info['regularMarketPreviousClose']
-        self.three_mo_avg_vol = info['averageDailyVolume3Month']
-        self.year_range = info['fiftyTwoWeekRange']
+        if info != {}:
+            self.name = info['longName']
+            self.previous_close = info['regularMarketPreviousClose']
+            self.three_mo_avg_vol = info['averageDailyVolume3Month']
+            self.year_range = info['fiftyTwoWeekRange']
         self.save()
         return self.id

@@ -87,7 +87,7 @@ def moving_average_template(model_id=None):
                     choices.append((model.id, model.name))
     mform.model.choices = choices
     if mform.pop_model.data and (mform.model.data != ''):
-        return redirect(url_for('processes.static_range_template', model_id=mform.model.data))
+        return redirect(url_for('processes.moving_average_template', model_id=mform.model.data))
     if sform.check.data:
         info = Check(ticker=sform.check_ticker.data.upper()).get_info()
         stock_info = Check.objects(pk=info).first()
@@ -146,7 +146,7 @@ def weighted_moving_average_template(model_id=None):
                     choices.append((model.id, model.name))
     mform.model.choices = choices
     if mform.pop_model.data and (mform.model.data != ''):
-        return redirect(url_for('processes.static_range_template', model_id=mform.model.data))
+        return redirect(url_for('processes.weighted_moving_average_template', model_id=mform.model.data))
     if sform.check.data:
         info = Check(ticker=sform.check_ticker.data.upper()).get_info()
         stock_info = Check.objects(pk=info).first()
