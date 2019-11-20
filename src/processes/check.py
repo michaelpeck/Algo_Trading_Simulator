@@ -15,11 +15,10 @@ class Check(UserMixin, db.Document):
     year_range = db.StringField()
 
 
-
     def get_info(self):
         stock = yf.Ticker(self.ticker)
         info = stock.info
-        if info != {}:
+        if info['quoteType'] == 'EQUITY':
             self.name = info['longName']
             self.previous_close = info['regularMarketPreviousClose']
             self.three_mo_avg_vol = info['averageDailyVolume3Month']
