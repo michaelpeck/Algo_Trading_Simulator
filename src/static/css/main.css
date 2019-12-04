@@ -237,7 +237,6 @@ footer {
 /* Algo pages */
 .algo-intro{
     padding: 50px 6%;
-
 }
 .stock-data-form{
     padding: 40px;
@@ -248,7 +247,47 @@ footer {
     background-color: #A9A9A9;
     margin-bottom: 40px;
 }
-
+.strat-explained {
+    background: linear-gradient(240deg, rgba(144,238,144,0.469625350140056) 0%, rgba(232,232,232,1) 30%, rgba(232,232,232,1) 70%, rgba(64,149,191,0.427608543417367) 100%);    width: 100%;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+.graph-stack {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.strat-account {
+    width: 35%;
+    min-width: 210px;
+    padding: 30px;
+}
+.strat-graph {
+    width: 65%;
+    min-width: 390px;
+    padding: 30px;
+}
+.strat-legend {
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+}
+table.table-bordered {
+    border:1px solid #2D6886;
+}
+table.table-bordered > thead > tr > th{
+    border:1px solid #2D6886;
+    border-bottom:3px solid #2D6886;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid #2D6886;
+}
 /* Results page */
 .results-container{
     padding-top: 50px;

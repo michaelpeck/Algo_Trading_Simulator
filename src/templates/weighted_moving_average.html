@@ -16,95 +16,123 @@
 <div class="container algo-intro">
     <h1>Weighted moving average algorithm</h1>
     <p>Fill out the form below with the stock information that you would like to run through the algorithm.</p>
-    <table id="parameter-explanation" class="table table-striped table-dark">
-        <thead>
-            <tr>
-                <th scope="col">Parameter</th>
-                <th scope="col">Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">Ticker</th>
-                <td>Official symbol used for trading on the New York Stock Exchange</td>
-            </tr>
-            <tr>
-                <th scope="row">Period</th>
-                <td>Total period over which to run the trading algorithm dating back from the time of execution.</td>
-            </tr>
-            <tr>
-                <th scope="row">Length of average</th>
-                <td>Amount of days included in the moving average (ie. 5 day weighted moving average, 10 day weighted moving average, etc.).</td>
-            </tr>
-            <tr>
-                <th scope="row">Account balance</th>
-                <td>Beginning balance of available money to be traded.</td>
-            </tr>
-            <tr>
-                <th scope="row">Buy point</th>
-                <td>Negative difference from moving average at which to purchase shares if there is money in the account.</td>
-            </tr>
-            <tr>
-                <th scope="row">Sell point</th>
-                <td>Positive difference from moving average at which to sell any shares that are currently owned.</td>
-            </tr>
-            <tr>
-                <th scope="row">Cost per trade</th>
-                <td>Brokerage fee per transaction. This amount will be charged from the account every time a stock
-                is bought or sold.</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="text-center">
-        <p>Note: Trading period begins X days after the start of the period (X = Length of average).</p>
-    </div>
 </div>
-
-<div class="container page-form">
-    <div class="preset-data-form">
-        <form id="pop-stock-form" method="POST" action="" enctype="multipart/form-data">
-            {{ sform.hidden_tag() }}
-            <legend class="border-bottom mb-4">Stock info</legend>
-            <fieldset class="form-group">
-                <div class="form-group row">
-                {{ sform.check_ticker.label(class="col-lg-4 col-form-label") }}
-                {% if sform.check_ticker.errors %}
-                    {{ sform.check_ticker(class="col-lg-4 form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in sform.check_ticker.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ sform.check_ticker(class="col-lg-4 form-control") }}
-                {% endif %}
-                {{ sform.check(class="btn btn-secondary col-lg-4 form-control") }}
-                </div>
-            </fieldset>
-        </form>
-        <div>
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <td scope="col">{{ name }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="col">Previous close</th>
-                        <td scope="col">{{ prev_close }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="col">Avg daily volume (3 month)</th>
-                        <td scope="col">{{ three_mo_avg_vol }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="col">Fifty-two week range</th>
-                        <td scope="col">{{ year_range }}</td>
-                    </tr>
-                </tbody>
-            </table>
+<div class="strat-explained">
+    <div class="graph-stack">
+        <div class="strat-account">
+            <img src="../static/assets/Strat_v_account.png" width="100%">
+        </div>
+        <div class="strat-graph">
+            <img src="../static/assets/WMA_v_graph.png" width="100%">
         </div>
     </div>
+    <div class="strat-legend">
+        <table id="parameter-explanation" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Ref</th>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row"><img src="../static/assets/Legend_1.png" width="30px"></td>
+                    <td>Ticker</td>
+                    <td>Official symbol used for trading on the New York Stock Exchange</td>
+                </tr>
+                <tr>
+                    <td scope="row"><img src="../static/assets/Legend_2.png" width="30px"></td>
+                    <td>Period</td>
+                    <td>Total period over which to run the trading algorithm dating back from the time of execution.</td>
+                </tr>
+                <tr>
+                    <td scope="row"><img src="../static/assets/Legend_3.png" width="30px"></td>
+                    <td>Length of average</td>
+                    <td>Amount of days included in the moving average (ie. 5 day moving average, 10 day moving average, etc.).</td>                </tr>
+                <tr>
+                    <td scope="row"><img src="../static/assets/Legend_4.png" width="30px"></td>
+                    <td>Account balance</td>
+                    <td>Beginning balance of available money to be traded.</td>
+                </tr>
+                <tr>
+                    <td scope="row"><img src="../static/assets/Legend_5.png" width="30px"></td>
+                    <td>Buy point</td>
+                    <td>Negative difference from moving average at which to purchase shares if there is money in the account.</td>
+                </tr>
+                <tr>
+                    <td scope="row"><img src="../static/assets/Legend_6.png" width="30px"></td>
+                    <td>Sell point</td>
+                    <td>Positive difference from moving average at which to sell any shares that are currently owned.</td>
+                </tr>
+                <tr>
+                    <td scope="row"><img src="../static/assets/Legend_7.png" width="30px"></td>
+                    <td>Cost per trade</td>
+                    <td>Brokerage fee per transaction. This amount will be charged from the account every time a stock
+                    is bought or sold.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <p>Note: Trading period begins X days after the start of the period (X = Length of average).</p>
+        </div>
+    </div>
+</div>
+<div class="home-col-flex">
+    <div class="flex-col-two">
+        <div style="padding: 50px;">
+            <h3>Don't know where to start?</h3>
+            <h4>Get some basic info on a ticker that you would like to use (Optional).</h4>
+        </div>
+    </div>
+    <div class="flex-col-two">
+        <div class="preset-data-form">
+            <form id="pop-stock-form" method="POST" action="" enctype="multipart/form-data">
+                {{ sform.hidden_tag() }}
+                <legend class="border-bottom mb-4">Stock info</legend>
+                <fieldset class="form-group">
+                    <div class="form-group row">
+                    {{ sform.check_ticker.label(class="col-lg-4 col-form-label") }}
+                    {% if sform.check_ticker.errors %}
+                        {{ sform.check_ticker(class="col-lg-4 form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in sform.check_ticker.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ sform.check_ticker(class="col-lg-4 form-control") }}
+                    {% endif %}
+                    {{ sform.check(class="btn btn-secondary col-lg-4 form-control") }}
+                    </div>
+                </fieldset>
+            </form>
+            <div>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <td scope="col">{{ name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Previous close</th>
+                            <td scope="col">{{ prev_close }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Avg daily volume (3 month)</th>
+                            <td scope="col">{{ three_mo_avg_vol }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Fifty-two week range</th>
+                            <td scope="col">{{ year_range }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container page-form">
     <div class="stock-data-form">
         {% if current_user.is_authenticated %}
             <form id="pop-model-form" method="POST" action="" enctype="multipart/form-data">
